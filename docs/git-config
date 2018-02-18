@@ -126,7 +126,7 @@
 	finish-hotfix = "!git checkout master && git merge --no-ff \"hotfix/$1\" -m \"finish release $1\" && git tag -m \"$1\" \"$1\" && git checkout develop && git merge --no-ff \"hotfix/$1\" -m \"finish release $1\" && git branch -d \"hotfix/$1\" #"
 		
 [remote "origin"]
-	url = https://github.com/kadegnon/b314-survival-compiler.git
+	url = https://github.com/UNamurCSFaculty/1718_INFOB314_COMPILATEUR_GROUPE09.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
 [branch "master"]
 	remote = origin
