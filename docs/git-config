@@ -1,0 +1,133 @@
+# Commit early, commit often: it is a bad idea to do a lot of work without committing.
+
+[user]
+	name = <Github Username>
+	email = <Github Email>
+	# signingkey = <GPGKEYIDHERE>
+[commit]
+	# gpgsign = true
+[push]
+	default = simple
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[color]
+	ui = auto
+[color "branch"]
+	current = yellow bold
+	local = green bold
+	remote = cyan bold
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "status"]
+	added = green bold
+	changed = yellow bold
+	untracked = red bold
+[merge]
+	ff = false
+
+[alias]
+	co = checkout
+	cob = checkout -b
+
+	# Quickly see what you’ve done today (commits that aren’t merges on all branches)
+	today = !git log --since=midnight --author=\"`git config user.name`\" --no-merges --all
+
+	# show a graphical representation of your repo
+	grog = log --color --graph --abbrev-commit --decorate --all --format=format:\"%C(bold blue)%h%C(reset) %C(bold cyan)%s%C(reset) %C(bold yellow)%d%C(reset)%n  %C(dim white)%aD %C(cyan)(%ar)%n%C(dim white)  %an %C(cyan)[ %G? %GS]%C(reset)\"
+	lg    = log --pretty=oneline --abbrev-commit
+	hist  = log --pretty=format:'%h %ad | [%an] %s%d' --graph --color --date=short
+
+	# adds all changes including untracked files to the index and then creates a commit
+  	cm = !git add -A && git commit -m
+
+	# adds all changes including untracked files and creates a commit. 
+  	save = !git add -A && git commit --allow-empty  -m 'SAVEPOINT'
+	# only commits tracked changes
+  	wip = commit -am "WIP" 
+	
+	# resets the previous commit, but keeps all the changes from that commit in the working directory
+	undo = reset HEAD~1 --mixed
+    
+	# pulls changes from the remote. 
+	# If I have any local commits, it’ll rebase them to come after the commits I pulled down. 
+	# The --prune option removes remote-tracking branches that no longer exist on the remote
+	up = !git pull --rebase --prune $@ && git submodule update --init --recursive
+
+	# make adjustments to the last commit without creating a new one
+	amend = commit -a --amend --no-edit
+
+	# commits everything in my working directory and then does a hard reset to remove that commit
+	# The nice thing is, the commit is still there, but it’s just unreachable. 
+	wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+	# Unreachable commits are a bit inconvenient to restore, but at least they are still there.
+	# You can run the git reflog command and find the SHA of the commit with message == “WIPE SAVEPOINT”
+
+	# deletes every branch that’s been merged into develop except develop
+	bclean = "!f() { git branch --merged ${1-develop} | grep -v " ${1-develop}$" | xargs -r git branch -d; }; f"
+
+	# Switches to develop (though you can specify a different default branch)
+	# Runs git up to bring develop up to speed with the origin
+	# Deletes all branches already merged into develop using another alias, git bclean
+	bdone = "!f() { git checkout ${1-develop} && git up && git bclean ${1-develop}; }; f"
+
+	# List tags using (better) version sorting
+	tags = !git tag | sort -V	
+
+	# Show the last tag
+	lasttag = describe --tags --abbrev=0
+
+	# override content on github, but only if you've synced first
+	puff = push --force-with-lease
+
+	# show the current git status, but without all the default cruft
+	stats = status --short --branch
+	st = stats
+
+	# do a fast-forward merge
+	ff = merge --ff
+
+	# pull everything from the remote
+	fall = fetch --all
+
+	sync = !git pull && git push
+
+	# compare your own local branch with the corresponding remote
+	check = !git diff $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+
+	# push your new branch to the remote for the first time
+	publish = !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
+
+	# rebase your changes on develop
+	sync = rebase --interactive develop
+
+	#########################
+	# Git-Flow operations
+	#
+	# initialize a new git repo with a first commit and a develop branch
+	it = "!git init && git commit -m \"First Commit - Init repo\" --allow-empty && git checkout -b develop #"
+
+  	start-feature = "!git branch \"feature/$1\" develop && git checkout \"feature/$1\" #"
+  	finish-feature = "!git checkout develop && git merge --no-ff \"feature/$1\" -m \"close #$1\" && git branch -d \"feature/$1\" #"
+
+  	start-release = "!git branch \"release/$1\" develop && git checkout \"release/$1\" #"
+	finish-release = "!git checkout master && git merge --no-ff \"release/$1\" -m \"finish release $1\" && git tag -m \"$1\" \"$1\" && git checkout develop && git merge --no-ff \"release/$1\" -m \"finish release $1\" && git branch -d \"release/$1\" #"
+
+  	start-hotfix = "!git branch \"hotfix/$1\" master && git checkout \"hotfix/$1\" #"
+	finish-hotfix = "!git checkout master && git merge --no-ff \"hotfix/$1\" -m \"finish release $1\" && git tag -m \"$1\" \"$1\" && git checkout develop && git merge --no-ff \"hotfix/$1\" -m \"finish release $1\" && git branch -d \"hotfix/$1\" #"
+		
+[remote "origin"]
+	url = https://github.com/kadegnon/b314-survival-compiler.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
