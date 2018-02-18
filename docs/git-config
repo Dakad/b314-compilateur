@@ -91,7 +91,6 @@
 
 	# show the current git status, but without all the default cruft
 	stats = status --short --branch
-	st = stats
 
 	# do a fast-forward merge
 	ff = merge --ff
