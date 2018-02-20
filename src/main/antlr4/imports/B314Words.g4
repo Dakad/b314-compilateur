@@ -75,6 +75,9 @@ DIV: '/';
 MOD: '%';
 COMPUTE: 'compute';
 IMPORT: 'import';
+AMMO : 'ammo';
+
+
 
 // Identifiers
 
