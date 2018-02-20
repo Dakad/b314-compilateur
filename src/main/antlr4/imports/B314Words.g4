@@ -21,6 +21,8 @@ LESSTO: '<';
 SUPTO: '>';
 PLUS: '+';
 COMMA: ',';
+POINTVIRGULE: ';';
+DUPOINT: ':';
 PLAYER: 'player';
 ENNEMI: 'ennemi';
 ZOMBIE: 'zombie';
