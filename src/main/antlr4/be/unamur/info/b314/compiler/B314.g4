@@ -12,3 +12,8 @@ scalar : BOOLEAN | INTEGER | SQUARE
        ;
 array : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET     // boolean[2]  or square[2,3]
       ;
+
+// Import
+impDecl: IMPORT FileDec;
+FileDec: FileName'.wdl';
+FileName: LETTER (NUMBER | LETTER)*;
