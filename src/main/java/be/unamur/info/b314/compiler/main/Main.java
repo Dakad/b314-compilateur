@@ -1,17 +1,19 @@
 package be.unamur.info.b314.compiler.main;
 
 import static com.google.common.base.Preconditions.checkArgument;
+
+import be.unamur.info.b314.compiler.B314Lexer;
+import be.unamur.info.b314.compiler.B314Parser;
+import be.unamur.info.b314.compiler.main.exception.ParsingException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -83,6 +85,11 @@ public class Main {
      * The output PCode file.
      */
     private File outputFile;
+
+  /**
+   * The parser.
+   */
+  private B314Parser parser;
     
     private Main() {
         // Create command line options
@@ -144,20 +151,18 @@ public class Main {
     /**
      * Compiler Methods, this is where the MAGIC happens !!! \o/
      */
-
-    /**
-     * This is where the magic happens. \o/
-     */
     private void compile() throws IOException, ParsingException {
-        // Get abstract syntax tree
+        // Get AST : Abstract Syntax Tree
         LOG.debug("Parsing input");
-        DEMOParser.DemoContext tree = parse(new ANTLRInputStream(new FileInputStream(inputFile)));
+        B314Parser.RootContext tree = parse(new ANTLRInputStream(new FileInputStream(inputFile)));
         LOG.debug("Parsing input: done");
         LOG.debug("AST is {}", tree.toStringTree(parser));
+
         // Build symbol table
         LOG.debug("Building symbol table");
         Map<String, Integer> symTable = fillSymTable(tree);
         LOG.debug("Building symbol table: done");
+
         // Print PCode
         LOG.debug("Printing PCode");
         printPCode(tree, symTable);
@@ -167,19 +172,19 @@ public class Main {
     /**
      * Builds the abstract syntax tree from input.
      */
-    private DEMOParser.DemoContext parse(ANTLRInputStream input) throws ParseCancellationException, ParsingException {
+    private B314Parser.RootContext parse(ANTLRInputStream input) throws ParseCancellationException, ParsingException {
         // Create the token stream
-        CommonTokenStream tokens = new CommonTokenStream(new DEMOLexer(input));
+        CommonTokenStream tokens = new CommonTokenStream(new B314Lexer(input));
         // Intialise parser
-        parser = new DEMOParser(tokens);
+        this.parser = new B314Parser(tokens);
         // Set error listener to adoc implementation
-        parser.removeErrorListeners();
+        this.parser.removeErrorListeners();
         MyConsoleErrorListener errorListener = new MyConsoleErrorListener();
         parser.addErrorListener(errorListener);
         // Launch parsing
-        DEMOParser.DemoContext tree;
+        B314Parser.RootContext tree;
         try {
-            tree = parser.demo();
+            tree = parser.root();
         } catch (RecognitionException e) {
             throw new ParsingException("Error while retrieving parsing tree!", e);
         }
@@ -192,7 +197,7 @@ public class Main {
     /**
      * Builds symbol table from AST.
      */
-    private Map<String, Integer> fillSymTable(DEMOParser.DemoContext tree) {
+    private Map<String, Integer> fillSymTable(B314Parser.RootContext tree) {
         SymTableFiller filler = new SymTableFiller();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(filler, tree);
@@ -202,7 +207,7 @@ public class Main {
     /**
      * Print PCode from AST and symtable.
      */
-    private void printPCode(DEMOParser.DemoContext tree, Map<String, Integer> symTable) throws FileNotFoundException {
+    private void printPCode(B314Parser.RootContext tree, Map<String, Integer> symTable) throws FileNotFoundException {
         PCodePrinter printer = new PCodePrinter(outputFile);
         PCodeVisitor visitor = new PCodeVisitor(symTable, printer);
         tree.accept(visitor);
