@@ -21,6 +21,8 @@ LESSTO: '<';
 SUPTO: '>';
 PLUS: '+';
 COMMA: ',';
+POINTVIRGULE: ';';
+DUPOINT: ':';
 PLAYER: 'player';
 ENNEMI: 'ennemi';
 ZOMBIE: 'zombie';
@@ -73,6 +75,9 @@ DIV: '/';
 MOD: '%';
 COMPUTE: 'compute';
 IMPORT: 'import';
+AMMO : 'ammo';
+
+
 
 // Identifiers
 
