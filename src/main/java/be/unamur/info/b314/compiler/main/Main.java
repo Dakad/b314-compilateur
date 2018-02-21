@@ -3,7 +3,10 @@ package be.unamur.info.b314.compiler.main;
 import static com.google.common.base.Preconditions.checkArgument;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -141,12 +144,70 @@ public class Main {
     /**
      * Compiler Methods, this is where the MAGIC happens !!! \o/
      */
-    private void compile() {
-    
-    
-       // Put your code here !
-       
-       
+
+    /**
+     * This is where the magic happens. \o/
+     */
+    private void compile() throws IOException, ParsingException {
+        // Get abstract syntax tree
+        LOG.debug("Parsing input");
+        DEMOParser.DemoContext tree = parse(new ANTLRInputStream(new FileInputStream(inputFile)));
+        LOG.debug("Parsing input: done");
+        LOG.debug("AST is {}", tree.toStringTree(parser));
+        // Build symbol table
+        LOG.debug("Building symbol table");
+        Map<String, Integer> symTable = fillSymTable(tree);
+        LOG.debug("Building symbol table: done");
+        // Print PCode
+        LOG.debug("Printing PCode");
+        printPCode(tree, symTable);
+        LOG.debug("Printing PCode: done");
+    }
+
+    /**
+     * Builds the abstract syntax tree from input.
+     */
+    private DEMOParser.DemoContext parse(ANTLRInputStream input) throws ParseCancellationException, ParsingException {
+        // Create the token stream
+        CommonTokenStream tokens = new CommonTokenStream(new DEMOLexer(input));
+        // Intialise parser
+        parser = new DEMOParser(tokens);
+        // Set error listener to adoc implementation
+        parser.removeErrorListeners();
+        MyConsoleErrorListener errorListener = new MyConsoleErrorListener();
+        parser.addErrorListener(errorListener);
+        // Launch parsing
+        DEMOParser.DemoContext tree;
+        try {
+            tree = parser.demo();
+        } catch (RecognitionException e) {
+            throw new ParsingException("Error while retrieving parsing tree!", e);
+        }
+        if (errorListener.errorHasBeenReported()) {
+            throw new ParsingException("Error while parsing input!");
+        }
+        return tree;
+    }
+
+    /**
+     * Builds symbol table from AST.
+     */
+    private Map<String, Integer> fillSymTable(DEMOParser.DemoContext tree) {
+        SymTableFiller filler = new SymTableFiller();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(filler, tree);
+        return filler.getSymTable();
+    }
+
+    /**
+     * Print PCode from AST and symtable.
+     */
+    private void printPCode(DEMOParser.DemoContext tree, Map<String, Integer> symTable) throws FileNotFoundException {
+        PCodePrinter printer = new PCodePrinter(outputFile);
+        PCodeVisitor visitor = new PCodeVisitor(symTable, printer);
+        tree.accept(visitor);
+        printer.flush();
+        printer.close();
     }
 
 }
