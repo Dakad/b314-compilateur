@@ -26,155 +26,155 @@ public class PCodePrinter {
     private final PrintWriter writer;
 
     public PCodePrinter(File outFile) throws FileNotFoundException {
-        writer = new PrintWriter(outFile);
+        this.writer = new PrintWriter(outFile);
     }
 
     public PCodePrinter(String fileName) throws FileNotFoundException {
-        writer = new PrintWriter(fileName);
+        this.writer = new PrintWriter(fileName);
     }
 
     public PCodePrinter(OutputStream out) {
-        writer = new PrintWriter(out);
+        this.writer = new PrintWriter(out);
     }
 
     public void printLoadConstant(PCodeTypes type, int value) {
-        writer.printf("ldc %s %d", type.representation, value).println();
+        this.writer.printf("ldc %s %d", type.representation, value).println();
     }
 
     public void printLoad(PCodeTypes type, int diff, int offset) {
-        writer.printf("lod %s %d %d", type.representation, diff, offset).println();
+        this.writer.printf("lod %s %d %d", type.representation, diff, offset).println();
     }
 
     public void printLoadAdress(PCodeTypes type, int diff, int offset) {
-        writer.printf("lda %s %d %d", type.representation, diff, offset).println();
+        this.writer.printf("lda %s %d %d", type.representation, diff, offset).println();
     }
 
     public void printIndexedFetch(PCodeTypes type) {
-        writer.printf("ind %s", type.representation).println();
+        this.writer.printf("ind %s", type.representation).println();
     }
 
     public void printStore(PCodeTypes type) {
-        writer.printf("sto %s", type.representation).println();
+        this.writer.printf("sto %s", type.representation).println();
     }
 
     public void printPop() {
-        writer.println("pop");
+        this.writer.println("pop");
     }
 
     public void printMarkStack(int diff) {
-        writer.printf("mst %d", diff).println();
+        this.writer.printf("mst %d", diff).println();
     }
 
     public void printCallUserProcedure(int paramCount, String name) {
-        writer.printf("cup %d @%s", paramCount, name).println();
+        this.writer.printf("cup %d @%s", paramCount, name).println();
     }
 
     public void printSetStackPointer(int spValue) {
-        writer.printf("ssp %d", spValue).println();
+        this.writer.printf("ssp %d", spValue).println();
     }
 
     public void printReturnFromProcedure() {
-        writer.println("retp");
+        this.writer.println("retp");
     }
 
     public void printReturnFromFunction() {
-        writer.println("retf");
+        this.writer.println("retf");
     }
 
     public void printStop() {
-        writer.println("stp");
+        this.writer.println("stp");
     }
 
     public void printComments(String comment) {
-        writer.printf("; %s", comment).println();
+        this.writer.printf("; %s", comment).println();
     }
 
     public void printDefineLabel(String label) {
-        writer.printf("define @%s", label).println();
+        this.writer.printf("define @%s", label).println();
     }
 
     public void printUnconditionalJump(String label) {
-        writer.printf("ujp @%s", label).println();
+        this.writer.printf("ujp @%s", label).println();
     }
 
     public void printFalseJump(String label) {
-        writer.printf("fjp @%s", label).println();
+        this.writer.printf("fjp @%s", label).println();
     }
 
     public void printAdd(PCodeTypes type) {
         Preconditions.checkArgument(type.equals(PCodeTypes.Int) || type.equals(PCodeTypes.Adr));
-        writer.printf("add %s", type.representation).println();
+        this.writer.printf("add %s", type.representation).println();
     }
 
     public void printSub(PCodeTypes type) {
         Preconditions.checkArgument(type.equals(PCodeTypes.Int) || type.equals(PCodeTypes.Adr));
-        writer.printf("sub %s", type.representation).println();
+        this.writer.printf("sub %s", type.representation).println();
     }
 
     public void printMul(PCodeTypes type) {
         Preconditions.checkArgument(type.equals(PCodeTypes.Int) || type.equals(PCodeTypes.Adr));
-        writer.printf("mul %s", type.representation).println();
+        this.writer.printf("mul %s", type.representation).println();
     }
 
     public void printDiv(PCodeTypes type) {
         Preconditions.checkArgument(type.equals(PCodeTypes.Int) || type.equals(PCodeTypes.Adr));
-        writer.printf("div %s", type.representation).println();
+        this.writer.printf("div %s", type.representation).println();
     }
 
     public void printMod(PCodeTypes type) {
         Preconditions.checkArgument(type.equals(PCodeTypes.Int) || type.equals(PCodeTypes.Adr));
-        writer.printf("mod %s", type.representation).println();
+        this.writer.printf("mod %s", type.representation).println();
     }
 
     public void printEqualsValues(PCodeTypes type) {
-        writer.printf("equ %s", type.representation).println();
+        this.writer.printf("equ %s", type.representation).println();
     }
 
     public void printLess(PCodeTypes type) {
         Preconditions.checkArgument(type.equals(PCodeTypes.Int) || type.equals(PCodeTypes.Adr));
-        writer.printf("les %s", type.representation).println();
+        this.writer.printf("les %s", type.representation).println();
     }
 
     public void printGreather(PCodeTypes type) {
         Preconditions.checkArgument(type.equals(PCodeTypes.Int) || type.equals(PCodeTypes.Adr));
-        writer.printf("grt %s", type.representation).println();
+        this.writer.printf("grt %s", type.representation).println();
     }
 
     public void printOr() {
-        writer.println("or b");
+        this.writer.println("or b");
     }
 
     public void printAnd() {
-        writer.println("and b");
+        this.writer.println("and b");
     }
 
     public void printNot() {
-        writer.println("not b");
+        this.writer.println("not b");
     }
 
     public void printRead() {
-        writer.println("read");
+        this.writer.println("read");
     }
 
     public void printPrin() {
-        writer.println("prin");
+        this.writer.println("prin");
     }
 
     public void printCheck(int p, int q) {
-        writer.printf("chk %d %d", p, q).println();
+        this.writer.printf("chk %d %d", p, q).println();
     }
 
     public void printIndexedAdressComputation(int q) {
-        writer.printf("ixa %d", q).println();
+        this.writer.printf("ixa %d", q).println();
     }
 
     public void flush() {
-        writer.flush();
+        this.writer.flush();
     }
 
     public void close() {
-        writer.flush();
-        writer.close();
+        this.writer.flush();
+        this.writer.close();
     }
 
 }
