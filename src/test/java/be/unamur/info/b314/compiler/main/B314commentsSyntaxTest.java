@@ -1,5 +1,6 @@
 package be.unamur.info.b314.compiler.main;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -9,6 +10,7 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public class B314commentsSyntaxTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(B314commentsSyntaxTest.class);
