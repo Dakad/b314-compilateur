@@ -31,7 +31,7 @@ DIRT: 'dirt';
 FRUITS: 'fruits';
 MAP: 'map';
 RADIO: 'radio';
-GRALL: 'graal';
+GRAAL: 'graal';
 SODA: 'soda';
 SQUARE: 'square';
 VOID: 'void';
@@ -41,6 +41,7 @@ COUNT: 'count';
 NOT: 'not';
 FALSE: 'false';
 NEARBY: 'nearby';
+IS: 'is';
 
 //stategie
 BOOLEAN: 'boolean';
@@ -63,7 +64,7 @@ USE: 'use';
 LOCAL: 'local';
 MOVE: 'move';
 EAST: 'east';
-NOTH: 'noth';
+NORTH: 'north';
 SOUTH: 'south';
 WEST: 'west';
 LATITUDE: 'latitude';
@@ -78,10 +79,11 @@ IMPORT: 'import';
 AMMO : 'ammo';
 
 
-
 // Identifiers
 
 ID: LETTER (LETTER | DIGIT)* ;
+
+ENTIER: (MINUS)? NUMBER;
 
 NUMBER: (DIGIT)+;
 
