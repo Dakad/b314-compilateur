@@ -63,7 +63,7 @@ USE: 'use';
 LOCAL: 'local';
 MOVE: 'move';
 EAST: 'east';
-NOTH: 'noth';
+NORTH: 'north';
 SOUTH: 'south';
 WEST: 'west';
 LATITUDE: 'latitude';
