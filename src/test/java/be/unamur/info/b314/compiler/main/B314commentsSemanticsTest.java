@@ -14,6 +14,7 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public class B314commentsSemanticsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(B314commentsSemanticsTest.class);
