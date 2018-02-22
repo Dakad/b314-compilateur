@@ -2,24 +2,40 @@ grammar B314;
 
 import B314Words;
 
-// parser rules start with lowercase letters,
-// lexer rules with uppercase
+/** Parser rules starts with lowercase letters */
+/** Lexer rules (B314Words) is only with UPPERCASE */
 
 /** The start rule; begin parsing here. */
-root: (type | varDel | impDecl)*;
+root: (type | varDecl | impDecl | instr | action)*;
+
 
 // Variables
-type : scalar | array
-     ;
-scalar : BOOLEAN | INTEGER | SQUARE
-       ;
-array : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET     // boolean[2]  or square[2,3]
-      ;
+type : scalar | array;
+scalar : BOOLEAN | INTEGER | SQUARE;
+array : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET ;     // boolean[2]  or square[2,3]
 
 // Variable declaration
-varDel: ID AS type;
+varDecl: ID AS type;
 
 
 // import
-impDecl: IMPORT filedecl;
-filedecl: ID IMPORT_EXT;
+impDecl: IMPORT fileDecl;
+fileDecl: ID IMPORT_EXT;
+
+
+// Instructions
+instr : SKIP
+      | IF 'expD' THEN (instr)+ DONE
+      | IF 'expD' THEN (instr)+ ELSE (instr)+ DONE
+      | WHILE 'exprD' DO (instr)+ DONE
+      | SET 'exprG' TO 'expreD'
+      | COMPUTE 'exprD'
+      | NEXT action
+      ;
+
+// Actions
+action  : MOVE (NORTH | SOUTH| EAST | WEST)
+        | SHOOT (NORTH | SOUTH| EAST | WEST)
+        | USE (MAP | RADIO | FRUITS | SODA)
+        | DO NOTHING
+        ;
