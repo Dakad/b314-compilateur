@@ -8,13 +8,11 @@ import B314Words;
 /** The start rule; begin parsing here. */
 root: (type | varDecl | impDecl)*;
 
+
 // Variables
-type : scalar | array
-     ;
-scalar : BOOLEAN | INTEGER | SQUARE
-       ;
-array : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET     // boolean[2]  or square[2,3]
-      ;
+type : scalar | array;
+scalar : BOOLEAN | INTEGER | SQUARE;
+array : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET ;     // boolean[2]  or square[2,3]
 
 // Variable declaration
 varDecl: ID AS type;
