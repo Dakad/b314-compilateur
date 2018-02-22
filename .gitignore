@@ -32,3 +32,6 @@ buildNumber.properties
 gen/
 generate/
 generated/
+# No need to send the generated tokens
+src/main/antlr4/imports/B314Words.tokens
+
