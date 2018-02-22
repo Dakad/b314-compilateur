@@ -2,8 +2,10 @@ grammar B314;
 
 import B314Words;
 
-root: ID;
+/** The start rule; begin parsing here. */
+root: impDecl;
 
-impDecl: IMPORT FileDec;
-FileDec: FileName'.wdl';
-FileName: LETTER (NUMBER | LETTER)*;
+// parser rules start with lowercase letters,
+// lexer rules with uppercase
+impDecl: IMPORT filedecl;
+filedecl: FILENAME IMPORT_EXT;

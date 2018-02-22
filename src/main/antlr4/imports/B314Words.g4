@@ -77,6 +77,8 @@ COMPUTE: 'compute';
 IMPORT: 'import';
 AMMO : 'ammo';
 
+FILENAME : ID (NUMBER | ID)*;
+IMPORT_EXT : '.wld';
 
 
 
