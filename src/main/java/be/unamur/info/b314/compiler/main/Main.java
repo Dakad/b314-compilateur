@@ -1,14 +1,19 @@
 package be.unamur.info.b314.compiler.main;
 
 import static com.google.common.base.Preconditions.checkArgument;
+
+import be.unamur.info.b314.compiler.B314Lexer;
+import be.unamur.info.b314.compiler.B314Parser;
+import be.unamur.info.b314.compiler.main.exception.ParsingException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -80,6 +85,11 @@ public class Main {
      * The output PCode file.
      */
     private File outputFile;
+
+  /**
+   * The parser.
+   */
+  private B314Parser parser;
     
     private Main() {
         // Create command line options
@@ -141,12 +151,68 @@ public class Main {
     /**
      * Compiler Methods, this is where the MAGIC happens !!! \o/
      */
-    private void compile() {
-    
-    
-       // Put your code here !
-       
-       
+    private void compile() throws IOException, ParsingException {
+        // Get AST : Abstract Syntax Tree
+        LOG.debug("Parsing input");
+        B314Parser.RootContext tree = parse(new ANTLRInputStream(new FileInputStream(inputFile)));
+        LOG.debug("Parsing input: done");
+        LOG.debug("AST is {}", tree.toStringTree(parser));
+
+        // Build symbol table
+        LOG.debug("Building symbol table");
+        Map<String, Integer> symTable = fillSymTable(tree);
+        LOG.debug("Building symbol table: done");
+
+        // Print PCode
+        LOG.debug("Printing PCode");
+        printPCode(tree, symTable);
+        LOG.debug("Printing PCode: done");
+    }
+
+    /**
+     * Builds the abstract syntax tree from input.
+     */
+    private B314Parser.RootContext parse(ANTLRInputStream input) throws ParseCancellationException, ParsingException {
+        // Create the token stream
+        CommonTokenStream tokens = new CommonTokenStream(new B314Lexer(input));
+        // Intialise parser
+        this.parser = new B314Parser(tokens);
+        // Set error listener to adoc implementation
+        this.parser.removeErrorListeners();
+        MyConsoleErrorListener errorListener = new MyConsoleErrorListener();
+        parser.addErrorListener(errorListener);
+        // Launch parsing
+        B314Parser.RootContext tree;
+        try {
+            tree = parser.root();
+        } catch (RecognitionException e) {
+            throw new ParsingException("Error while retrieving parsing tree!", e);
+        }
+        if (errorListener.errorHasBeenReported()) {
+            throw new ParsingException("Error while parsing input!");
+        }
+        return tree;
+    }
+
+    /**
+     * Builds symbol table from AST.
+     */
+    private Map<String, Integer> fillSymTable(B314Parser.RootContext tree) {
+        SymTableFiller filler = new SymTableFiller();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(filler, tree);
+        return filler.getSymTable();
+    }
+
+    /**
+     * Print PCode from AST and symtable.
+     */
+    private void printPCode(B314Parser.RootContext tree, Map<String, Integer> symTable) throws FileNotFoundException {
+        PCodePrinter printer = new PCodePrinter(outputFile);
+        PCodeVisitor visitor = new PCodeVisitor(symTable, printer);
+        tree.accept(visitor);
+        printer.flush();
+        printer.close();
     }
 
 }
