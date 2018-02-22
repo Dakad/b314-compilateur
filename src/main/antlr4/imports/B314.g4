@@ -24,7 +24,7 @@ fileDecl: ID IMPORT_EXT;
 
 
 // Instructions
-instr : SKIP
+instr : SKP
       | IF 'expD' THEN (instr)+ DONE
       | IF 'expD' THEN (instr)+ ELSE (instr)+ DONE
       | WHILE 'exprD' DO (instr)+ DONE
