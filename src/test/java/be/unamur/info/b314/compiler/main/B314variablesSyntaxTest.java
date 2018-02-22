@@ -35,23 +35,18 @@ public class B314variablesSyntaxTest {
     }
 
     @Test
-    public void testvariables_square_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/variables/ok/square.b314", testFolder.newFile(), true, "variables: square");
+    public void testvariables_integer_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/variables/ok/integer.b314", testFolder.newFile(), true, "variables: integer");
     }
 
     @Test
-    public void testvariables_integer_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/variables/ok/integer.b314", testFolder.newFile(), true, "variables: integer");
+    public void testvariables_square_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/variables/ok/square.b314", testFolder.newFile(), true, "variables: square");
     }
 
     //
     // Serie variables KO
     //
-    @Test
-    public void testvariables_int_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/int.b314", testFolder.newFile(), false, "variables: int");
-    }
-
     @Test
     public void testvariables_arena_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/variables/ko/arena.b314", testFolder.newFile(), false, "variables: arena");
@@ -60,6 +55,11 @@ public class B314variablesSyntaxTest {
     @Test
     public void testvariables_bool_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/variables/ko/bool.b314", testFolder.newFile(), false, "variables: bool");
+    }
+
+    @Test
+    public void testvariables_int_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/int.b314", testFolder.newFile(), false, "variables: int");
     }
 
 }
