@@ -77,15 +77,12 @@ COMPUTE: 'compute';
 IMPORT: 'import';
 AMMO : 'ammo';
 
-FILENAME : ID (NUMBER | ID)*;
+
+//idenfifiant
+ID: LETTER (LETTER | DIGIT)* ;
+
 IMPORT_EXT : '.wld';
 
-
-
-
-// Identifiers
-
-ID: LETTER (LETTER | DIGIT)* ;
 
 NUMBER: (DIGIT)+;
 
@@ -100,3 +97,5 @@ COMMENT: '/*' .*? '*/' -> skip;
 
 NEWLINE: '\r'? '\n'  -> skip ;
 WS: [ \t]+ -> skip ;
+
+WHITESPACE: ' ' -> skip;
