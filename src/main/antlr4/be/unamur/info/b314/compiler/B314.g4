@@ -6,7 +6,7 @@ import B314Words;
 // lexer rules with uppercase
 
 /** The start rule; begin parsing here. */
-root: (type | varDel | impDecl)*;
+root: (type | varDecl | impDecl)*;
 
 // Variables
 type : scalar | array
@@ -17,9 +17,9 @@ array : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET     // boolean[2]  or sq
       ;
 
 // Variable declaration
-varDel: ID AS type;
+varDecl: ID AS type;
 
 
 // import
-impDecl: IMPORT filedecl;
-filedecl: ID IMPORT_EXT;
+impDecl: IMPORT fileDecl;
+fileDecl: ID IMPORT_EXT;
