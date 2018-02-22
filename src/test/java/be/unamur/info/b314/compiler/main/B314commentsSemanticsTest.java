@@ -2,6 +2,7 @@ package be.unamur.info.b314.compiler.main;
 
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -13,6 +14,7 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public class B314commentsSemanticsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(B314commentsSemanticsTest.class);
@@ -31,6 +33,7 @@ public class B314commentsSemanticsTest {
     };
 
     @Test
+    @Ignore
     public void testcomments_empty() throws Exception{
         File pcodeFile = testFolder.newFile();
         CompilerTestHelper.launchCompilation("/semantics/comments/empty.b314", pcodeFile, true, "comments: empty");

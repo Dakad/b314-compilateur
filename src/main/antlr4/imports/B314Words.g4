@@ -21,8 +21,8 @@ LESSTO: '<';
 SUPTO: '>';
 PLUS: '+';
 COMMA: ',';
-POINTVIRGULE: ';';
-DUPOINT: ':';
+SEMICOLON: ';';
+COLON: ':';
 PLAYER: 'player';
 ENNEMI: 'ennemi';
 ZOMBIE: 'zombie';
@@ -51,7 +51,7 @@ RETURN: 'return';
 IF: 'if';
 ELSE: 'else';
 OR: 'or';
-EGAL: '=';
+EQ: '=';
 THEN: 'then';
 MULT: '*';
 LPAR: '(';
@@ -79,9 +79,11 @@ IMPORT: 'import';
 AMMO : 'ammo';
 
 
-// Identifiers
 
+//idenfifiant
 ID: LETTER (LETTER | DIGIT)* ;
+
+IMPORT_EXT : '.wld';
 
 ENTIER: (MINUS)? NUMBER;
 
@@ -98,3 +100,5 @@ COMMENT: '/*' .*? '*/' -> skip;
 
 NEWLINE: '\r'? '\n'  -> skip ;
 WS: [ \t]+ -> skip ;
+
+WHITESPACE: ' ' -> skip;
