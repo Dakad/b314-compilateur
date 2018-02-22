@@ -1,16 +1,20 @@
 package be.unamur.info.b314.compiler.main;
 
 import be.unamur.info.b314.compiler.B314BaseVisitor;
+import be.unamur.info.b314.compiler.B314Parser.ImpDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import java.util.Map;
 
 /**
- * Print PCode for a given tree using provided symbol table and printer. This 
- * class uses ANTLR visitor mechanism.
+ * Print PCode for a given tree using provided symbol table and printer.
+ * This class uses ANTLR visitor mechanism.
  * @author Xavier Devroey - xavier.devroey@unamur.be
  */
 public class PCodeVisitor extends B314BaseVisitor<Object> {
 
+  /**
+   * "Memory" of B314; variable/value pairs go here
+   */
   private final Map<String, Integer> symTable;
 
   private final PCodePrinter printer;
@@ -23,16 +27,19 @@ public class PCodeVisitor extends B314BaseVisitor<Object> {
   @Override
   public Object visitRoot(RootContext ctx) {
     this.printer.printSetStackPointer(symTable.size()); // Reserve space for variables
-    this.printer.printComments("Start declare ...");
+    this.printer.printComments("Start root rule ...");
     super.visitRoot(ctx);  // Print instructions
-    this.printer.printComments("End declare ... ");
+    this.printer.printComments("End root rule ... ");
     this.printer.printStop(); // Stop execution
     return null;
   }
 
+  @Override
+  public Object visitImpDecl(ImpDeclContext ctx) {
+    return super.visitImpDecl(ctx);
+  }
 
-
-/*
+  /*
   @Override
   public Object visitAffectInstr(B314Parser.AffectInstrContext ctx) {
     String var = ctx.ID().getText();
