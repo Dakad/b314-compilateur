@@ -67,6 +67,11 @@ exprG : ID
       |ID LBRACKET exprD (COMMA exprD)? RBRACKET;
 
 
+// Fonction
+fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | VOID)
+          //(declare local (VarDecl;)+)?
+          DO (instr)+ RETURN ID DONE;
+
 /* Instructions */
 
 instr : SKP
