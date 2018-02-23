@@ -21,8 +21,8 @@ LESSTO: '<';
 SUPTO: '>';
 PLUS: '+';
 COMMA: ',';
-POINTVIRGULE: ';';
-DUPOINT: ':';
+SEMICOLON: ';';
+COLON: ':';
 PLAYER: 'player';
 ENNEMI: 'ennemi';
 ZOMBIE: 'zombie';
@@ -31,7 +31,7 @@ DIRT: 'dirt';
 FRUITS: 'fruits';
 MAP: 'map';
 RADIO: 'radio';
-GRALL: 'graal';
+GRAAL: 'graal';
 SODA: 'soda';
 SQUARE: 'square';
 VOID: 'void';
@@ -46,11 +46,12 @@ NEARBY: 'nearby';
 BOOLEAN: 'boolean';
 FUNCTION : 'function';
 TRUE: 'true';
+IS : 'is';
 RETURN: 'return';
 IF: 'if';
 ELSE: 'else';
 OR: 'or';
-EGAL: '=';
+EQ: '=';
 THEN: 'then';
 MULT: '*';
 LPAR: '(';
@@ -63,25 +64,29 @@ USE: 'use';
 LOCAL: 'local';
 MOVE: 'move';
 EAST: 'east';
-NOTH: 'noth';
+NORTH: 'north';
 SOUTH: 'south';
 WEST: 'west';
 LATITUDE: 'latitude';
 LONGITUDE: 'longitude';
 SHOOT: 'shoot';
 NOTHING: 'nothing';
+SKP : 'skip';
+
 MINUS: '-';
 DIV: '/';
 MOD: '%';
+
 COMPUTE: 'compute';
 IMPORT: 'import';
 AMMO : 'ammo';
 
+IMPORT_EXT : '.wld';
 
-
-// Identifiers
-
+//idenfifiant
 ID: LETTER (LETTER | DIGIT)* ;
+
+
 
 NUMBER: (DIGIT)+;
 
@@ -96,3 +101,5 @@ COMMENT: '/*' .*? '*/' -> skip;
 
 NEWLINE: '\r'? '\n'  -> skip ;
 WS: [ \t]+ -> skip ;
+
+WHITESPACE: ' ' -> skip;
