@@ -82,3 +82,27 @@ instr : SKP
       | COMPUTE exprD
       | NEXT action
       ;
+
+/* Program */
+
+program: DECLARE AND RETAIN
+      (varDecl COMMA | fctDecl)*
+      (instr)*
+      clauseDefault
+
+      | DECLARE AND RETAIN
+       (varDecl SEMICOLON | fctDecl | impDecl)*
+        WHEN YOUR TURN
+        (clauseWhen)*
+        clauseDefault;
+
+/* Clause Default */
+
+clauseDefault: BY DEFAULT
+      (DECALRE LOCAL (varDecl COMMA SEMICOLON)+)?
+      DO (instr)+ DONE ;
+
+/* Clause When */
+clauseWhen: WHEN exprD
+      (DECLARE LOCAL (varDecl SEMICOLON)+)?
+      DO (instr)+ DONE ;
