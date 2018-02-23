@@ -13,7 +13,7 @@ root: (type | varDecl | impDecl | instr | action | fctDecl)*;
 /** Variable */
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
-array   : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET ;     // boolean[2]  or square[2,3]
+array   : scalar LBRACK NUMBER (COMMA NUMBER)? RBRACK ;     // boolean[2]  or square[2,3]
 
   // Variable declaration
 varDecl : ID AS type;                                          // nomVar as integer, boolean[2]
@@ -50,12 +50,12 @@ exprD : INT_TYPE
       | GRAAL IS (NORTH | SOUTH | EAST | WEST)
       | exprD (AND | OR) exprD
       | NOT exprD
-      | exprD (LT | GT | EQ) exprD
+      | exprD (LT | GT | EQ | LE | GE) exprD
 
   /* Expressions sur les types de cases */
       | (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
       | (FRUITS | SODA | GRAAL)
-      | NEARBY LBRACKET exprD COMMA exprD RBRACKET
+      | NEARBY LBRACK exprD COMMA exprD RBRACK
 
       | exprG
       | ID LPAR (exprD (COMMA exprD)*)? RPAR;
@@ -64,7 +64,7 @@ exprD : INT_TYPE
 /*' Expression Gauche */
 
 exprG : ID
-      |ID LBRACKET exprD (COMMA exprD)? RBRACKET;
+      |ID LBRACK exprD (COMMA exprD)? RBRACK;
 
 
 // Fonction
