@@ -71,18 +71,21 @@ LATITUDE: 'latitude';
 LONGITUDE: 'longitude';
 SHOOT: 'shoot';
 NOTHING: 'nothing';
+SKP : 'skip';
+
 MINUS: '-';
 DIV: '/';
 MOD: '%';
+
 COMPUTE: 'compute';
 IMPORT: 'import';
 AMMO : 'ammo';
 
+IMPORT_EXT : '.wld';
 
 //idenfifiant
 ID: LETTER (LETTER | DIGIT)* ;
 
-IMPORT_EXT : '.wld';
 
 
 NUMBER: (DIGIT)+;
