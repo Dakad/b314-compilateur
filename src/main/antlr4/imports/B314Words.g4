@@ -41,12 +41,12 @@ COUNT: 'count';
 NOT: 'not';
 FALSE: 'false';
 NEARBY: 'nearby';
-IS: 'is';
 
 //stategie
 BOOLEAN: 'boolean';
 FUNCTION : 'function';
 TRUE: 'true';
+IS : 'is';
 RETURN: 'return';
 IF: 'if';
 ELSE: 'else';
@@ -71,21 +71,22 @@ LATITUDE: 'latitude';
 LONGITUDE: 'longitude';
 SHOOT: 'shoot';
 NOTHING: 'nothing';
+SKP : 'skip';
+
 MINUS: '-';
 DIV: '/';
 MOD: '%';
+
 COMPUTE: 'compute';
 IMPORT: 'import';
 AMMO : 'ammo';
 
-
+IMPORT_EXT : '.wld';
 
 //idenfifiant
 ID: LETTER (LETTER | DIGIT)* ;
 
-IMPORT_EXT : '.wld';
 
-ENTIER: (MINUS)? NUMBER;
 
 NUMBER: (DIGIT)+;
 
