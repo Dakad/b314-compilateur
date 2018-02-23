@@ -18,20 +18,9 @@ array : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET ;     // boolean[2]  or 
 varDecl: ID AS type;
 
 
-// import
-impDecl: IMPORT fileDecl;
+// Import
+impDecl:  IMPORT fileDecl;
 fileDecl: ID IMPORT_EXT;
-
-
-// Instructions
-instr : SKP
-      | IF 'expD' THEN (instr)+ DONE
-      | IF 'expD' THEN (instr)+ ELSE (instr)+ DONE
-      | WHILE 'exprD' DO (instr)+ DONE
-      | SET 'exprG' TO 'expreD'
-      | COMPUTE 'exprD'
-      | NEXT action
-      ;
 
 // Actions
 action  : MOVE (NORTH | SOUTH| EAST | WEST)
@@ -57,7 +46,7 @@ exprD : INTEGER
       | GRAAL IS (NORTH | SOUTH | EAST | WEST)
       | exprD (AND | OR) exprD
       | NOT exprD
-      | exprD (LESSTO | SUPTO | EGAL) exprD
+      | exprD (LESSTO | SUPTO | EQ) exprD
 
   //Expressions sur les types de cases
       | (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
@@ -69,3 +58,14 @@ exprD : INTEGER
 
 exprG : ID
       |ID LBRACKET exprD (COMMA exprD)? RBRACKET;
+
+
+// Instructions
+instr : SKP
+      | IF exprD THEN (instr)+ DONE
+      | IF exprD THEN (instr)+ ELSE (instr)+ DONE
+      | WHILE exprD DO (instr)+ DONE
+      | SET exprG TO exprD
+      | COMPUTE exprD
+      | NEXT action
+      ;
