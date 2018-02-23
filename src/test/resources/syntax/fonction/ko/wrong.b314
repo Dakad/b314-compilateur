@@ -1,0 +1,5 @@
+f as fonction( ): boolo
+    do
+        set t to true
+        return t;
+    done
