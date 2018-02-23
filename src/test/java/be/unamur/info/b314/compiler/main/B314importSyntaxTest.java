@@ -38,8 +38,8 @@ public class B314importSyntaxTest {
     // Serie import KO
     //
     @Test
-    public void testimport_missing_import_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/import/ko/missing_import.b314", testFolder.newFile(), false, "import: missing_import");
+    public void testimport_double_import_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/import/ko/double_import.b314", testFolder.newFile(), false, "import: double_import");
     }
 
     @Test
@@ -48,13 +48,13 @@ public class B314importSyntaxTest {
     }
 
     @Test
-    public void testimport_double_import_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/import/ko/double_import.b314", testFolder.newFile(), false, "import: double_import");
+    public void testimport_missing_file_ext_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/import/ko/missing_file_ext.b314", testFolder.newFile(), false, "import: missing_file_ext");
     }
 
     @Test
-    public void testimport_missing_file_ext_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/import/ko/missing_file_ext.b314", testFolder.newFile(), false, "import: missing_file_ext");
+    public void testimport_missing_import_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/import/ko/missing_import.b314", testFolder.newFile(), false, "import: missing_import");
     }
 
     @Test
