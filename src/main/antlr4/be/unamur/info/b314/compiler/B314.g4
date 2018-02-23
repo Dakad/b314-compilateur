@@ -7,7 +7,7 @@ import B314Words;
 
 
 /** The start rule; begin parsing here. */
-root: (type | varDecl | impDecl | instr | action)*;
+root: (type | varDecl | impDecl | instr | action | fctDecl)*;
 
 
 /** Variable */
@@ -70,7 +70,7 @@ exprG : ID
 // Fonction
 fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | VOID)
           //(declare local (VarDecl;)+)?
-          DO (instr)+ RETURN ID DONE;
+          DO (instr)+ RETURN ID SEMICOLON DONE;
 
 /* Instructions */
 
@@ -82,3 +82,27 @@ instr : SKP
       | COMPUTE exprD
       | NEXT action
       ;
+
+/* Program */
+
+program: DECLARE AND RETAIN
+      (varDecl COMMA | fctDecl)*
+      (instr)*
+      clauseDefault
+
+      | DECLARE AND RETAIN
+       (varDecl SEMICOLON | fctDecl | impDecl)*
+        WHEN YOUR TURN
+        (clauseWhen)*
+        clauseDefault;
+
+/* Clause Default */
+
+clauseDefault: BY DEFAULT
+      (DECALRE LOCAL (varDecl COMMA SEMICOLON)+)?
+      DO (instr)+ DONE ;
+
+/* Clause When */
+clauseWhen: WHEN exprD
+      (DECLARE LOCAL (varDecl SEMICOLON)+)?
+      DO (instr)+ DONE ;
