@@ -7,7 +7,7 @@ import B314Words;
 
 
 /** The start rule; begin parsing here. */
-root: (type | varDecl | impDecl | instr | action)*;
+root: (type | varDecl | impDecl | instr | action | fctDecl)*;
 
 
 /** Variable */
@@ -66,6 +66,11 @@ exprD : INTEGER
 exprG : ID
       |ID LBRACKET exprD (COMMA exprD)? RBRACKET;
 
+
+// Fonction
+fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | VOID)
+          //(declare local (VarDecl;)+)?
+          DO (instr)+ RETURN ID SEMICOLON DONE;
 
 /* Instructions */
 
