@@ -33,7 +33,7 @@ MAP: 'map';
 RADIO: 'radio';
 GRAAL: 'graal';
 SODA: 'soda';
-SQUARE: 'square';
+SQR_TYPE: 'square';
 VOID: 'void';
 GRID: 'grid';
 SIZE: 'size';
@@ -72,6 +72,7 @@ LONGT: 'longitude';
 SHOOT: 'shoot';
 NOTHING: 'nothing';
 SKP : 'skip';
+YOUR : 'your';
 
 SUB: '-';
 DIV: '/';

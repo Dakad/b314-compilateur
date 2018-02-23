@@ -12,7 +12,7 @@ root: (type | varDecl | impDecl | instr | action | fctDecl)*;
 
 /** Variable */
 type    : scalar | array;
-scalar  : BOOL_TYPE | INT_TYPE | SQUARE;
+scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
 array   : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET ;     // boolean[2]  or square[2,3]
 
   // Variable declaration
@@ -99,7 +99,7 @@ program: DECLARE AND RETAIN
 /* Clause Default */
 
 clauseDefault: BY DEFAULT
-      (DECALRE LOCAL (varDecl COMMA SEMI)+)?
+      (DECLARE LOCAL (varDecl COMMA SEMI)+)?
       DO (instr)+ DONE ;
 
 /* Clause When */
