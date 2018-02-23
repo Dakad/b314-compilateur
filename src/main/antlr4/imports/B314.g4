@@ -12,7 +12,7 @@ root: (type | varDecl | impDecl | instr | action | fctDecl)*;
 
 /** Variable */
 type    : scalar | array;
-scalar  : BOOLEAN | INTEGER | SQUARE;
+scalar  : BOOL_TYPE | INT_TYPE | SQUARE;
 array   : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET ;     // boolean[2]  or square[2,3]
 
   // Variable declaration
@@ -38,11 +38,11 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
 
   /* Expressions entières : */  //int, variable de l’environnement
                            // (lat, long, grid size) ou int + int
-exprD : INTEGER
-      | LATITUDE | LONGITUDE | GRID SIZE
+exprD : INT_TYPE
+      | LAT | LONGT | GRID SIZE
       | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
       | LIFE
-      | exprD (PLUS | |MULT | DIV | MOD) exprD
+      | exprD (ADD | |MULT | DIV | MOD) exprD
 
   /* Expressions booléennes */
       | TRUE | FALSE
@@ -50,7 +50,7 @@ exprD : INTEGER
       | GRAAL IS (NORTH | SOUTH | EAST | WEST)
       | exprD (AND | OR) exprD
       | NOT exprD
-      | exprD (LESSTO | SUPTO | EQ) exprD
+      | exprD (LT | GT | EQ) exprD
 
   /* Expressions sur les types de cases */
       | (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
@@ -70,7 +70,7 @@ exprG : ID
 // Fonction
 fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | VOID)
           //(declare local (VarDecl;)+)?
-          DO (instr)+ RETURN ID SEMICOLON DONE;
+          DO (instr)+ RETURN ID SEMI DONE;
 
 /* Instructions */
 
@@ -91,7 +91,7 @@ program: DECLARE AND RETAIN
       clauseDefault
 
       | DECLARE AND RETAIN
-       (varDecl SEMICOLON | fctDecl | impDecl)*
+       (varDecl SEMI | fctDecl | impDecl)*
         WHEN YOUR TURN
         (clauseWhen)*
         clauseDefault;
@@ -99,10 +99,10 @@ program: DECLARE AND RETAIN
 /* Clause Default */
 
 clauseDefault: BY DEFAULT
-      (DECALRE LOCAL (varDecl COMMA SEMICOLON)+)?
+      (DECALRE LOCAL (varDecl COMMA SEMI)+)?
       DO (instr)+ DONE ;
 
 /* Clause When */
 clauseWhen: WHEN exprD
-      (DECLARE LOCAL (varDecl SEMICOLON)+)?
+      (DECLARE LOCAL (varDecl SEMI)+)?
       DO (instr)+ DONE ;
