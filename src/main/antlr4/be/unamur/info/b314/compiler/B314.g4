@@ -2,68 +2,78 @@ grammar B314;
 
 import B314Words;
 
-// parser rules start with lowercase letters,
-// lexer rules with uppercase
+/** Parser rules (B314.g4) starts with lowercase letters */
+/** Lexer rules (B314Words.g4) is only with UPPERCASE */
+
 
 /** The start rule; begin parsing here. */
-root: (type | varDel | impDecl)*;
+root: (type | varDecl | impDecl | instr | action)*;
 
-// Variables
-type : scalar | array
-     ;
-scalar : BOOLEAN | INTEGER | SQUARE
-       ;
-array : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET     // boolean[2]  or square[2,3]
+
+/** Variable */
+type    : scalar | array;
+scalar  : BOOLEAN | INTEGER | SQUARE;
+array   : scalar LBRACKET NUMBER (COMMA NUMBER)? RBRACKET ;     // boolean[2]  or square[2,3]
+
+  // Variable declaration
+varDecl : ID AS type;                                          // nomVar as integer, boolean[2]
+
+
+/** Import */
+
+impDecl:  IMPORT fileDecl;                                    // import inputFile.wld
+fileDecl: ID IMPORT_EXT;                                      // inputFile.wld
+
+
+/** Actions */
+
+action  : MOVE  (NORTH | SOUTH | EAST | WEST)
+        | SHOOT (NORTH | SOUTH | EAST | WEST)
+        | USE (MAP | RADIO | FRUITS | SODA)
+        | DO NOTHING
+        ;
+
+
+/*' Expression Droite */
+
+  /* Expressions entières : */  //int, variable de l’environnement
+                           // (lat, long, grid size) ou int + int
+exprD : INTEGER
+      | LATITUDE | LONGITUDE | GRID SIZE
+      | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
+      | LIFE
+      | exprD (PLUS | |MULT | DIV | MOD) exprD
+
+  /* Expressions booléennes */
+      | TRUE | FALSE
+      | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
+      | GRAAL IS (NORTH | SOUTH | EAST | WEST)
+      | exprD (AND | OR) exprD
+      | NOT exprD
+      | exprD (LESSTO | SUPTO | EQ) exprD
+
+  /* Expressions sur les types de cases */
+      | (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
+      | (FRUITS | SODA | GRAAL)
+      | NEARBY LBRACKET exprD COMMA exprD RBRACKET
+
+      | exprG
+      | ID LPAR (exprD (COMMA exprD)*)? RPAR;
+
+
+/*' Expression Gauche */
+
+exprG : ID
+      |ID LBRACKET exprD (COMMA exprD)? RBRACKET;
+
+
+/* Instructions */
+
+instr : SKP
+      | IF exprD THEN (instr)+ DONE
+      | IF exprD THEN (instr)+ ELSE (instr)+ DONE
+      | WHILE exprD DO (instr)+ DONE
+      | SET exprG TO exprD
+      | COMPUTE exprD
+      | NEXT action
       ;
-
-// Variable declaration
-varDel: ID AS type;
-
-
-// import
-impDecl: IMPORT filedecl;
-filedecl: ID IMPORT_EXT;
-
-//Right expressions
-exprD: exprEnt
-    | exprBool
-    | exprCase
-    | exprG
-    | ID LPAR (exprD ( COMMA exprD)*)? RPAR
-    | LPAR exprD RPAR ;
-
-//Int expressions
-exprEnt: ENTIER
-    | LATITUDE | LONGITUDE | GRID SIZE
-    | (MAP | RADIO | AMMO | FRUITS | SODA) COUNT
-    | LIFE
-    | exprD (PLUS|MINUS) exprD
-    | exprD (MULT|DIV|MOD) exprD ;
-
-//Bool expression
-exprBool: TRUE | FALSE
-    | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
-    | GRAAL IS (NORTH | SOUTH | EAST | WEST)
-    | exprD (AND|OR) exprD
-    | NOT exprD
-    | exprD (LESSTO|SUPTO|EQ) exprD ;
-
-//Case expression
-exprCase: DIRT
-    | ROCK
-    | VINES
-    | ZOMBIE
-    | PLAYER
-    | ENNEMI
-    | MAP
-    | RADIO
-    | AMMO
-    | FRUITS
-    | SODA
-    | GRAAL
-    | NEARBY LBRACKET exprD COMMA exprD RBRACKET ;
-
-//Lefth expression
-exprG: ID
-    | ID LBRACKET exprD (COMMA exprD)? RBRACKET ;
-
