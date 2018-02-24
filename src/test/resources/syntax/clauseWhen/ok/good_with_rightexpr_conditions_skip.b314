@@ -1,0 +1,3 @@
+when true and b1 or v1[0, i1 + 2 * 5] do
+	skip
+done

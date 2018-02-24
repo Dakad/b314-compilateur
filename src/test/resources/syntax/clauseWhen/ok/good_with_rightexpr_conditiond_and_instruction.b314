@@ -1,0 +1,11 @@
+when true and b1 or v1[0, i1 + 2 * 5] do
+	if b1 and i1 = 2 then
+		while i1 < i3 do
+			set i2 to i1 + 1
+	done
+	else
+		if s1 = ammo then
+			next do nothing
+		done
+	done
+done

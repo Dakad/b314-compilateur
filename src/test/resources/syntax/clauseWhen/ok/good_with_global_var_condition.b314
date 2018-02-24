@@ -1,0 +1,4 @@
+when not b1 do
+	set b1 to true
+	next move north
+done

@@ -1,0 +1,15 @@
+when fct4() do /* wrong type */
+		skip
+done
+
+when false do
+		skip
+done
+
+when fct5(v2[1], b1 and true, s2) = 42 do
+	skip
+done
+
+by default do
+	skip
+done

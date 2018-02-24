@@ -1,0 +1,27 @@
+when true do
+    skip
+done
+
+when false do
+    skip
+done
+
+when graal is north do
+    skip
+done
+
+when graal is south do
+    skip
+done
+
+when graal is west do
+    skip
+done
+
+when graal is east do
+    skip
+done
+
+when ennemi is north do
+    skip
+done

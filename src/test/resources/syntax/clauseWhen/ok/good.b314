@@ -1,0 +1,4 @@
+when false do
+    next move west
+done
+
