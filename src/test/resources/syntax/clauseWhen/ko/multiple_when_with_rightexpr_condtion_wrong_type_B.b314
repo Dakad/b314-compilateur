@@ -1,0 +1,15 @@
+when s2 do /* wrong type */
+	skip
+done
+
+when false do
+	skip
+done
+
+when not graal is north and i2 > 5 and v2[4] < 42 or s1 = dirt do
+	skip
+done
+
+by default do
+	skip
+done
