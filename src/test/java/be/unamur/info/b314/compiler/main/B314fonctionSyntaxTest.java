@@ -9,9 +9,9 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class B314instructionsSyntaxTest {
+public class B314fonctionSyntaxTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(B314instructionsSyntaxTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(B314fonctionSyntaxTest.class);
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder(); // Create a temporary folder for outputs deleted after tests
@@ -27,19 +27,19 @@ public class B314instructionsSyntaxTest {
     };
 
     //
-    // Serie instructions OK
+    // Serie fonction OK
     //
     @Test
-    public void testinstructions_only_skip_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/only_skip.b314", testFolder.newFile(), true, "instructions: only_skip");
+    public void testfonction_good_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/fonction/ok/good.b314", testFolder.newFile(), true, "fonction: good");
     }
 
     //
-    // Serie instructions KO
+    // Serie fonction KO
     //
     @Test
-    public void testinstructions_wrong_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong.b314", testFolder.newFile(), false, "instructions: wrong");
+    public void testfonction_wrong_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/fonction/ko/wrong.b314", testFolder.newFile(), false, "fonction: wrong");
     }
 
 }
