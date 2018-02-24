@@ -1,6 +1,5 @@
 package be.unamur.info.b314.compiler.main;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -10,7 +9,6 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Ignore
 public class B314commentsSyntaxTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(B314commentsSyntaxTest.class);
@@ -37,23 +35,18 @@ public class B314commentsSyntaxTest {
     }
 
     @Test
-    public void testcomments_empty_multiple_lines_and_tab_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/comments/ok/empty_multiple_lines_and_tab.b314", testFolder.newFile(), true, "comments: empty_multiple_lines_and_tab");
+    public void testcomments_empty_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/comments/ok/empty.b314", testFolder.newFile(), true, "comments: empty");
     }
 
     @Test
-    public void testcomments_empty_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/comments/ok/empty.b314", testFolder.newFile(), true, "comments: empty");
+    public void testcomments_empty_multiple_lines_and_tab_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/comments/ok/empty_multiple_lines_and_tab.b314", testFolder.newFile(), true, "comments: empty_multiple_lines_and_tab");
     }
 
     //
     // Serie comments KO
     //
-    @Test
-    public void testcomments_missing_default_bloc_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/comments/ko/missing_default_bloc.b314", testFolder.newFile(), false, "comments: missing_default_bloc");
-    }
-
     @Test
     public void testcomments_at_least_one_instruction_in_default_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/comments/ko/at_least_one_instruction_in_default.b314", testFolder.newFile(), false, "comments: at_least_one_instruction_in_default");
@@ -62,6 +55,11 @@ public class B314commentsSyntaxTest {
     @Test
     public void testcomments_missing_declare_bloc_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/comments/ko/missing_declare_bloc.b314", testFolder.newFile(), false, "comments: missing_declare_bloc");
+    }
+
+    @Test
+    public void testcomments_missing_default_bloc_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/comments/ko/missing_default_bloc.b314", testFolder.newFile(), false, "comments: missing_default_bloc");
     }
 
 }
