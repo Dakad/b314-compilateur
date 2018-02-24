@@ -38,8 +38,8 @@ public class B314instructionsSyntaxTest {
     // Serie instructions KO
     //
     @Test
-    public void testinstructions_wrong_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong.b314", testFolder.newFile(), false, "instructions: wrong");
+    public void testinstructions_set_express_as_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/set_express_as.b314", testFolder.newFile(), false, "instructions: set_express_as");
     }
 
 }
