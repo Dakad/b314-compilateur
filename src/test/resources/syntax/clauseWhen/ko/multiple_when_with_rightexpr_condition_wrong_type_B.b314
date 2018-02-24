@@ -12,15 +12,15 @@ declare and retain
     done
 
 when your turn
-	when fct4( do /* wrong type */
+	when s2 do
 		skip
 	done
 
 	when false do
-			skip
+		skip
 	done
 
-	when fct5(v2[1], b1 and true, s2) = 42 do
+	when not graal is north and i2 > 5 and v2[4] < 42 or s1 += dirt do
 		skip
 	done
 
