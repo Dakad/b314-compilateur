@@ -7,13 +7,23 @@ import B314Words;
 
 
 /** The start rule; begin parsing here. */
-root: (type | varDecl | impDecl | instr | action | fctDecl)*;
+root: program | anyRules ;
+
+
+// This rules is only for testing a specific rules.
+// TODO Must be removed on final release.
+anyRules : (type | varDecl | impDecl | instr | action
+         | exprD | exprD | exprG | fctDecl | instr
+         | clauseDefault | clauseWhen )
+         ;
 
 
 /** Variable */
+
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
 array   : scalar LBRACK NUMBER (COMMA NUMBER)? RBRACK ;       // boolean[2]  or square[2,3]
+
 
   // Variable declaration
 varDecl : ID AS type;                                        // nomVar as integer, boolean[2]
@@ -80,6 +90,7 @@ fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | V
           DONE
         ;
 
+
 /* Instructions */
 
 instr : SKP
@@ -90,6 +101,7 @@ instr : SKP
       | COMPUTE exprD
       | NEXT action
       ;
+
 
 /* Program */
 
@@ -104,6 +116,7 @@ program : DECLARE AND RETAIN
             clauseDefault
         ;
 
+
 /* Clause Default */
 
 clauseDefault : BY DEFAULT
@@ -111,9 +124,11 @@ clauseDefault : BY DEFAULT
                 DO instr+ DONE
               ;
 
+
 /* Clause When */
 
 clauseWhen : WHEN exprD
             (DECLARE LOCAL (varDecl SEMI)+)?
              DO instr+ DONE
            ;
+
