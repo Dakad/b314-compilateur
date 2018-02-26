@@ -1,4 +1,76 @@
-when true do
-	skip
-done
+declare and retain
+	b1 as boolean;
+	b2 as boolean;
+    i1 as integer;
+    i2 as integer;
+
+    fct2 as function(x as integer, y as boolean):integer
+    	do
+    		skip
+    		return fct2 ;
+    	done
+
+    fct3 as function():boolean
+    	do
+    		skip
+    		return fct3;
+    	done
+
+    fct4 as function():square
+    	do
+    		skip
+    		return fct4;
+    	done
+
+    fct5 as function(x as integer, y as boolean, z as square):integer
+    	do
+    		skip
+    		return fct5;
+    	done
+
+when your turn
+
+	when true do
+		skip
+	done
+
+	when false do
+		skip
+	done
+
+	when graal is north do
+		skip
+	done
+
+	when graal is south do
+		skip
+	done
+
+	when graal is west do
+		skip
+	done
+
+	when graal is east do
+		skip
+	done
+
+	when ennemi is north do
+		skip
+	done
+
+	when ennemi is south do
+		skip
+	done
+
+	when ennemi is west do
+		skip
+	done
+
+	when ennemi is east do
+		skip
+	done
+
+	by default do
+		skip
+	done
 

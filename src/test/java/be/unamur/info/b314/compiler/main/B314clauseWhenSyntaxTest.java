@@ -30,18 +30,8 @@ public class B314clauseWhenSyntaxTest {
     // Serie clauseWhen OK
     //
     @Test
-    public void testclauseWhen_good_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ok/good.b314", testFolder.newFile(), true, "clauseWhen: good");
-    }
-
-    @Test
     public void testclauseWhen_good_with_constant_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ok/good_with_constant.b314", testFolder.newFile(), true, "clauseWhen: good_with_constant");
-    }
-
-    @Test
-    public void testclauseWhen_good_with_fct_call_condition_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ok/good_with_fct_call_condition.b314", testFolder.newFile(), true, "clauseWhen: good_with_fct_call_condition");
     }
 
     @Test
@@ -50,13 +40,23 @@ public class B314clauseWhenSyntaxTest {
     }
 
     @Test
+    public void testclauseWhen_good_with_rightexpr_conditiond_and_instruction_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ok/good_with_rightexpr_conditiond_and_instruction.b314", testFolder.newFile(), true, "clauseWhen: good_with_rightexpr_conditiond_and_instruction");
+    }
+
+    @Test
     public void testclauseWhen_good_with_global_var_condition_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ok/good_with_global_var_condition.b314", testFolder.newFile(), true, "clauseWhen: good_with_global_var_condition");
     }
 
     @Test
-    public void testclauseWhen_good_with_rightexpr_conditiond_and_instruction_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ok/good_with_rightexpr_conditiond_and_instruction.b314", testFolder.newFile(), true, "clauseWhen: good_with_rightexpr_conditiond_and_instruction");
+    public void testclauseWhen_good_with_fct_call_condition_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ok/good_with_fct_call_condition.b314", testFolder.newFile(), true, "clauseWhen: good_with_fct_call_condition");
+    }
+
+    @Test
+    public void testclauseWhen_good_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ok/good.b314", testFolder.newFile(), true, "clauseWhen: good");
     }
 
     @Test
@@ -68,13 +68,13 @@ public class B314clauseWhenSyntaxTest {
     // Serie clauseWhen KO
     //
     @Test
-    public void testclauseWhen_multiple_when_clauses_after_default_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_clauses_after_default.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_clauses_after_default");
+    public void testclauseWhen_multiple_when_with_rightexpr_conditions_and_instructions_wrong_typed_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_with_rightexpr_conditions_and_instructions_wrong_typed.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_with_rightexpr_conditions_and_instructions_wrong_typed");
     }
 
     @Test
-    public void testclauseWhen_multiple_when_clause_with_wrong_fct_call_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_clause_with_wrong_fct_call.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_clause_with_wrong_fct_call");
+    public void testclauseWhen_multiple_when_with_rightexpr_condition_wrong_type_C_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_with_rightexpr_condition_wrong_type_C.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_with_rightexpr_condition_wrong_type_C");
     }
 
     @Test
@@ -83,8 +83,8 @@ public class B314clauseWhenSyntaxTest {
     }
 
     @Test
-    public void testclauseWhen_multiple_when_with_rightexpr_conditions_and_instructions_wrong_typed_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_with_rightexpr_conditions_and_instructions_wrong_typed.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_with_rightexpr_conditions_and_instructions_wrong_typed");
+    public void testclauseWhen_multiple_when_with_rightexpr_condition_wrong_type_B_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_with_rightexpr_condition_wrong_type_B.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_with_rightexpr_condition_wrong_type_B");
     }
 
     @Test
@@ -93,13 +93,13 @@ public class B314clauseWhenSyntaxTest {
     }
 
     @Test
-    public void testclauseWhen_multiple_when_with_rightexpr_condition_wrong_type_B_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_with_rightexpr_condition_wrong_type_B.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_with_rightexpr_condition_wrong_type_B");
+    public void testclauseWhen_multiple_when_clause_with_wrong_fct_call_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_clause_with_wrong_fct_call.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_clause_with_wrong_fct_call");
     }
 
     @Test
-    public void testclauseWhen_multiple_when_with_rightexpr_condition_wrong_type_C_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_with_rightexpr_condition_wrong_type_C.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_with_rightexpr_condition_wrong_type_C");
+    public void testclauseWhen_multiple_when_clauses_after_default_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/clauseWhen/ko/multiple_when_clauses_after_default.b314", testFolder.newFile(), false, "clauseWhen: multiple_when_clauses_after_default");
     }
 
 }
