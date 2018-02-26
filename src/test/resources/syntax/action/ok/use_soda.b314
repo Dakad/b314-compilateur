@@ -1,0 +1,16 @@
+declare and retain
+    import inputFile.wld
+
+when your turn
+    when life < 20 do
+        next use soda
+    done
+
+    when life < 50 do
+        next use soda
+    done
+
+    by default
+    do
+        next use soda
+    done
