@@ -1,1 +1,17 @@
-use map
+declare and retain
+    import inputFile.wld
+
+
+when your turn
+    when life < 20 do
+        next use map
+    done
+
+    when life < 50 do
+        next use map
+    done
+
+    by default
+    do
+        next use map
+    done
