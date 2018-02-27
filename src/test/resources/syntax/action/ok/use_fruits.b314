@@ -1,1 +1,16 @@
-use fruits
+declare and retain
+    import inputFile.wld
+
+when your turn
+    when life < 20 do
+        next use fruits
+    done
+
+    when x > 5 and life < 2 do
+        next use fruits
+    done
+
+    by default
+    do
+        next use fruits
+    done
