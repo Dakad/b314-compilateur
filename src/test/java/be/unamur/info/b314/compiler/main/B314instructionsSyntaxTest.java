@@ -30,6 +30,11 @@ public class B314instructionsSyntaxTest {
     // Serie instructions OK
     //
     @Test
+    public void testinstructions_int_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_right_expr.b314", testFolder.newFile(), true, "instructions: int_right_expr");
+    }
+
+    @Test
     public void testinstructions_only_skip_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/instructions/ok/only_skip.b314", testFolder.newFile(), true, "instructions: only_skip");
     }
@@ -39,7 +44,7 @@ public class B314instructionsSyntaxTest {
     //
     @Test
     public void testinstructions_wrong_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong.b314", testFolder.newFile(), false, "instructions: wrong");
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_init_right.b314", testFolder.newFile(), false, "instructions: wrong");
     }
 
 }
