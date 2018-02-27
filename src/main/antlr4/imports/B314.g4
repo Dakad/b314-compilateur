@@ -19,10 +19,10 @@ anyRules : (type | varDecl | impDecl | instr | action
 
 
 /** Variable */
-
+nbVal   : NUMBER;
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
-array   : scalar LBRACK NUMBER (COMMA NUMBER)? RBRACK ;       // boolean[2]  or square[2,3]
+array   : scalar LBRACK nbVal (COMMA nbVal)? RBRACK ;       // boolean[2]  or square[2,3]
 
 
   // Variable declaration
@@ -49,8 +49,9 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
   /* Expressions entières : int, variable de l’environnement
    *                        (lat, long, grid size) ou int + int
    */
+intVal : INTEGER;
 
-exprD : INTEGER                                         // 2, 13, -4,
+exprD : intVal                                         // 2, 13, -4,
       | LAT | LONGT | GRID SIZE
       | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
       | LIFE
