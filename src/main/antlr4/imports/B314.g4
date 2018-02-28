@@ -22,7 +22,7 @@ anyRules : (type | varDecl | impDecl | instr | action
 nbVal   : NUMBER;
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
-array   : scalar LBRACK nbVal (COMMA nbVal)? RBRACK ;       // boolean[2]  or square[2,3]
+array   : scalar LBRACK intVal (COMMA intVal)? RBRACK ;       // boolean[2]  or square[2,3]
 
 
   // Variable declaration
