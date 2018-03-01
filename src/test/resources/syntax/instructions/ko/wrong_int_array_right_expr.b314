@@ -1,0 +1,7 @@
+declare and retain
+    rightArrayExpression as integer 7],
+    set val to 99
+    by default
+    do
+        set rightArrayExpression[0] to val
+    done
