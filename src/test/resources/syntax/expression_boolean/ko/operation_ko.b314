@@ -1,0 +1,18 @@
+/* My comments */
+declare and retain
+    x as integer;
+    y as square;
+    z as boolean;
+    v as boolean;
+    f as function (x as boolean, y as boolean) : boolean
+    do if x=y then set f to true done done
+    f2 as function (a as boolean, b as boolean) : integer
+        do if a=b then set f2 to false done done
+when your turn
+by default
+    do
+        compute not x < 5 and f(z=v, true)=true and f(true, false)=f2(true,true) or f2(true, false)=v
+        compute x = 2 and ennemi is north
+        compute not graal is south or ennemi is north and x > 42
+        compute nearby[2, 2] = ammo and y = map and not x < 5
+    done
