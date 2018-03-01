@@ -1,0 +1,11 @@
+/* My commentaire*/
+
+declare and retain
+    moyvar as integer;
+    v2 as square [0];
+    v3 as boolean;
+
+    when your turn
+        by default do
+            skip
+        done

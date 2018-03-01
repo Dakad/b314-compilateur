@@ -1,0 +1,6 @@
+declare and retain
+    set cstbool to false
+    by default
+    do
+        skip
+    done

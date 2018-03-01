@@ -30,6 +30,41 @@ public class B314instructionsSyntaxTest {
     // Serie instructions OK
     //
     @Test
+    public void testinstructions_bool_array_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_array_constant.b314", testFolder.newFile(), true, "instructions: bool_array_constant");
+    }
+
+    @Test
+    public void testinstructions_bool_array_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_array_right_expr.b314", testFolder.newFile(), true, "instructions: bool_array_right_expr");
+    }
+
+    @Test
+    public void testinstructions_bool_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_constant.b314", testFolder.newFile(), true, "instructions: bool_constant");
+    }
+
+    @Test
+    public void testinstructions_bool_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_right_expr.b314", testFolder.newFile(), true, "instructions: bool_right_expr");
+    }
+
+    @Test
+    public void testinstructions_int_array_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_array_constant.b314", testFolder.newFile(), true, "instructions: int_array_constant");
+    }
+
+    @Test
+    public void testinstructions_int_array_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_array_right_expr.b314", testFolder.newFile(), true, "instructions: int_array_right_expr");
+    }
+
+    @Test
+    public void testinstructions_int_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_constant.b314", testFolder.newFile(), true, "instructions: int_constant");
+    }
+
+    @Test
     public void testinstructions_int_right_expr_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_right_expr.b314", testFolder.newFile(), true, "instructions: int_right_expr");
     }
@@ -37,6 +72,26 @@ public class B314instructionsSyntaxTest {
     @Test
     public void testinstructions_only_skip_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/instructions/ok/only_skip.b314", testFolder.newFile(), true, "instructions: only_skip");
+    }
+
+    @Test
+    public void testinstructions_square_array_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_array_constant.b314", testFolder.newFile(), true, "instructions: square_array_constant");
+    }
+
+    @Test
+    public void testinstructions_square_array_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_array_right_expr.b314", testFolder.newFile(), true, "instructions: square_array_right_expr");
+    }
+
+    @Test
+    public void testinstructions_square_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_constant.b314", testFolder.newFile(), true, "instructions: square_constant");
+    }
+
+    @Test
+    public void testinstructions_square_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_right_expr.b314", testFolder.newFile(), true, "instructions: square_right_expr");
     }
 
     //

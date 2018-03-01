@@ -1,0 +1,23 @@
+declare and retain
+    x as integer;
+    y as square;
+    /*t1 as boolean[42];
+    t2 as boolean[42, 42];
+    t3 as boolean[42, 42];
+    t4 as integer[42];
+    t5 as integer[42, 42];
+    t6 as integer[42, 42];
+    t7 as square[42];
+    t8 as square[42, 42];
+    t9 as square[42, 42];*/
+when your turn
+by default
+    do
+        compute not x < 5
+        compute x = 2 and ennemi is north
+        compute not graal is south or ennemi is north and x > 42
+        compute nearby[2, 2] = ammo and y = map and not x < 5
+		compute t1[0] and t1[x + 2 * 4 % 6] or t2[x + 2 * 4 % 6, 0] and t3[x + 2 * 4 % 6, latitude + 1]
+		compute t3[0, 1] and t4[0] < t5[41, x + 2 * 4 % 6] or not t6[41, x + 2 * 4 % 6] > 42
+		compute t7[41] = dirt and t8[t4[0], t6[0, 0]] = ennemi
+    done
