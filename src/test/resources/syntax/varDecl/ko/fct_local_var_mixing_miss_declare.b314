@@ -1,0 +1,131 @@
+/* My comments */
+declare and retain
+	b1 as boolean;
+	b2 as boolean;
+    i1 as integer;
+    i2 as integer;
+    i3 as integer;
+    s1 as square;
+    s2 as square;
+    v1 as boolean[5, 7];
+    v2 as integer[42];
+
+    fct1 as function():square
+    	do
+    		skip
+    		return fct1;
+    	done
+
+    fct2 as function(x as integer, y as boolean):integer
+    	declare local
+    		loc1 as integer;
+    		loc2 as boolean;
+    		loc3 as square;
+    		loc4 as integer[5];
+    		b1 as integer;
+    		s1 as boolean;
+    	do
+    		compute s1 and b1 = 42 or loc2
+    		return fct2;
+    	done
+
+    fct3 as function():boolean
+    	declare local
+    		loc1 as integer;
+    		loc2 as boolean;
+    		loc3 as square;
+    		loc4 as integer[5];
+    	do
+    		skip
+    		return fct3;
+    	done
+
+    fct4 as function():square
+    	declare local
+    		loc1 as integer;
+    		loc2 as boolean;
+    		loc3 as square;
+    		loc4 as integer[5];
+    	do
+    		skip
+    		return fct4;
+        done
+
+    fct5 as function(x as integer, y as boolean, z as square):integer
+    	declare local
+    		loc1 as integer;
+    		loc2 as boolean;
+    		loc3 as square;
+    		loc4 as integer[5];
+    		v1 as integer[42];
+    	do
+    		set v1[0] to 42
+    		return fct5;
+    	done
+
+when your turn
+
+	when true and b1 or v1[0, i1 + 2 * 5] do
+		if b1 and i1 = 2 then
+			while i1 < i3 do
+				set i2 to i1 + 1
+			done
+		else
+			if s1 = ammo then
+				next do nothing
+			done
+		done
+	done
+
+	when v1[0, i2 + 2]
+	declare local
+		loc1 as integer;
+		loc2 as boolean;
+		loc3 as square;
+		loc4 as integer[5];
+		v1 as integer[42];
+	do
+		set v1[0] to 42
+	done
+
+	when not graal is north and i2 > 5 and v2[4] < 42 or s1 = dirt
+	local
+		loc1 as integer;
+		loc2 as boolean;
+		loc3 as square;
+		loc4 as integer[5];
+	do
+    	compute fct1()
+    	set s1 to fct1()
+    	if fct5(i1 + 2, s2 = ammo, ennemi) > 2 then
+    		skip
+    	done
+    	while fct3() do
+    		skip
+    	done
+    	next move west
+	done
+
+	when true and false and not b1 and s1 = dirt
+	declare local
+		loc1 as integer;
+		loc2 as boolean;
+		loc3 as square;
+		loc4 as integer[5];
+		b1 as integer;
+		s1 as boolean;
+    do
+	    skip
+    done
+
+    by default
+	declare local
+		loc1 as integer;
+		loc2 as boolean;
+		loc3 as square;
+		loc4 as integer[5];
+		b1 as integer;
+		s1 as boolean;
+	do
+		compute s1 and b1 = 42 or loc2
+	done
