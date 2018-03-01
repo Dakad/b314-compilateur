@@ -1,0 +1,6 @@
+declare and retain
+    set cstSquare to GRAAL
+    by default
+    do
+        skip
+    done

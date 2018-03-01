@@ -1,1 +1,16 @@
-use radio
+declare and retain
+    import inputFile.wld
+
+when your turn
+    when nearby [4, 5] = ennemi do
+        next use radio
+    done
+
+    when life < 50 do
+        next use radio
+    done
+
+    by default
+    do
+        next use radio
+    done
