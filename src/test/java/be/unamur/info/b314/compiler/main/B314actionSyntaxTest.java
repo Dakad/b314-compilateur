@@ -85,6 +85,7 @@ public class B314actionSyntaxTest {
     }
 
     @Test
+
     public void testaction_move_south_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/action/ok/move_south.b314", testFolder.newFile(), true, "action: move_south");
     }
