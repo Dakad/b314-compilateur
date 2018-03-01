@@ -50,7 +50,8 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
   /* Expressions entières : int, variable de l’environnement
    *                        (lat, long, grid size) ou int + int
    */
-intVal : INTEGER;
+intVal  : INTEGER;
+boolVal : TRUE | FALSE;
 
 exprD : intVal                                         // 2, 13, -4,
       | LAT | LONGT | GRID SIZE
@@ -59,7 +60,7 @@ exprD : intVal                                         // 2, 13, -4,
       | exprD (ADD | MULT | DIV | MOD) exprD
 
   /* Expressions booléennes */
-      | TRUE | FALSE
+      | boolVal
       | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
       | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
       | exprD (AND | OR) exprD
