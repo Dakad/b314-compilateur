@@ -48,18 +48,18 @@ public class B314variablesSyntaxTest {
     // Serie variables KO
     //
     @Test
-    public void testvariables_shoot_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/shoot.b314", testFolder.newFile(), false, "variables: shoot");
-    }
-
-    @Test
-    public void testvariables_use_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/use.b314", testFolder.newFile(), false, "variables: use");
+    public void testvariables_int_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/int.b314", testFolder.newFile(), false, "variables: int");
     }
 
     @Test
     public void testvariables_arena_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/variables/ko/arena.b314", testFolder.newFile(), false, "variables: arena");
+    }
+
+    @Test
+    public void testvariables_bool_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/bool.b314", testFolder.newFile(), false, "variables: bool");
     }
 
 }
