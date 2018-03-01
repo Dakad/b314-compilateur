@@ -42,4 +42,9 @@ public class B314instructionsSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/instructions/ko/set_express_as.b314", testFolder.newFile(), false, "instructions: set_express_as");
     }
 
+    @Test
+    public void testinstructions_wrong_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong.b314", testFolder.newFile(), false, "instructions: wrong");
+    }
+
 }
