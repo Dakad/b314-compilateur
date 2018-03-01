@@ -30,6 +30,11 @@ public class B314actionSyntaxTest {
     // Serie action OK
     //
     @Test
+    public void testaction_use_soda_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/use_soda.b314", testFolder.newFile(), true, "action: use_soda");
+    }
+
+    @Test
     public void testaction_shoot_north_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/action/ok/shoot_north.b314", testFolder.newFile(), true, "action: shoot_north");
     }
@@ -85,7 +90,6 @@ public class B314actionSyntaxTest {
     }
 
     @Test
-
     public void testaction_move_south_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/action/ok/move_south.b314", testFolder.newFile(), true, "action: move_south");
     }
