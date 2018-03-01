@@ -1,0 +1,8 @@
+declare and retain
+        rightExpr as square,
+        s as square,
+    by default
+    do
+        set rightExpr  graal
+        set s to rightExpr
+    done
