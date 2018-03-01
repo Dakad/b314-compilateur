@@ -1,8 +1,20 @@
 declare and retain
-    b1 as boolean;
-        fct1 as function (): boolean
-           do
-                set fct1 to true
-                return fct1;
-        when your turn
-by default do skip done
+    b as boolean;
+    i as integer;
+    s as square;
+when your turn
+by default
+    do
+        if not false and i < 5 or b  or nearby[2, i + 1] = dirt  then
+        	set i to i + 1 skip
+        else
+        	 if true then
+				skip skip skip
+			else
+				skip
+				compute b
+				set b to 1 + 2 /* Wrong type */
+			done
+        done
+    done
+
