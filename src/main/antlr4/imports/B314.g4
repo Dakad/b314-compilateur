@@ -19,10 +19,11 @@ anyRules : (type | varDecl | impDecl | instr | action
 
 
 /** Variable */
-
+nbVal   : NUMBER;
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
-array   : scalar LBRACK INTEGER (COMMA INTEGER)? RBRACK ;       // boolean[2]  or square[2,3]
+array   : scalar LBRACK intVal (COMMA intVal)? RBRACK ;       // boolean[2]  or square[2,3]
+
 
 
   // Variable declaration
@@ -49,15 +50,17 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
   /* Expressions entières : int, variable de l’environnement
    *                        (lat, long, grid size) ou int + int
    */
+intVal  : INTEGER;
+boolVal : TRUE | FALSE;
 
-exprD : INTEGER                                         // 2, 13, -4,
+exprD : intVal                                         // 2, 13, -4,
       | LAT | LONGT | GRID SIZE
       | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
       | LIFE
       | exprD (ADD | MULT | DIV | MOD) exprD
 
   /* Expressions booléennes */
-      | TRUE | FALSE
+      | boolVal
       | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
       | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
       | exprD (AND | OR) exprD

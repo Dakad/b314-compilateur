@@ -1,0 +1,11 @@
+declare and retain
+    x as integer;
+    y as square;
+when your turn
+by default
+    do
+        compute not true
+        compute graal is south and ennemi is north
+        compute not graal is south or ennemi is north and latitude > 42
+        compute nearby[2, 2] = ammo and nearby[2, 2] = map and not ammo count < 5 or life > soda count
+    done
