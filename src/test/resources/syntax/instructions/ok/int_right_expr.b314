@@ -1,0 +1,8 @@
+declare and retain
+    rightExpression as integer,
+    i as integer,
+    set rightExpression to 99
+    by default
+    do
+        set i to rightExpression
+    done

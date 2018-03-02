@@ -1,0 +1,8 @@
+declare and retain
+    rightArrayExpression as boolean[],
+    b as boolean,
+    by default
+    do
+        set b to true
+        set rightArrayExpression[0] to b
+    done
