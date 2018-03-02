@@ -1,1 +1,21 @@
-boolean
+declare and retain
+    import inputFile.wld
+    t as boolean;
+    res as boolean[3];
+    res as boolean[3,43];
+
+    f as function( ): boolean
+    do
+        set t to true
+        return res;
+    done
+
+when your turn
+
+	when x = ammo do
+		skip
+	done
+
+	by default do
+		skip
+	done
