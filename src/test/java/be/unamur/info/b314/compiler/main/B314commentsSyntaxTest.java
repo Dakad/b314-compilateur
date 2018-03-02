@@ -44,6 +44,21 @@ public class B314commentsSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/comments/ok/empty_multiple_lines_and_tab.b314", testFolder.newFile(), true, "comments: empty_multiple_lines_and_tab");
     }
 
+    @Test
+    public void testcomments_original_comments_everywhere_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/comments/ok/original_comments_everywhere.b314", testFolder.newFile(), true, "comments: original_comments_everywhere");
+    }
+
+    @Test
+    public void testcomments_original_empty_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/comments/ok/original_empty.b314", testFolder.newFile(), true, "comments: original_empty");
+    }
+
+    @Test
+    public void testcomments_original_empty_multiple_lines_and_tab_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/comments/ok/original_empty_multiple_lines_and_tab.b314", testFolder.newFile(), true, "comments: original_empty_multiple_lines_and_tab");
+    }
+
     //
     // Serie comments KO
     //
@@ -53,18 +68,13 @@ public class B314commentsSyntaxTest {
     }
 
     @Test
+    public void testcomments_wrong_empty_multiple_lines_and_tab_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/comments/ko/wrong_empty_multiple_lines_and_tab.b314", testFolder.newFile(), false, "comments: wrong_empty_multiple_lines_and_tab");
+    }
+
+    @Test
     public void testcomments_missing_declare_bloc_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/comments/ko/missing_declare_bloc.b314", testFolder.newFile(), false, "comments: missing_declare_bloc");
-    }
-
-    @Test
-    public void testcomments_missing_default_bloc_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/comments/ko/missing_default_bloc.b314", testFolder.newFile(), false, "comments: missing_default_bloc");
-    }
-
-    @Test
-    public void testcomments_wrong_comments_everywhere_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/comments/ko/wrong_comments_everywhere.b314", testFolder.newFile(), false, "comments: wrong_comments_everywhere");
     }
 
     @Test
@@ -73,8 +83,13 @@ public class B314commentsSyntaxTest {
     }
 
     @Test
-    public void testcomments_wrong_empty_multiple_lines_and_tab_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/comments/ko/wrong_empty_multiple_lines_and_tab.b314", testFolder.newFile(), false, "comments: wrong_empty_multiple_lines_and_tab");
+    public void testcomments_wrong_comments_everywhere_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/comments/ko/wrong_comments_everywhere.b314", testFolder.newFile(), false, "comments: wrong_comments_everywhere");
+    }
+
+    @Test
+    public void testcomments_missing_default_bloc_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/comments/ko/missing_default_bloc.b314", testFolder.newFile(), false, "comments: missing_default_bloc");
     }
 
 }
