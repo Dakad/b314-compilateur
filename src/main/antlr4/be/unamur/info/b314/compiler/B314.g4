@@ -7,22 +7,16 @@ import B314Words;
 
 
 /** The start rule; begin parsing here. */
-root: program | anyRules ;
+root: program ;
 
-
-// This rules is only for testing a specific rules.
-// TODO Must be removed on final release.
-anyRules : (type | varDecl | impDecl | instr | action
-         | exprD | exprD | exprG | fctDecl | instr
-         | clauseDefault | clauseWhen )
-         ;
 
 
 /** Variable */
-
+// nbVal   : NUMBER;
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
-array   : scalar LBRACK INTEGER (COMMA INTEGER)? RBRACK ;       // boolean[2]  or square[2,3]
+array   : scalar LBRACK intVal (COMMA intVal)? RBRACK ;       // boolean[2]  or square[2,3]
+
 
 
   // Variable declaration
@@ -46,18 +40,19 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
 
 /*' Expression Droite */
 
-  /* Expressions entières : int, variable de l’environnement
-   *                        (lat, long, grid size) ou int + int
-   */
+intVal  : INTEGER;
+boolVal : TRUE | FALSE;
 
-exprD : INTEGER                                         // 2, 13, -4,
-      | LAT | LONGT | GRID SIZE
+
+      /* Expressions entières */
+exprD : intVal                                              // 2, 13, -4,
+      | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
       | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
       | LIFE
-      | exprD (ADD | MULT | DIV | MOD) exprD
+      | exprD (ADD | MULT | DIV | MOD) exprD                // int + int, map count * 3
 
   /* Expressions booléennes */
-      | TRUE | FALSE
+      | boolVal
       | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
       | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
       | exprD (AND | OR) exprD
@@ -74,7 +69,7 @@ exprD : INTEGER                                         // 2, 13, -4,
       ;
 
 
-/*' Expression Gauche */
+/* Expression Gauche */
 
 exprG : ID
       | ID LBRACK exprD (COMMA exprD)? RBRACK
