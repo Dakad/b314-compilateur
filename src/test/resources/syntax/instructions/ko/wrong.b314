@@ -13,7 +13,7 @@ by default
 			else
 				skip
 				compute b
-				set b to 1 + 2 /* Wrong type */
+				set b to 1  2 /* Wrong type */
 			done
         done
     done

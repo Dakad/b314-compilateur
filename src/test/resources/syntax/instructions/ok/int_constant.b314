@@ -1,4 +1,5 @@
 declare and retain
+        set cstInt to 0
     by default
     do
         skip
