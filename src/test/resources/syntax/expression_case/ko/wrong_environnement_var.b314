@@ -1,0 +1,12 @@
+declare and retain
+    x as integer;
+when your turn
+by default
+    do
+        compute dirt
+        compute rock + 63 is south
+        compute fruits is east
+        compute soda is west
+        compute graal is north
+        compute zombie is south
+    done
