@@ -1,0 +1,8 @@
+declare and retain
+    rightArrayExpression as square[10,10]
+    s as square,
+    by default
+    do
+        set s to graal
+        set rightArrayExpression[5,5] to s
+    done

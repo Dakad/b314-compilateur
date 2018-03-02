@@ -1,12 +1,8 @@
- declare and retain /*       */
+declare and retain
     rightExpression as boolean,
-    b as boolean,
+    b as boolean
     set rightExpression to false
     by default
-    /*
-
-
-    */
     do
         set b to rightExpression
     done
