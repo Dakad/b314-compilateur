@@ -1,7 +1,7 @@
 declare and retain
     import inputFile.wld
-    t as square;
-    r as square[3];
+    t as use;
+    r as use[3];
     res as square[43,43];
 
     f as function( ): boolean
