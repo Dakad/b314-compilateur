@@ -1,0 +1,7 @@
+declare and retain
+    x as boolean;
+when your turn
+by default
+    do
+        compute nearby[fct(x),x+x,fct2]+x
+    done
