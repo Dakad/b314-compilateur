@@ -1,0 +1,6 @@
+declare and retain
+    set arraySquare [0,5] to graal
+    by default
+    do
+        skip
+    done
