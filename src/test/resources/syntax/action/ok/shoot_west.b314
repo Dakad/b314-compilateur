@@ -1,1 +1,20 @@
-shoot west
+declare and retain
+    import inputFile.wld
+    t as boolean;
+    res as integer;
+
+    f as function( ): boolean
+    do
+        set t to true
+        return res;
+    done
+
+when your turn
+
+	when x = ammo do
+		skip
+	done
+
+	by default do
+		next shoot west
+	done
