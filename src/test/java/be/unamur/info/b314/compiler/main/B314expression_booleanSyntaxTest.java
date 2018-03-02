@@ -30,16 +30,6 @@ public class B314expression_booleanSyntaxTest {
     // Serie expression_boolean OK
     //
     @Test
-    public void testexpression_boolean_operations_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operations.b314", testFolder.newFile(), true, "expression_boolean: operations");
-    }
-
-    @Test
-    public void testexpression_boolean_environnement_var_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/environnement_var.b314", testFolder.newFile(), true, "expression_boolean: environnement_var");
-    }
-
-    @Test
     public void testexpression_boolean_constant_values_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/constant_values.b314", testFolder.newFile(), true, "expression_boolean: constant_values");
     }
@@ -50,18 +40,38 @@ public class B314expression_booleanSyntaxTest {
     }
 
     @Test
+    public void testexpression_boolean_operation_only_env_vars_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operation_only_env_vars.b314", testFolder.newFile(), true, "expression_boolean: operation_only_env_vars");
+    }
+
+    @Test
     public void testexpression_boolean_expression_gauche_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/expression_gauche.b314", testFolder.newFile(), true, "expression_boolean: expression_gauche");
     }
 
     @Test
-    public void testexpression_boolean_operation_only_env_vars_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operation_only_env_vars.b314", testFolder.newFile(), true, "expression_boolean: operation_only_env_vars");
+    public void testexpression_boolean_operations_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operations.b314", testFolder.newFile(), true, "expression_boolean: operations");
+    }
+
+    @Test
+    public void testexpression_boolean_environnement_var_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/environnement_var.b314", testFolder.newFile(), true, "expression_boolean: environnement_var");
     }
 
     //
     // Serie expression_boolean KO
     //
+    @Test
+    public void testexpression_boolean_or_env_var_wrong_type_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/or_env_var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: or_env_var_wrong_type");
+    }
+
+    @Test
+    public void testexpression_boolean_var_wrong_type_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: var_wrong_type");
+    }
+
     @Test
     public void testexpression_boolean_wrong_type_in_sub_expression_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/wrong_type_in_sub_expression.b314", testFolder.newFile(), false, "expression_boolean: wrong_type_in_sub_expression");
@@ -73,8 +83,8 @@ public class B314expression_booleanSyntaxTest {
     }
 
     @Test
-    public void testexpression_boolean_var_wrong_type_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: var_wrong_type");
+    public void testexpression_boolean_env_var_wrong_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/env_var_wrong.b314", testFolder.newFile(), false, "expression_boolean: env_var_wrong");
     }
 
     @Test
@@ -90,16 +100,6 @@ public class B314expression_booleanSyntaxTest {
     @Test
     public void testexpression_boolean_undeclared_var_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/undeclared_var.b314", testFolder.newFile(), false, "expression_boolean: undeclared_var");
-    }
-
-    @Test
-    public void testexpression_boolean_env_var_wrong_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/env_var_wrong.b314", testFolder.newFile(), false, "expression_boolean: env_var_wrong");
-    }
-
-    @Test
-    public void testexpression_boolean_or_env_var_wrong_type_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/or_env_var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: or_env_var_wrong_type");
     }
 
 }
