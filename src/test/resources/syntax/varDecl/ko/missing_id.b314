@@ -1,0 +1,10 @@
+/* My Commentaire */
+
+declare and retain
+    myVar as integer [7,5];
+    as integer;
+
+    when your turn
+        by default do
+            skip
+        done

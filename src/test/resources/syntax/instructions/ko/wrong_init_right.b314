@@ -1,0 +1,8 @@
+declare and retain
+    b1 as boolean;
+        fct1 as function (): boolean
+           do
+                set fct1 to true
+                return fct1;
+        when your turn
+by default do skip done

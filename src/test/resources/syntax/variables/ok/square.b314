@@ -1,2 +1,21 @@
-square
-square [2,4]
+declare and retain
+    import inputFile.wld
+    t as square;
+    r as square[3];
+    res as square[43,43];
+
+    f as function( ): boolean
+    do
+        set t to true
+        return res;
+    done
+
+when your turn
+
+	when x = ammo do
+		skip
+	done
+
+	by default do
+		skip
+	done

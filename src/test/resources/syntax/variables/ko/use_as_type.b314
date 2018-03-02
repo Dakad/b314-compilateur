@@ -1,0 +1,21 @@
+declare and retain
+    import inputFile.wld
+    t as use;
+    r as use[3];
+    res as square[43,43];
+
+    f as function( ): boolean
+    do
+        set t to true
+        return res;
+    done
+
+when your turn
+
+	when x = ammo do
+		skip
+	done
+
+	by default do
+		skip
+	done

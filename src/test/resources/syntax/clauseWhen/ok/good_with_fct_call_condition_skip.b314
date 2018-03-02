@@ -1,0 +1,50 @@
+/* My comments */
+declare and retain
+	b1 as boolean;
+	b2 as boolean;
+    i1 as integer;
+    i2 as integer;
+    s1 as square;
+    s2 as square;
+
+    fct2 as function(x as integer, y as boolean):integer
+    	do
+    		skip
+    		return fct2;
+    	done
+
+    fct3 as function():boolean
+    	do
+    		skip
+    		return fct3;
+    	done
+
+    fct4 as function():square
+    	do
+    		skip
+    		return fct4;
+    	done
+
+    fct5 as function(x as integer, y as boolean, z as square):integer
+    	do
+    		skip
+    		return fct5;
+    	done
+
+when your turn
+
+	when fct3() do
+		skip
+	done
+
+	when false do
+		skip
+	done
+
+	when fct5(v2[1], b1 and true, s2) = 42 do
+		skip
+	done
+
+	by default do
+		skip
+	done

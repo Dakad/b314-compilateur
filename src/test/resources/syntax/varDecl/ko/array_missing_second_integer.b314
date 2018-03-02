@@ -1,0 +1,11 @@
+/* My commentaire */
+
+declare and retain
+    myVar as integer [7,];
+    v1 as integer;
+    v2 as square;
+
+    when your turn
+        by default do
+            skip
+        done

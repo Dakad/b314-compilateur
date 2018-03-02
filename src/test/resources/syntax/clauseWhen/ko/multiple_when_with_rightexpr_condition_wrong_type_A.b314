@@ -1,0 +1,29 @@
+declare and retain
+    import inputFile.wld
+
+    /*	Global	variables	*/	
+    t as boolean;
+    res as integer;
+
+    f as function( ): boolean
+    do
+        set t to true
+        return res;
+    done
+
+when your turn
+	when v2[0  + 1 do /* wrong type */
+			skip
+	done
+
+	when false do
+		skip
+	done
+
+	when not graal is north and i2 > 5 and v2[4] < 42 or s1 = dirt do
+		skip
+	done
+
+	by default do
+		skip
+	done

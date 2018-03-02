@@ -1,1 +1,21 @@
-integer
+declare and retain
+    import inputFile.wld
+    t as integer;
+    res as integer[4];
+    res as integer[4,45];
+
+    f as function( ): boolean
+    do
+        set t to true
+        return res;
+    done
+
+when your turn
+
+	when x = ammo do
+		skip
+	done
+
+	by default do
+		skip
+	done

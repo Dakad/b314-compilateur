@@ -14,7 +14,7 @@ declare and retain
 
     facto as function(x as integer): integer
     do
-        if x < 0 or x = 0 then
+        if x < 0 or x = 0 thengit
             set res to 1
         else
             set res to x ∗ facto (x - 1)

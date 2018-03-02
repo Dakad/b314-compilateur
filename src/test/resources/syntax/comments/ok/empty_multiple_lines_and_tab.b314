@@ -1,12 +1,12 @@
-declare 
-
-and 
-
-
-retain      when your    turn by 
-
-
-default         do      skip 
+ declare and retain /*       */
+    rightExpression as boolean,
+    b as boolean,
+    set rightExpression to false
+    by default
+    /*
 
 
-done
+    */
+    do
+        set b to rightExpression
+    done

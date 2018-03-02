@@ -89,6 +89,11 @@ public class B314actionSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/action/ok/use_radio.b314", testFolder.newFile(), true, "action: use_radio");
     }
 
+    @Test
+    public void testaction_use_soda_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/use_soda.b314", testFolder.newFile(), true, "action: use_soda");
+    }
+
     //
     // Serie action KO
     //

@@ -7,13 +7,17 @@ import B314Words;
 
 
 /** The start rule; begin parsing here. */
-root: (type | varDecl | impDecl | instr | action | fctDecl)*;
+root: program ;
+
 
 
 /** Variable */
+// nbVal   : NUMBER;
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
-array   : scalar LBRACK NUMBER (COMMA NUMBER)? RBRACK ;       // boolean[2]  or square[2,3]
+array   : scalar LBRACK intVal (COMMA intVal)? RBRACK ;       // boolean[2]  or square[2,3]
+
+
 
   // Variable declaration
 varDecl : ID AS type;                                        // nomVar as integer, boolean[2]
@@ -36,18 +40,19 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
 
 /*' Expression Droite */
 
-  /* Expressions entières : int, variable de l’environnement
-   *                        (lat, long, grid size) ou int + int
-   */
+intVal  : INTEGER;
+boolVal : TRUE | FALSE;
 
-exprD : INTEGER                                         // 2, 13, -4,
-      | LAT | LONGT | GRID SIZE
+
+      /* Expressions entières */
+exprD : intVal                                              // 2, 13, -4,
+      | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
       | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
       | LIFE
-      | exprD (ADD | MULT | DIV | MOD) exprD
+      | exprD (ADD | MULT | DIV | MOD) exprD                // int + int, map count * 3
 
   /* Expressions booléennes */
-      | TRUE | FALSE
+      | boolVal
       | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
       | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
       | exprD (AND | OR) exprD
@@ -64,7 +69,7 @@ exprD : INTEGER                                         // 2, 13, -4,
       ;
 
 
-/*' Expression Gauche */
+/* Expression Gauche */
 
 exprG : ID
       | ID LBRACK exprD (COMMA exprD)? RBRACK
@@ -80,6 +85,7 @@ fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | V
           DONE
         ;
 
+
 /* Instructions */
 
 instr : SKP
@@ -90,6 +96,7 @@ instr : SKP
       | COMPUTE exprD
       | NEXT action
       ;
+
 
 /* Program */
 
@@ -104,6 +111,7 @@ program : DECLARE AND RETAIN
             clauseDefault
         ;
 
+
 /* Clause Default */
 
 clauseDefault : BY DEFAULT
@@ -111,9 +119,11 @@ clauseDefault : BY DEFAULT
                 DO instr+ DONE
               ;
 
+
 /* Clause When */
 
 clauseWhen : WHEN exprD
             (DECLARE LOCAL (varDecl SEMI)+)?
              DO instr+ DONE
            ;
+

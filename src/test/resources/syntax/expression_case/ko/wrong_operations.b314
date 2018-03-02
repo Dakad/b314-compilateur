@@ -1,0 +1,16 @@
+declare and retain
+    x as integer;
+    y as square;
+    t1 as boolean[42];
+    t2 as integer[42, 42];
+    t3 as square[42, 42];
+    t4 as case[42];
+    /*t9 as square[42, 42];*/
+
+when your turn
+by default
+    do
+        compute nearby[2, +] = ammo and y = rock and not x = soda
+        compute not x < player
+        compute not graal is south or ennemi is north and x > ammo
+    done
