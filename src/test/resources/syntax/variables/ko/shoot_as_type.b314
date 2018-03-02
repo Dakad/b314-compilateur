@@ -1,7 +1,7 @@
 declare and retain
     import inputFile.wld
-    t as square;
-    r as square[3];
+    t as shoot;
+    r as map[3];
     res as square[43,43];
 
     f as function( ): boolean
@@ -17,5 +17,5 @@ when your turn
 	done
 
 	by default do
-		skip
+		skip 
 	done
