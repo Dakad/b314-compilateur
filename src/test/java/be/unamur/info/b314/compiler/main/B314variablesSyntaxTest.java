@@ -30,6 +30,11 @@ public class B314variablesSyntaxTest {
     // Serie variables OK
     //
     @Test
+    public void testvariables_boolean_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/variables/ok/boolean.b314", testFolder.newFile(), true, "variables: boolean");
+    }
+
+    @Test
     public void testvariables_integer_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/variables/ok/integer.b314", testFolder.newFile(), true, "variables: integer");
     }
@@ -39,37 +44,32 @@ public class B314variablesSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/variables/ok/square.b314", testFolder.newFile(), true, "variables: square");
     }
 
-    @Test
-    public void testvariables_boolean_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/variables/ok/boolean.b314", testFolder.newFile(), true, "variables: boolean");
-    }
-
     //
     // Serie variables KO
     //
     @Test
-    public void testvariables_arena_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/arena.b314", testFolder.newFile(), false, "variables: arena");
+    public void testvariables_arena_as_type_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/arena_as_type.b314", testFolder.newFile(), false, "variables: arena_as_type");
     }
 
     @Test
-    public void testvariables_use_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/use.b314", testFolder.newFile(), false, "variables: use");
+    public void testvariables_bool_instead_of_boolean_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/bool_instead_of_boolean.b314", testFolder.newFile(), false, "variables: bool_instead_of_boolean");
     }
 
     @Test
-    public void testvariables_bool_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/bool.b314", testFolder.newFile(), false, "variables: bool");
+    public void testvariables_int_instead_of_integer_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/int_instead_of_integer.b314", testFolder.newFile(), false, "variables: int_instead_of_integer");
     }
 
     @Test
-    public void testvariables_int_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/int.b314", testFolder.newFile(), false, "variables: int");
+    public void testvariables_shoot_as_type_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/shoot_as_type.b314", testFolder.newFile(), false, "variables: shoot_as_type");
     }
 
     @Test
-    public void testvariables_shoot_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/shoot.b314", testFolder.newFile(), false, "variables: shoot");
+    public void testvariables_use_as_type_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/use_as_type.b314", testFolder.newFile(), false, "variables: use_as_type");
     }
 
 }

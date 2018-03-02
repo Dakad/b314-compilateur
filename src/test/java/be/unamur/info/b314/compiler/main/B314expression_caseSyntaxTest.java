@@ -35,13 +35,8 @@ public class B314expression_caseSyntaxTest {
     }
 
     @Test
-    public void testexpression_case_operations_with_array_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_case/ok/operations_with_array.b314", testFolder.newFile(), true, "expression_case: operations_with_array");
-    }
-
-    @Test
-    public void testexpression_case_operation_only_env_vars_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_case/ok/operation_only_env_vars.b314", testFolder.newFile(), true, "expression_case: operation_only_env_vars");
+    public void testexpression_case_environnement_var_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_case/ok/environnement_var.b314", testFolder.newFile(), true, "expression_case: environnement_var");
     }
 
     @Test
@@ -55,26 +50,26 @@ public class B314expression_caseSyntaxTest {
     }
 
     @Test
-    public void testexpression_case_environnement_var_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_case/ok/environnement_var.b314", testFolder.newFile(), true, "expression_case: environnement_var");
+    public void testexpression_case_operations_with_array_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_case/ok/operations_with_array.b314", testFolder.newFile(), true, "expression_case: operations_with_array");
+    }
+
+    @Test
+    public void testexpression_case_operation_only_env_vars_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_case/ok/operation_only_env_vars.b314", testFolder.newFile(), true, "expression_case: operation_only_env_vars");
     }
 
     //
     // Serie expression_case KO
     //
     @Test
+    public void testexpression_case_wrong_constant_values_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_case/ko/wrong_constant_values.b314", testFolder.newFile(), false, "expression_case: wrong_constant_values");
+    }
+
+    @Test
     public void testexpression_case_wrong_environnement_var_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/expression_case/ko/wrong_environnement_var.b314", testFolder.newFile(), false, "expression_case: wrong_environnement_var");
-    }
-
-    @Test
-    public void testexpression_case_wrong_operation_only_env_vars_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_case/ko/wrong_operation_only_env_vars.b314", testFolder.newFile(), false, "expression_case: wrong_operation_only_env_vars");
-    }
-
-    @Test
-    public void testexpression_case_wrong_operations_with_array_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_case/ko/wrong_operations_with_array.b314", testFolder.newFile(), false, "expression_case: wrong_operations_with_array");
     }
 
     @Test
@@ -88,8 +83,13 @@ public class B314expression_caseSyntaxTest {
     }
 
     @Test
-    public void testexpression_case_wrong_constant_values_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_case/ko/wrong_constant_values.b314", testFolder.newFile(), false, "expression_case: wrong_constant_values");
+    public void testexpression_case_wrong_operations_with_array_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_case/ko/wrong_operations_with_array.b314", testFolder.newFile(), false, "expression_case: wrong_operations_with_array");
+    }
+
+    @Test
+    public void testexpression_case_wrong_operation_only_env_vars_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_case/ko/wrong_operation_only_env_vars.b314", testFolder.newFile(), false, "expression_case: wrong_operation_only_env_vars");
     }
 
 }
