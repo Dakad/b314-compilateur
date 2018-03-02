@@ -1,1 +1,5 @@
-declare and retain when your turn by default do skip done
+declare and retain
+    by default
+    do
+        skip
+    done
