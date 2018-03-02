@@ -128,8 +128,8 @@ public class B314varDeclSyntaxTest {
     }
 
     @Test
-    public void testvarDecl_arrat_missing_rbrack£_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/varDecl/ko/arrat_missing_rbrack£.b314", testFolder.newFile(), false, "varDecl: arrat_missing_rbrack£");
+    public void testvarDecl_array_missing_rbrack_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/varDecl/ko/array_missing_rbrack.b314", testFolder.newFile(), false, "varDecl: array_missing_rbrack");
     }
 
 }
