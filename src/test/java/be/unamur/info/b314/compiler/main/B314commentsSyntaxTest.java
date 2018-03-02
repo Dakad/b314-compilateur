@@ -45,11 +45,6 @@ public class B314commentsSyntaxTest {
     }
 
     @Test
-    public void testcomments_empty_multiple_lines_and_tab_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/comments/ok/empty_multiple_lines_and_tab.b314", testFolder.newFile(), true, "comments: empty_multiple_lines_and_tab");
-    }
-
-    @Test
     public void testcomments_original_comments_everywhere_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/comments/ok/original_comments_everywhere.b314", testFolder.newFile(), true, "comments: original_comments_everywhere");
     }

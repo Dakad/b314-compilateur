@@ -30,8 +30,8 @@ public class B314instructionsSyntaxTest {
     // Serie instructions OK
     //
     @Test
-    public void testinstructions_bool_array_constant_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_array_constant.b314", testFolder.newFile(), true, "instructions: bool_array_constant");
+    public void testinstructions_int_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_right_expr.b314", testFolder.newFile(), true, "instructions: int_right_expr");
     }
 
     @Test
@@ -40,28 +40,8 @@ public class B314instructionsSyntaxTest {
     }
 
     @Test
-    public void testinstructions_int_right_expr_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_right_expr.b314", testFolder.newFile(), true, "instructions: int_right_expr");
-    }
-
-    @Test
-    public void testinstructions_int_array_constant_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_array_constant.b314", testFolder.newFile(), true, "instructions: int_array_constant");
-    }
-
-    @Test
-    public void testinstructions_square_right_expr_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_right_expr.b314", testFolder.newFile(), true, "instructions: square_right_expr");
-    }
-
-    @Test
-    public void testinstructions_only_skip_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/only_skip.b314", testFolder.newFile(), true, "instructions: only_skip");
-    }
-
-    @Test
-    public void testinstructions_square_constant_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_constant.b314", testFolder.newFile(), true, "instructions: square_constant");
+    public void testinstructions_bool_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_constant.b314", testFolder.newFile(), true, "instructions: bool_constant");
     }
 
     @Test
@@ -70,13 +50,8 @@ public class B314instructionsSyntaxTest {
     }
 
     @Test
-    public void testinstructions_square_array_constant_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_array_constant.b314", testFolder.newFile(), true, "instructions: square_array_constant");
-    }
-
-    @Test
-    public void testinstructions_bool_array_right_expr_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_array_right_expr.b314", testFolder.newFile(), true, "instructions: bool_array_right_expr");
+    public void testinstructions_bool_array_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_array_constant.b314", testFolder.newFile(), true, "instructions: bool_array_constant");
     }
 
     @Test
@@ -85,23 +60,51 @@ public class B314instructionsSyntaxTest {
     }
 
     @Test
+    public void testinstructions_square_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_right_expr.b314", testFolder.newFile(), true, "instructions: square_right_expr");
+    }
+
+    @Test
+    public void testinstructions_square_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_constant.b314", testFolder.newFile(), true, "instructions: square_constant");
+    }
+
+    @Test
+    public void testinstructions_square_array_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_array_constant.b314", testFolder.newFile(), true, "instructions: square_array_constant");
+    }
+
+    @Test
     public void testinstructions_square_array_right_expr_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/instructions/ok/square_array_right_expr.b314", testFolder.newFile(), true, "instructions: square_array_right_expr");
     }
 
     @Test
-    public void testinstructions_bool_constant_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_constant.b314", testFolder.newFile(), true, "instructions: bool_constant");
+    public void testinstructions_bool_array_right_expr_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/bool_array_right_expr.b314", testFolder.newFile(), true, "instructions: bool_array_right_expr");
+    }
+
+    @Test
+    public void testinstructions_only_skip_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/only_skip.b314", testFolder.newFile(), true, "instructions: only_skip");
+    }
+
+    @Test
+    public void testinstructions_int_array_constant_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ok/int_array_constant.b314", testFolder.newFile(), true, "instructions: int_array_constant");
     }
 
     //
     // Serie instructions KO
     //
     @Test
-    public void testinstructions_set_express_as_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/set_express_as.b314", testFolder.newFile(), false, "instructions: set_express_as");
-    public void testinstructions_wrong_bool_constant_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_bool_constant.b314", testFolder.newFile(), false, "instructions: wrong_bool_constant");
+    public void testinstructions_wrong_square_constant_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_square_constant.b314", testFolder.newFile(), false, "instructions: wrong_square_constant");
+    }
+
+    @Test
+    public void testinstructions_wrong_int_right_expr_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_int_right_expr.b314", testFolder.newFile(), false, "instructions: wrong_int_right_expr");
     }
 
     @Test
@@ -110,38 +113,13 @@ public class B314instructionsSyntaxTest {
     }
 
     @Test
-    public void testinstructions_wrong_int_array_constant_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_int_array_constant.b314", testFolder.newFile(), false, "instructions: wrong_int_array_constant");
-    }
-
-    @Test
     public void testinstructions_wrong_bool_right_expr_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_bool_right_expr.b314", testFolder.newFile(), false, "instructions: wrong_bool_right_expr");
     }
 
     @Test
-    public void testinstructions_wrong_int_array_right_expr_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_int_array_right_expr.b314", testFolder.newFile(), false, "instructions: wrong_int_array_right_expr");
-    }
-
-    @Test
     public void testinstructions_wrong_bool_array_constant_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_bool_array_constant.b314", testFolder.newFile(), false, "instructions: wrong_bool_array_constant");
-    }
-
-    @Test
-    public void testinstructions_wrong_square_right_expr_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_square_right_expr.b314", testFolder.newFile(), false, "instructions: wrong_square_right_expr");
-    }
-
-    @Test
-    public void testinstructions_wrong_square_constant_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_square_constant.b314", testFolder.newFile(), false, "instructions: wrong_square_constant");
-    }
-
-    @Test
-    public void testinstructions_wrong_square_array_constant_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_square_array_constant.b314", testFolder.newFile(), false, "instructions: wrong_square_array_constant");
     }
 
     @Test
@@ -155,18 +133,43 @@ public class B314instructionsSyntaxTest {
     }
 
     @Test
-    public void testinstructions_wrong_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong.b314", testFolder.newFile(), false, "instructions: wrong");
+    public void testinstructions_wrong_int_array_right_expr_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_int_array_right_expr.b314", testFolder.newFile(), false, "instructions: wrong_int_array_right_expr");
     }
 
     @Test
-    public void testinstructions_wrong_int_right_expr_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_int_right_expr.b314", testFolder.newFile(), false, "instructions: wrong_int_right_expr");
+    public void testinstructions_wrong_square_right_expr_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_square_right_expr.b314", testFolder.newFile(), false, "instructions: wrong_square_right_expr");
     }
 
     @Test
     public void testinstructions_wrong_square_array_right_expr_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_square_array_right_expr.b314", testFolder.newFile(), false, "instructions: wrong_square_array_right_expr");
+    }
+
+    @Test
+    public void testinstructions_wrong_bool_constant_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_bool_constant.b314", testFolder.newFile(), false, "instructions: wrong_bool_constant");
+    }
+
+    @Test
+    public void testinstructions_wrong_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong.b314", testFolder.newFile(), false, "instructions: wrong");
+    }
+
+    @Test
+    public void testinstructions_wrong_square_array_constant_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_square_array_constant.b314", testFolder.newFile(), false, "instructions: wrong_square_array_constant");
+    }
+
+    @Test
+    public void testinstructions_set_express_as_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/set_express_as.b314", testFolder.newFile(), false, "instructions: set_express_as");
+    }
+
+    @Test
+    public void testinstructions_wrong_int_array_constant_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/instructions/ko/wrong_int_array_constant.b314", testFolder.newFile(), false, "instructions: wrong_int_array_constant");
     }
 
 }

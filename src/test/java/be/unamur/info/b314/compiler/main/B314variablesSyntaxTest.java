@@ -35,13 +35,11 @@ public class B314variablesSyntaxTest {
     }
 
     @Test
-    public void testvariables_integer_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/variables/ok/integer.b314", testFolder.newFile(), true, "variables: integer");
+    public void testvariables_square_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/variables/ok/square.b314", testFolder.newFile(), true, "variables: square");
     }
 
     @Test
-    public void testvariables_square_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/variables/ok/square.b314", testFolder.newFile(), true, "variables: square");
     public void testvariables_boolean_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/variables/ok/boolean.b314", testFolder.newFile(), true, "variables: boolean");
     }
@@ -52,6 +50,11 @@ public class B314variablesSyntaxTest {
     @Test
     public void testvariables_arena_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/variables/ko/arena.b314", testFolder.newFile(), false, "variables: arena");
+    }
+
+    @Test
+    public void testvariables_use_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/variables/ko/use.b314", testFolder.newFile(), false, "variables: use");
     }
 
     @Test
@@ -67,17 +70,6 @@ public class B314variablesSyntaxTest {
     @Test
     public void testvariables_shoot_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/variables/ko/shoot.b314", testFolder.newFile(), false, "variables: shoot");
- 
-    }
-
-    @Test
-    public void testvariables_use_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/use.b314", testFolder.newFile(), false, "variables: use");
-    }
-
-    @Test
-    public void testvariables_int_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/variables/ko/int.b314", testFolder.newFile(), false, "variables: int");
     }
 
 }
