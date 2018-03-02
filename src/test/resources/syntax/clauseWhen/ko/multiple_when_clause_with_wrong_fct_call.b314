@@ -1,0 +1,29 @@
+declare and retain
+    import inputFile.wld
+
+    /*	Global	variables	*/	
+    t as boolean;
+    res as integer;
+
+    f as function( ): boolean
+    do
+        set t to true
+        return res;
+    done
+
+when your turn
+	when fct4( do /* wrong type */
+		skip
+	done
+
+	when false do
+			skip
+	done
+
+	when fct5(v2[1], b1 and true, s2) = 42 do
+		skip
+	done
+
+	by default do
+		skip
+	done

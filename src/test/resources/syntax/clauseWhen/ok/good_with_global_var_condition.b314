@@ -1,0 +1,27 @@
+declare and retain
+	b1 as boolean;
+	b2 as boolean;
+    i1 as integer;
+    i2 as integer;
+
+    fct1 as function():boolean
+    	do
+    		set fct1 to true
+    		return fct1;
+    	done
+
+when your turn
+
+	when not b1 do
+		set b1 to true
+		next move north
+	done
+
+	when b1 do
+		set b1 to false
+		next move east
+	done
+
+	by default do
+		next do nothing
+	done
