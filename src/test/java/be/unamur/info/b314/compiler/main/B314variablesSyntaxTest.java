@@ -30,11 +30,6 @@ public class B314variablesSyntaxTest {
     // Serie variables OK
     //
     @Test
-    public void testvariables_boolean_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/variables/ok/boolean.b314", testFolder.newFile(), true, "variables: boolean");
-    }
-
-    @Test
     public void testvariables_integer_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/variables/ok/integer.b314", testFolder.newFile(), true, "variables: integer");
     }
@@ -42,6 +37,11 @@ public class B314variablesSyntaxTest {
     @Test
     public void testvariables_square_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/syntax/variables/ok/square.b314", testFolder.newFile(), true, "variables: square");
+    }
+
+    @Test
+    public void testvariables_boolean_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/variables/ok/boolean.b314", testFolder.newFile(), true, "variables: boolean");
     }
 
     //
