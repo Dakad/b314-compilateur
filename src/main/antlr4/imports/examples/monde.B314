@@ -3,7 +3,7 @@
     /∗ Global declarations ∗/
     i as integer;
     j as integer;
-    arena as arena[27,27];
+    arena as square[27,27];
   by default do
     set i to 1
     set j to 1
