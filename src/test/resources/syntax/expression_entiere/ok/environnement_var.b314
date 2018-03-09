@@ -1,0 +1,8 @@
+declare and retain
+    x as integer;
+    y as integer;
+when your turn
+by default
+    do
+        set x to life - 50
+    done
