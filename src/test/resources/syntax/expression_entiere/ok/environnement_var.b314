@@ -5,4 +5,5 @@ when your turn
 by default
     do
         set x to life - 50
+        set y to lat + 100
     done
