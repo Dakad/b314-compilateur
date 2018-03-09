@@ -1,9 +1,11 @@
 declare and retain
     x as integer;
     y as integer;
+    z as integer;
 when your turn
 by default
     do
         set x to life - 50
-        set y to lat + 100
+        set y to latitude + 100
+        set z to longitude *2
     done
