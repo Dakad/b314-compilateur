@@ -29,3 +29,18 @@ public class B314expression_entiereSyntaxTest {
     //
     // Serie expression_entiere OK
     //
+
+    @Test
+    public void testexpression_entiere_constant_values_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_entiere/ok/constant_values.b314", testFolder.newFile(), true, "expression_entiere: constant_values");
+    }
+
+    @Test
+    public void testexpression_entiere_environnement_var_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_entiere/ok/environnement_var.b314", testFolder.newFile(), true, "expression_entiere: environnement_var");
+    }
+
+    //
+    // Serie expression_entiere KO
+    //
+}
