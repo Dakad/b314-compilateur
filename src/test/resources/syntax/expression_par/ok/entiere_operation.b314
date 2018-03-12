@@ -1,0 +1,7 @@
+declare and retain
+    x as integer;
+when your turn
+by default
+    do
+        set x to ((5 + 9) * 8 + (6 / 2) - 7)
+    done
