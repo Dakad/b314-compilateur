@@ -45,7 +45,8 @@ boolVal : TRUE | FALSE;
 
 
       /* Expressions entières */
-exprD : intVal                                              // 2, 13, -4,
+exprD : LPAR exprD RPAR
+      | intVal                                              // 2, 13, -4,
       | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
       | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
       | LIFE
