@@ -54,6 +54,11 @@ public class B314expression_parSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/entiere_items.b314", testFolder.newFile(), true, "expression_par: entiere_items");
     }
 
+    @Test
+    public void testexpression_par_entiere_operation_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/entiere_operation.b314", testFolder.newFile(), true, "expression_par: entiere_operation");
+    }
+
     //
     // Serie expression_par KO
     //
