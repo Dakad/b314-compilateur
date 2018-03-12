@@ -62,4 +62,14 @@ public class B314expression_parSyntaxTest {
     //
     // Serie expression_par KO
     //
+    @Test
+    public void testexpression_par_wrong_boolean_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/wrong_boolean.b314", testFolder.newFile(), false, "expression_par: wrong_boolean");
+    }
+
+    @Test
+    public void testexpression_par_wrong_entiere_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/wrong_entiere.b314", testFolder.newFile(), false, "expression_par: wrong_entiere");
+    }
+
 }
