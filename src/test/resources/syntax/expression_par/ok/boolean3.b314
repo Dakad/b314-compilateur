@@ -1,0 +1,7 @@
+declare and retain
+
+when your turn
+by default
+    do
+        compute not (graal is north)
+    done
