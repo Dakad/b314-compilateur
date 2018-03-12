@@ -44,6 +44,11 @@ public class B314expression_parSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/boolean3.b314", testFolder.newFile(), true, "expression_par: boolean3");
     }
 
+    @Test
+    public void testexpression_par_boolean4_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/boolean4.b314", testFolder.newFile(), true, "expression_par: boolean4");
+    }
+
     //
     // Serie expression_par KO
     //
