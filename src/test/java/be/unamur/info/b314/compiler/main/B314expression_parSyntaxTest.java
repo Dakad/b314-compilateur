@@ -9,9 +9,9 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class B314expression_entiereSyntaxTest {
+public class B314expression_parSyntaxTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(B314expression_entiereSyntaxTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(B314expression_parSyntaxTest.class);
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder(); // Create a temporary folder for outputs deleted after tests
@@ -27,19 +27,14 @@ public class B314expression_entiereSyntaxTest {
     };
 
     //
-    // Serie expression_entiere OK
+    // Serie expression_par OK
     //
     @Test
-    public void testexpression_entiere_constant_values_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_entiere/ok/constant_values.b314", testFolder.newFile(), true, "expression_entiere: constant_values");
-    }
-
-    @Test
-    public void testexpression_entiere_environnement_var_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_entiere/ok/environnement_var.b314", testFolder.newFile(), true, "expression_entiere: environnement_var");
+    public void testexpression_par_boolean_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/boolean.b314", testFolder.newFile(), true, "expression_par: boolean");
     }
 
     //
-    // Serie expression_entiere KO
+    // Serie expression_par KO
     //
 }
