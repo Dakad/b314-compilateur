@@ -60,8 +60,8 @@ public class B314expression_booleanSyntaxTest {
     }
 
     @Test
-    public void testexpression_boolean_parin_in_expression_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/parin_expression.b314", testFolder.newFile(), true, "expression_boolean: parin_in_expression");
+    public void testexpression_boolean_parin_expression_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/parin_expression.b314", testFolder.newFile(), true, "expression_boolean: parin_expression");
     }
 
     //
