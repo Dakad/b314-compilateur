@@ -1,0 +1,7 @@
+declare and retain
+    x as integer;
+when your turn
+by default
+    do
+        compute ((graal is north) and (ennemi is south))
+    done

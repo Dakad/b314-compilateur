@@ -59,6 +59,11 @@ public class B314expression_booleanSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operation_only_env_vars.b314", testFolder.newFile(), true, "expression_boolean: operation_only_env_vars");
     }
 
+    @Test
+    public void testexpression_boolean_parin_expression_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/parin_expression.b314", testFolder.newFile(), true, "expression_boolean: parin_expression");
+    }
+
     //
     // Serie expression_boolean KO
     //
@@ -95,11 +100,6 @@ public class B314expression_booleanSyntaxTest {
     @Test
     public void testexpression_boolean_var_wrong_type_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: var_wrong_type");
-    }
-
-    @Test
-    public void testexpression_boolean_wrong_type_in_sub_expression_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/wrong_type_in_sub_expression.b314", testFolder.newFile(), false, "expression_boolean: wrong_type_in_sub_expression");
     }
 
 }
