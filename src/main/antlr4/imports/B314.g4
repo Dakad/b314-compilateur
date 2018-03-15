@@ -26,7 +26,7 @@ varDecl : ID AS type;                                        // nomVar as intege
 /** Import */
 
 impDecl :  IMPORT fileDecl;                                  // import inputFile.wld
-fileDecl: ID IMPORT_EXT;                                     // inputFile.wld
+fileDecl:  ID IMPORT_EXT;                                   // inputFile.wld
 
 
 /** Actions */
@@ -38,37 +38,48 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
         ;
 
 
-/*' Expression Droite */
-
-intVal  : INTEGER;
-boolVal : TRUE | FALSE;
-
-
-      /* Expressions entières */
-exprD : LPAR exprD RPAR
-      | intVal                                              // 2, 13, -4,
-      | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
-      | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
-      | LIFE
-      | exprD (ADD | SUB | MULT | DIV | MOD) exprD                // int + int, map count * 3
-
-  /* Expressions booléennes */
-      | boolVal
-      | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
-      | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
-      | exprD (AND | OR) exprD
-      | NOT exprD
-      | exprD (LT | GT | EQ | LE | GE) exprD
-
-  /* Expressions sur les types de cases */
-      | (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
-      | (FRUITS | SODA | GRAAL)
-      | NEARBY LBRACK exprD COMMA exprD RBRACK
-
+/* Expression Droite */
+exprDFct : ID LPAR (exprD (COMMA exprD)*)? RPAR;
+exprD : exprInt
+      | exprBool
+      | exprCase
       | exprG
-      | ID LPAR (exprD (COMMA exprD)*)? RPAR
+      | exprDFct
+      | LPAR exprD RPAR
       ;
 
+      /* Expressions entières */
+intVal  : INTEGER;
+opEnt   : (ADD | SUB | MULT | DIV | MOD);
+
+exprInt : intVal                                              // 2, 13, -4,
+        | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
+        | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
+        | LIFE
+        | exprInt opEnt exprInt                              // int + int, map count * 3, life - 50
+        | exprDFct
+        ;
+
+
+  /* Expressions booléennes */
+boolVal  : (TRUE | FALSE);
+opCompare: (LT | GT | EQ | LE | GE);
+opBool   : (AND | OR);
+exprBool : boolVal
+         | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
+         | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
+         | exprBool opBool exprBool
+         | NOT exprBool
+         | exprInt opCompare exprInt
+         | exprDFct
+         ;
+
+  /* Expressions sur les types de cases */
+exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
+         | (FRUITS | SODA | GRAAL)
+         | NEARBY LBRACK exprD COMMA exprD RBRACK
+         | exprDFct
+         ;
 
 /* Expression Gauche */
 
