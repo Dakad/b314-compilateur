@@ -37,54 +37,60 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
         | DO NOTHING
         ;
 
+ /* Expression Droite */
 
-/* Expression Droite */
-exprDFct : ID LPAR (exprD (COMMA exprD)*)? RPAR;
-exprD : exprInt
-      | exprD opInt exprD                                   // int + int, map count * 3, life - 50
-      | exprBool
-      | exprD EQ exprD
-      | exprCase
-      | exprG
-      | exprDFct
-      | LPAR exprD RPAR
-      ;
-
-      /* Expressions entières */
 intVal  : INTEGER;
 opInt   : (ADD | SUB | MULT | DIV | MOD);
+boolVal : (TRUE | FALSE);
+opBool  : (AND | OR);
 
+exprDFct : ID LPAR (exprD (COMMA exprD)*)? RPAR;
+
+    /* Expressions entières */
+exprD : LPAR exprD RPAR
+      | exprInt
+      | exprD opInt exprD                // int + int, map count * 3
+
+    /* Expressions booléennes */
+      | exprBool
+      | exprD opBool exprD
+      | exprD (LT | GT | EQ | LE | GE) exprD
+
+    /* Expressions sur les types de cases */
+      | exprCase
+
+      | exprG
+      | exprDFct
+      ;
+
+
+    /* Var env. entières */
 exprInt : intVal                                              // 2, 13, -4,
         | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
         | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
         | LIFE
         ;
 
-
-  /* Expressions booléennes */
-boolVal  : (TRUE | FALSE);
-opBool   : (AND | OR);
+    /* Var. env. booléennes */
 exprBool : boolVal
          | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
          | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
-         | exprBool opBool exprBool
-         | NOT exprBool
-         | exprInt (LT | GT | LE | GE) exprInt
+         | NOT exprD
          ;
 
-  /* Expressions sur les types de cases */
+    /* Var. env. case */
 exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
          | (FRUITS | SODA | GRAAL)
          | NEARBY LBRACK exprD COMMA exprD RBRACK
-         | exprDFct
          ;
+
+
 
 /* Expression Gauche */
 
 exprG : ID
       | ID LBRACK exprD (COMMA exprD)? RBRACK
       ;
-
 
 /* Fonction */
 
