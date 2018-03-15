@@ -41,7 +41,9 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
 /* Expression Droite */
 exprDFct : ID LPAR (exprD (COMMA exprD)*)? RPAR;
 exprD : exprInt
+      | exprD opInt exprD                                   // int + int, map count * 3, life - 50
       | exprBool
+      | exprD EQ exprD
       | exprCase
       | exprG
       | exprDFct
@@ -50,28 +52,24 @@ exprD : exprInt
 
       /* Expressions entières */
 intVal  : INTEGER;
-opEnt   : (ADD | SUB | MULT | DIV | MOD);
+opInt   : (ADD | SUB | MULT | DIV | MOD);
 
 exprInt : intVal                                              // 2, 13, -4,
         | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
         | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
         | LIFE
-        | exprInt opEnt exprInt                              // int + int, map count * 3, life - 50
-        | exprDFct
         ;
 
 
   /* Expressions booléennes */
 boolVal  : (TRUE | FALSE);
-opCompare: (LT | GT | EQ | LE | GE);
 opBool   : (AND | OR);
 exprBool : boolVal
          | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
          | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
          | exprBool opBool exprBool
          | NOT exprBool
-         | exprInt opCompare exprInt
-         | exprDFct
+         | exprInt (LT | GT | LE | GE) exprInt
          ;
 
   /* Expressions sur les types de cases */
