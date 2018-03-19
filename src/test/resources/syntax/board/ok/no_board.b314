@@ -1,0 +1,12 @@
+declare and retain
+    v1 as integer;
+    v2 as integer [2,2];
+    v3 as boolean;
+    v4 as boolean [2,3];
+    v5 as square;
+    v6 as square [42,42];
+
+    when your turn
+        by default do
+            skip
+        done
