@@ -105,14 +105,16 @@ instr : SKP
 /* Program */
 
 program : DECLARE AND RETAIN
+          (board COMMA )?
+        (
             (varDecl COMMA | fctDecl)*
             instr*
             clauseDefault
-        | DECLARE AND RETAIN
-            (varDecl SEMI | fctDecl | impDecl)*
+        |  (varDecl SEMI | fctDecl | impDecl)*
             WHEN YOUR TURN
             clauseWhen*
             clauseDefault
+        )
         ;
 
 
