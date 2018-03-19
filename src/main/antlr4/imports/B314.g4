@@ -19,6 +19,9 @@ array   : scalar LBRACK intVal (COMMA intVal)? RBRACK ;       // boolean[2]  or 
 
 
 
+  // Plateau de jeu declaration
+board   : ARENA AS array;                                     // arena as square [9, 9]
+
   // Variable declaration
 varDecl : ID AS type;                                        // nomVar as integer, boolean[2]
 
