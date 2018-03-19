@@ -42,4 +42,3 @@ public class B314expression_entiereSyntaxTest {
     //
     // Serie expression_entiere KO
     //
-}

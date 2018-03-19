@@ -1,0 +1,7 @@
+declare and retain
+    x as boolea;
+when your turn
+by default
+    do
+        set x to x + true
+    done
