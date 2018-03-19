@@ -26,7 +26,7 @@ varDecl : ID AS type;                                        // nomVar as intege
 /** Import */
 
 impDecl :  IMPORT fileDecl;                                  // import inputFile.wld
-fileDecl: ID IMPORT_EXT;                                     // inputFile.wld
+fileDecl:  ID IMPORT_EXT;                                   // inputFile.wld
 
 
 /** Actions */
@@ -37,37 +37,53 @@ action  : MOVE  (NORTH | SOUTH | EAST | WEST)
         | DO NOTHING
         ;
 
-
-/*' Expression Droite */
+ /* Expression Droite */
 
 intVal  : INTEGER;
-boolVal : TRUE | FALSE;
+opInt   : (ADD | SUB | MULT | DIV | MOD);
+boolVal : (TRUE | FALSE);
+opBool  : (AND | OR);
 
+exprDFct : ID LPAR (exprD (COMMA exprD)*)? RPAR;
 
-      /* Expressions entières */
+    /* Expressions entières */
 exprD : LPAR exprD RPAR
-      | intVal                                              // 2, 13, -4,
-      | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
-      | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
-      | LIFE
-      | exprD (ADD | SUB | MULT | DIV | MOD) exprD                // int + int, map count * 3
+      | exprInt
+      | exprD opInt exprD                // int + int, map count * 3
 
-  /* Expressions booléennes */
-      | boolVal
-      | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
-      | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
-      | exprD (AND | OR) exprD
-      | NOT exprD
+    /* Expressions booléennes */
+      | exprBool
+      | exprD opBool exprD
       | exprD (LT | GT | EQ | LE | GE) exprD
 
-  /* Expressions sur les types de cases */
-      | (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
-      | (FRUITS | SODA | GRAAL)
-      | NEARBY LBRACK exprD COMMA exprD RBRACK
+    /* Expressions sur les types de cases */
+      | exprCase
 
       | exprG
-      | ID LPAR (exprD (COMMA exprD)*)? RPAR
+      | exprDFct
       ;
+
+
+    /* Var env. entières */
+exprInt : intVal                                              // 2, 13, -4,
+        | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
+        | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
+        | LIFE
+        ;
+
+    /* Var. env. booléennes */
+exprBool : boolVal
+         | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
+         | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
+         | NOT exprD
+         ;
+
+    /* Var. env. case */
+exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
+         | (FRUITS | SODA | GRAAL)
+         | NEARBY LBRACK exprD COMMA exprD RBRACK
+         ;
+
 
 
 /* Expression Gauche */
@@ -75,7 +91,6 @@ exprD : LPAR exprD RPAR
 exprG : ID
       | ID LBRACK exprD (COMMA exprD)? RBRACK
       ;
-
 
 /* Fonction */
 
