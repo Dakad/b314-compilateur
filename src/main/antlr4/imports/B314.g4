@@ -116,16 +116,20 @@ instr : SKP
 
 /* Program */
 
-program : DECLARE AND RETAIN
-            (varDecl SEMI | fctDecl)*
-            instr*
-            clauseDefault
-        | DECLARE AND RETAIN
-            (varDecl SEMI | fctDecl | impDecl)*
-            WHEN YOUR TURN
-            clauseWhen*
-            clauseDefault
-        ;
+program : DECLARE AND RETAIN (programMonde | programStrat) ;
+
+programMonde : (varDecl SEMI | fctDecl)*
+               instr*
+               clauseDefault
+             ;
+
+
+programStrat : (varDecl SEMI | fctDecl | impDecl)*
+               WHEN YOUR TURN
+               clauseWhen*
+               clauseDefault
+             ;
+
 
 
 /* Clause Default */
