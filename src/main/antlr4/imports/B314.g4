@@ -116,16 +116,26 @@ instr : SKP
 
 /* Program */
 
-program : DECLARE AND RETAIN
-            (varDecl COMMA | fctDecl)*
-            instr*
-            clauseDefault
-        | DECLARE AND RETAIN
-            (varDecl SEMI | fctDecl | impDecl)*
-            WHEN YOUR TURN
-            clauseWhen*
-            clauseDefault
-        ;
+program : DECLARE AND RETAIN (programMonde | programStrat) ;
+
+    /* Program pour fichier MONDE.b314 */
+
+programMonde : programMondeGlobalDecl*
+               instr*
+               clauseDefault
+             ;
+programMondeGlobalDecl : (varDecl SEMI | fctDecl);
+
+
+    /* Program pour fichier STRATEGIE.b314 */
+
+programStrat : programStratGlobalDecl*
+               WHEN YOUR TURN
+                clauseWhen*
+                clauseDefault
+             ;
+programStratGlobalDecl : (varDecl SEMI | fctDecl | impDecl);
+
 
 
 /* Clause Default */
