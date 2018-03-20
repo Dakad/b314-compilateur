@@ -1,6 +1,6 @@
 declare and retain
-    rightArrayExpression as square[10,10],
-    s as square,
+    rightArrayExpression as square[10,10];
+    s as square;
     by default
     do
         set s to graal
