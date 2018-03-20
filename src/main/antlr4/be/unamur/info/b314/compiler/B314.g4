@@ -124,7 +124,7 @@ program : DECLARE AND RETAIN (programMonde | programStrat) ;
 
     /* Program pour fichier MONDE.b314 */
 
-programMonde : ( programMondeGlobalDecl* board? programMondeGlobalDecl* )
+programMonde : ( programMondeGlobalDecl* (board SEMI)? programMondeGlobalDecl* )
                instr*
                clauseDefault
              ;
