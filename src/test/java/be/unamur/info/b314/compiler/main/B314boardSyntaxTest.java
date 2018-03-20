@@ -35,16 +35,26 @@ public class B314boardSyntaxTest {
     }
 
     @Test
-    public void testboard_monde_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/board/ok/monde.b314", testFolder.newFile(), true, "board: monde");
+    public void testboard_monde_without_declared_arena_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/board/ok/monde_without_declared_arena.b314", testFolder.newFile(), true, "board: monde_without_declared_arena");
+    }
+
+    @Test
+    public void testboard_monde_with_declared_arena_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/board/ok/monde_with_declared_arena.b314", testFolder.newFile(), true, "board: monde_with_declared_arena");
     }
 
     //
     // Serie board KO
     //
     @Test
-    public void testboard_no_board_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/board/ko/no_board.b314", testFolder.newFile(), false, "board: no_board");
+    public void testboard_double_declared_arena_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/board/ko/double_declared_arena.b314", testFolder.newFile(), false, "board: double_declared_arena");
+    }
+
+    @Test
+    public void testboard_reserved_keyword_arena_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/board/ko/reserved_keyword_arena.b314", testFolder.newFile(), false, "board: reserved_keyword_arena");
     }
 
     @Test
