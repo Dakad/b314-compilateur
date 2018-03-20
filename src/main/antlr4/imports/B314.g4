@@ -129,11 +129,12 @@ programMondeGlobalDecl : (varDecl SEMI | fctDecl);
 
     /* Program pour fichier STRATEGIE.b314 */
 
-programStrat : (varDecl SEMI | fctDecl | impDecl)*
+programStrat : programStratGlobalDecl*
                WHEN YOUR TURN
-               clauseWhen*
-               clauseDefault
+                clauseWhen*
+                clauseDefault
              ;
+programStratGlobalDecl : (varDecl SEMI | fctDecl | impDecl);
 
 
 
