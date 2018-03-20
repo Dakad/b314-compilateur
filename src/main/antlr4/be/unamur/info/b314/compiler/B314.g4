@@ -19,6 +19,9 @@ array   : scalar LBRACK intVal (COMMA intVal)? RBRACK ;       // boolean[2]  or 
 
 
 
+  // Plateau de jeu declaration
+board   : ARENA AS SQR_TYPE LBRACK intVal COMMA intVal RBRACK; // arena as square [9, 9]
+
   // Variable declaration
 varDecl : ID AS type;                                        // nomVar as integer, boolean[2]
 
@@ -92,6 +95,7 @@ exprG : ID
       | ID LBRACK exprD (COMMA exprD)? RBRACK
       ;
 
+
 /* Fonction */
 
 fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | VOID)
@@ -120,7 +124,7 @@ program : DECLARE AND RETAIN (programMonde | programStrat) ;
 
     /* Program pour fichier MONDE.b314 */
 
-programMonde : programMondeGlobalDecl*
+programMonde : ( programMondeGlobalDecl* board? programMondeGlobalDecl* )
                instr*
                clauseDefault
              ;
