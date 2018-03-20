@@ -46,6 +46,7 @@ intVal  : INTEGER;
 opInt   : (ADD | SUB | MULT | DIV | MOD);
 boolVal : (TRUE | FALSE);
 opBool  : (AND | OR);
+opBoolCompare : (LT | GT | EQ | LE | GE);
 
 exprDFct : ID LPAR (exprD (COMMA exprD)*)? RPAR;
 
@@ -57,7 +58,7 @@ exprD : LPAR exprD RPAR
     /* Expressions booléennes */
       | exprBool
       | exprD opBool exprD
-      | exprD (LT | GT | EQ | LE | GE) exprD
+      | exprD opBoolCompare exprD
 
     /* Expressions sur les types de cases */
       | exprCase
