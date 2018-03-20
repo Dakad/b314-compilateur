@@ -117,7 +117,7 @@ instr : SKP
 /* Program */
 
 program : DECLARE AND RETAIN
-            (varDecl COMMA | fctDecl)*
+            (varDecl SEMI | fctDecl)*
             instr*
             clauseDefault
         | DECLARE AND RETAIN
