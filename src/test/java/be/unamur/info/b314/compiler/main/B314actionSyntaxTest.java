@@ -35,28 +35,8 @@ public class B314actionSyntaxTest {
     }
 
     @Test
-    public void testaction_move_east_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/move_east.b314", testFolder.newFile(), true, "action: move_east");
-    }
-
-    @Test
-    public void testaction_move_north_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/move_north.b314", testFolder.newFile(), true, "action: move_north");
-    }
-
-    @Test
-    public void testaction_move_south_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/move_south.b314", testFolder.newFile(), true, "action: move_south");
-    }
-
-    @Test
-    public void testaction_move_west_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/move_west.b314", testFolder.newFile(), true, "action: move_west");
-    }
-
-    @Test
-    public void testaction_shoot_east_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/shoot_east.b314", testFolder.newFile(), true, "action: shoot_east");
+    public void testaction_shoot_west_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/shoot_west.b314", testFolder.newFile(), true, "action: shoot_west");
     }
 
     @Test
@@ -65,13 +45,8 @@ public class B314actionSyntaxTest {
     }
 
     @Test
-    public void testaction_shoot_south_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/shoot_south.b314", testFolder.newFile(), true, "action: shoot_south");
-    }
-
-    @Test
-    public void testaction_shoot_west_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/shoot_west.b314", testFolder.newFile(), true, "action: shoot_west");
+    public void testaction_use_radio_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/use_radio.b314", testFolder.newFile(), true, "action: use_radio");
     }
 
     @Test
@@ -80,13 +55,18 @@ public class B314actionSyntaxTest {
     }
 
     @Test
-    public void testaction_use_map_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/use_map.b314", testFolder.newFile(), true, "action: use_map");
+    public void testaction_shoot_east_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/shoot_east.b314", testFolder.newFile(), true, "action: shoot_east");
     }
 
     @Test
-    public void testaction_use_radio_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/action/ok/use_radio.b314", testFolder.newFile(), true, "action: use_radio");
+    public void testaction_shoot_south_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/shoot_south.b314", testFolder.newFile(), true, "action: shoot_south");
+    }
+
+    @Test
+    public void testaction_move_south_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/move_south.b314", testFolder.newFile(), true, "action: move_south");
     }
 
     @Test
@@ -94,12 +74,32 @@ public class B314actionSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/action/ok/use_soda.b314", testFolder.newFile(), true, "action: use_soda");
     }
 
+    @Test
+    public void testaction_move_north_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/move_north.b314", testFolder.newFile(), true, "action: move_north");
+    }
+
+    @Test
+    public void testaction_move_east_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/move_east.b314", testFolder.newFile(), true, "action: move_east");
+    }
+
+    @Test
+    public void testaction_move_west_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/move_west.b314", testFolder.newFile(), true, "action: move_west");
+    }
+
+    @Test
+    public void testaction_use_map_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/action/ok/use_map.b314", testFolder.newFile(), true, "action: use_map");
+    }
+
     //
     // Serie action KO
     //
     @Test
-    public void testaction_move_arena_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/action/ko/move_arena.b314", testFolder.newFile(), false, "action: move_arena");
+    public void testaction_shoot_nothing_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/action/ko/shoot_nothing.b314", testFolder.newFile(), false, "action: shoot_nothing");
     }
 
     @Test
@@ -108,13 +108,8 @@ public class B314actionSyntaxTest {
     }
 
     @Test
-    public void testaction_move_radio_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/action/ko/move_radio.b314", testFolder.newFile(), false, "action: move_radio");
-    }
-
-    @Test
-    public void testaction_shoot_nothing_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/action/ko/shoot_nothing.b314", testFolder.newFile(), false, "action: shoot_nothing");
+    public void testaction_move_arena_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/action/ko/move_arena.b314", testFolder.newFile(), false, "action: move_arena");
     }
 
     @Test
@@ -130,6 +125,11 @@ public class B314actionSyntaxTest {
     @Test
     public void testaction_use_nothing_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/action/ko/use_nothing.b314", testFolder.newFile(), false, "action: use_nothing");
+    }
+
+    @Test
+    public void testaction_move_radio_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/action/ko/move_radio.b314", testFolder.newFile(), false, "action: move_radio");
     }
 
     @Test
