@@ -15,29 +15,29 @@ root: program ;
 // nbVal   : NUMBER;
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
-array   : scalar LBRACK intVal (COMMA intVal)? RBRACK ;       // boolean[2]  or square[2,3]
+array   : scalar LBRACK elt+=intVal (COMMA elt+=intVal)? RBRACK ;       // boolean[2]  or square[2,3]
 
 
 
   // Plateau de jeu declaration
-board   : ARENA AS SQR_TYPE LBRACK intVal COMMA intVal RBRACK; // arena as square [9, 9]
+board   : ARENA AS SQR_TYPE LBRACK elt+=intVal COMMA elt+=intVal RBRACK; // arena as square [9, 9]
 
   // Variable declaration
-varDecl : ID AS type;                                        // nomVar as integer, boolean[2]
+varDecl : name=ID AS type;                                        // nomVar as integer, boolean[2]
 
 
 /** Import */
 
-impDecl :  IMPORT fileDecl;                                  // import inputFile.wld
-fileDecl:  ID IMPORT_EXT;                                   // inputFile.wld
+impDecl :  IMPORT fileDecl;                                     // import inputFile.wld
+fileDecl:  ID IMPORT_EXT;                                       // inputFile.wld
 
 
 /** Actions */
 
-action  : MOVE  (NORTH | SOUTH | EAST | WEST)
-        | SHOOT (NORTH | SOUTH | EAST | WEST)
-        | USE (MAP | RADIO | FRUITS | SODA)
-        | DO NOTHING
+action  : MOVE direction=(NORTH | SOUTH | EAST | WEST)      # Move
+        | SHOOT direction=(NORTH | SOUTH | EAST | WEST)     # Shoot
+        | USE (MAP | RADIO | FRUITS | SODA)                 # Use
+        | DO NOTHING                                        # Nothing
         ;
 
  /* Expression Droite */
@@ -48,17 +48,17 @@ boolVal : (TRUE | FALSE);
 opBool  : (AND | OR);
 opBoolCompare : (LT | GT | EQ | LE | GE);
 
-exprDFct : ID LPAR (exprD (COMMA exprD)*)? RPAR;
+exprDFct : name=ID LPAR (param+=exprD (COMMA param+=exprD)*)? RPAR;
 
     /* Expressions entières */
 exprD : LPAR exprD RPAR
       | exprInt
-      | exprD opInt exprD                // int + int, map count * 3
+      | left=exprD opInt right=exprD                // int + int, map count * 3
 
     /* Expressions booléennes */
       | exprBool
-      | exprD opBool exprD
-      | exprD opBoolCompare exprD
+      | left=exprD opBool right=exprD
+      | left=exprD opBoolCompare right=exprD
 
     /* Expressions sur les types de cases */
       | exprCase
@@ -69,7 +69,7 @@ exprD : LPAR exprD RPAR
 
 
     /* Var env. entières */
-exprInt : intVal                                              // 2, 13, -4,
+exprInt : value=intVal                                              // 2, 13, -4,
         | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
         | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
         | LIFE
@@ -77,8 +77,8 @@ exprInt : intVal                                              // 2, 13, -4,
 
     /* Var. env. booléennes */
 exprBool : boolVal
-         | ENNEMI IS (NORTH | SOUTH | EAST | WEST)
-         | GRAAL  IS (NORTH | SOUTH | EAST | WEST)
+         | ENNEMI IS direction=(NORTH | SOUTH | EAST | WEST)
+         | GRAAL  IS direction=(NORTH | SOUTH | EAST | WEST)
          | NOT exprD
          ;
 
@@ -92,8 +92,9 @@ exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
 
 /* Expression Gauche */
 
-exprG : ID
-      | ID LBRACK exprD (COMMA exprD)? RBRACK
+exprG : ID                                                  # Var
+      | ARENA LBRACK elt+=intVal COMMA elt+=intVal RBRACK   # Arena
+      | ID LBRACK exprD (COMMA exprD)? RBRACK               # Case
       ;
 
 
@@ -109,13 +110,13 @@ fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | V
 
 /* Instructions */
 
-instr : SKP
-      | IF exprD THEN (instr)+ DONE
-      | IF exprD THEN (instr)+ ELSE (instr)+ DONE
-      | WHILE exprD DO (instr)+ DONE
-      | SET exprG TO exprD
-      | COMPUTE exprD
-      | NEXT action
+instr : SKP                                             # Skip
+      | IF exprD THEN (instr)+ DONE                     # IfThen
+      | IF exprD THEN (instr)+ ELSE (instr)+ DONE       # IfThenElse
+      | WHILE condition=exprD DO (instr)+ DONE          # While
+      | SET exprG TO exprD                              # SetTo
+      | COMPUTE exprD                                   # Compute
+      | NEXT action                                     # Next
       ;
 
 
