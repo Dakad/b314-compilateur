@@ -93,6 +93,7 @@ exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
 /* Expression Gauche */
 
 exprG : ID
+      | ARENA LBRACK intVal COMMA intVal RBRACK
       | ID LBRACK exprD (COMMA exprD)? RBRACK
       ;
 
