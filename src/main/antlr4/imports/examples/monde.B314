@@ -1,13 +1,9 @@
-  /∗ Comments are between delimiters ∗/
+  /* Comments are between delimiters */
   declare and retain
-    /∗ Global declarations ∗/
+    /* Global declarations */
     i as integer;
     j as integer;
     arena as square[27,27];
-  by default do
-    set i to 1
-    set j to 1
-  done
 
   while i < 17 do
     while j < 17 do
@@ -37,4 +33,6 @@
     set arena[2,16] to radio
     set arena[16,4] to soda
     set arena[26,26] to graal
+    set i to 1
+    set j to 1
   done
