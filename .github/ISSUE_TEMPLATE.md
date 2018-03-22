@@ -10,4 +10,4 @@ Include specific tasks in the order they need to be done in. Include links to sp
 - [ ] Task 2
 - [ ] Task 3
 
-Remember to set the labels,  and milestones. 
+**Remember to set the labels and milestones.**
