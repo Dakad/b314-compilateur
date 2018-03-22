@@ -1,0 +1,10 @@
+declare and retain
+    x as integer;
+    y as integer;
+    z as integer;
+    t as integer;
+when your turn
+by default
+    do
+        set t to grid size latitude / 2
+    done

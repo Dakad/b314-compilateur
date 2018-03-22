@@ -42,4 +42,9 @@ public class B314expression_entiereSyntaxTest {
     //
     // Serie expression_entiere KO
     //
+    @Test
+    public void testexpression_entiere_wrong_env_vars_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_entiere/ko/wrong_env_vars.b314", testFolder.newFile(), false, "expression_entiere: wrong_env_vars");
+    }
+
 }
