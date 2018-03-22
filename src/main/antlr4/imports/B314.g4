@@ -28,8 +28,8 @@ varDecl : name=ID AS type;                                        // nomVar as i
 
 /** Import */
 
-impDecl :  IMPORT fileDecl;                                     // import inputFile.wld
-fileDecl:  ID IMPORT_EXT;                                       // inputFile.wld
+impDecl :  IMPORT fileDecl;                                  // import inputFile.wld
+fileDecl:  ID IMPORT_EXT;                                   // inputFile.wld
 
 
 /** Actions */
@@ -69,7 +69,7 @@ exprD : LPAR exprD RPAR
 
 
     /* Var env. entières */
-exprInt : value=intVal                                              // 2, 13, -4,
+exprInt : intVal                                              // 2, 13, -4,
         | LAT | LONGT | GRID SIZE                             // (lat, long, grid size)
         | (MAP | RADIO | AMMO | FRUITS |SODA) COUNT
         | LIFE
@@ -93,7 +93,7 @@ exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
 /* Expression Gauche */
 
 exprG : ID                                                  # Var
-      | ARENA LBRACK elt+=intVal COMMA elt+=intVal RBRACK   # Arena
+      | ARENA LBRACK (intVal|ID) COMMA (intVal|ID) RBRACK   # Arena
       | ID LBRACK exprD (COMMA exprD)? RBRACK               # Case
       ;
 
