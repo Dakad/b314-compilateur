@@ -28,15 +28,15 @@ varDecl : name=ID AS type;                                        // nomVar as i
 
 /** Import */
 
-impDecl :  IMPORT fileDecl;                                  // import inputFile.wld
-fileDecl:  ID IMPORT_EXT;                                   // inputFile.wld
+impDecl :  IMPORT file=fileDecl;                                  // import inputFile.wld
+fileDecl:  name=ID ext=IMPORT_EXT;                                   // inputFile.wld
 
 
 /** Actions */
 
 action  : MOVE direction=(NORTH | SOUTH | EAST | WEST)      # Move
         | SHOOT direction=(NORTH | SOUTH | EAST | WEST)     # Shoot
-        | USE (MAP | RADIO | FRUITS | SODA)                 # Use
+        | USE item=(MAP | RADIO | FRUITS | SODA)            # Use
         | DO NOTHING                                        # Nothing
         ;
 
@@ -48,7 +48,7 @@ boolVal : (TRUE | FALSE);
 opBool  : (AND | OR);
 opBoolCompare : (LT | GT | EQ | LE | GE);
 
-exprDFct : name=ID LPAR (param+=exprD (COMMA param+=exprD)*)? RPAR;
+exprDFct : fctName=ID LPAR (param+=exprD (COMMA param+=exprD)*)? RPAR;
 
     /* Expressions entières */
 exprD : LPAR exprD RPAR
@@ -83,40 +83,45 @@ exprBool : boolVal
          ;
 
     /* Var. env. case */
-exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
-         | (FRUITS | SODA | GRAAL)
-         | NEARBY LBRACK exprD COMMA exprD RBRACK
+exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)  # EnvCase
+         | (FRUITS | SODA | GRAAL)                                                # EnvCase
+         | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # Nearby
          ;
 
 
 
 /* Expression Gauche */
 
-exprG : ID                                                  # Var
-      | ARENA LBRACK (intVal|ID) COMMA (intVal|ID) RBRACK   # Arena
-      | ID LBRACK exprD (COMMA exprD)? RBRACK               # Case
+exprG : name=ID                                               # Var
+      | ARENA LBRACK (intVal|ID) COMMA (intVal|ID) RBRACK     # Arena
+      | name=ID LBRACK elt+=exprD (COMMA elt+=exprD)? RBRACK  # Case
       ;
 
 
 /* Fonction */
 
-fctDecl : ID AS FUNCTION LPAR (varDecl (COMMA varDecl)*)* RPAR COLON (scalar | VOID)
-          (DECLARE LOCAL (varDecl SEMI)+)?
+fctDecl : fctName=ID AS FUNCTION
+              LPAR
+                (param+=varDecl
+                (COMMA param+=varDecl)*)*
+              RPAR
+              COLON (fctType=scalar | VOID)
+          localVarDecl?
           DO (instr)+
-          RETURN ID SEMI
+          RETURN returnVal=ID SEMI
           DONE
         ;
 
 
 /* Instructions */
 
-instr : SKP                                             # Skip
-      | IF exprD THEN (instr)+ DONE                     # IfThen
-      | IF exprD THEN (instr)+ ELSE (instr)+ DONE       # IfThenElse
-      | WHILE condition=exprD DO (instr)+ DONE          # While
-      | SET exprG TO exprD                              # SetTo
-      | COMPUTE exprD                                   # Compute
-      | NEXT action                                     # Next
+instr : SKP                                                   # Skip
+      | IF condition=exprD THEN (instr)+ DONE                 # IfThen
+      | IF condition=exprD THEN (instr)+ ELSE (instr)+ DONE   # IfThenElse
+      | WHILE condition=exprD DO (instr)+ DONE                # While
+      | SET exprG TO value=exprD                              # SetTo
+      | COMPUTE exprD                                         # Compute
+      | NEXT action                                           # Next
       ;
 
 
@@ -126,11 +131,11 @@ program : DECLARE AND RETAIN (programMonde | programStrat) ;
 
     /* Program pour fichier MONDE.b314 */
 
-programMonde : ( programMondeGlobalDecl* (board SEMI)? programMondeGlobalDecl* )
+programMonde : ( programMondeGlobalDecl* (arenaDecl=board SEMI)? programMondeGlobalDecl* )
                instr*
                clauseDefault
              ;
-programMondeGlobalDecl : (varDecl SEMI | fctDecl);
+programMondeGlobalDecl : (globalVarDecl+=varDecl SEMI | globalFctDecl+=fctDecl);
 
 
     /* Program pour fichier STRATEGIE.b314 */
@@ -140,22 +145,23 @@ programStrat : programStratGlobalDecl*
                 clauseWhen*
                 clauseDefault
              ;
-programStratGlobalDecl : (varDecl SEMI | fctDecl | impDecl);
+programStratGlobalDecl : (globalVarDecl+=varDecl SEMI | globalFctDecl+=fctDecl | impDecl);
 
 
 
 /* Clause Default */
 
 clauseDefault : BY DEFAULT
-                (DECLARE LOCAL (varDecl SEMI)+)?
-                DO instr+ DONE
+                  localVarDecl?
+                  DO instr+ DONE
               ;
 
+localVarDecl : DECLARE LOCAL (localVars+=varDecl SEMI)+;
 
 /* Clause When */
 
 clauseWhen : WHEN exprD
-            (DECLARE LOCAL (varDecl SEMI)+)?
-             DO instr+ DONE
+              localVarDecl?
+              DO instr+ DONE
            ;
 
