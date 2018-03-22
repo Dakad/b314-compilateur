@@ -1,6 +1,6 @@
 declare and retain
-        rightExpr as square,
-        s as square,
+        rightExpr as square;
+        s as square;
     by default
     do
         set rightExpr to graal

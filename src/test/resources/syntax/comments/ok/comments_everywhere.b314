@@ -1,5 +1,5 @@
 declare and retain /* debut du programme */
-    rightArrayExpression as integer[7], /* declaration d'un tableau */
+    rightArrayExpression as integer[7]; /* declaration d'un tableau */
     set val to 99 /* affectation d'un valeur */
     by default
     do
