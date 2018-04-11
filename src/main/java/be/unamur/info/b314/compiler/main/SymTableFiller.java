@@ -1,30 +1,54 @@
 package be.unamur.info.b314.compiler.main;
 
 import be.unamur.info.b314.compiler.B314BaseListener;
-import be.unamur.info.b314.compiler.B314Parser;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
-import com.google.common.collect.Maps;
 
-import java.util.Map;
+import org.antlr.symtab.Scope;
+import org.antlr.symtab.SymbolTable;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * Fills a symbol table using ANTLR listener for B314 langage.
+ * @overview SymTableFiller has to fills a symbol table
+ *  using ANTLR listener for B314 langage.
+ *  SymTableFiller is mutable.
  *
- * @author Xavier Devroey - xavier.devroey@unamur.be
+ *  @specfield symbolTable : Holds all scope and symbol of the parsed .B314
+ *  @specfield currentScope : Represent the last Scope entered
+ *
+ *  @inv symbolTable will contains at least the global scope and the predifined types
+ *  such as Boolean, Integer, Square
+ *
+ *
+ *
  */
 public class SymTableFiller extends B314BaseListener {
 
-  private final Map<String, Integer> symTable;
+  private final SymbolTable symTable;
 
-  private int offset = 0; // The offset of the variable in the PMachine stack
+  private Scope currentScope;
+
 
   public SymTableFiller() {
-    this.symTable = Maps.newHashMap();
+    this.symTable = new SymbolTable();
   }
 
+
+  private void pushScope(Scope scope) {
+    currentScope = scope;
+  }
+
+  private void popScope() {
+    currentScope = currentScope.getEnclosingScope();
+  }
+
+  /**
+   * @return the number of global variables declared
+   */
+  public int countVariables() {
+    return symTable.GLOBALS.getNumberOfSymbols();
+  }
 
   @Override
   public void enterRoot(RootContext ctx) {
@@ -54,17 +78,6 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void visitErrorNode(ErrorNode node) {
     super.visitErrorNode(node);
-  }
-
-  private void addVariable(String var) {
-    if (!symTable.containsKey(var)) {
-      symTable.put(var, offset);
-      offset++;
-    }
-  }
-
-  public Map<String, Integer> getSymTable() {
-    return symTable;
   }
 
 }
