@@ -11,14 +11,27 @@ public enum PredefinedType {
 
   private PrimitiveType is;
 
-  PredefinedType(){
-    this.is = new PrimitiveType(this.name().toLowerCase());
+  PredefinedType() {
+    this(null);
   }
 
-  PrimitiveType type(){
+  PredefinedType(String type) {
+    if (type == null) {
+      type = this.name();
+    }
+    this.is = new PrimitiveType(type.toLowerCase());
+  }
+
+  PrimitiveType type() {
     return is;
   }
 
 
-
+  public static PredefinedType get(String text) {
+    try {
+      return PredefinedType.valueOf(text.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      return PredefinedType.VOID;
+    }
+  }
 }
