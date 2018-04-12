@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import org.antlr.symtab.ArrayType;
 import org.antlr.symtab.GlobalScope;
+import org.antlr.symtab.LocalScope;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
@@ -118,7 +119,6 @@ public class SymTableFiller extends B314BaseListener {
     popScope();
   }
 
-
   @Override
   public void enterType(TypeContext ctx) {
     ParseTree type = ctx.getChild(0);
@@ -144,12 +144,6 @@ public class SymTableFiller extends B314BaseListener {
     }
   }
 
-
-  @Override
-  public void enterScalar(ScalarContext ctx) {
-    super.enterScalar(ctx);
-  }
-
   @Override
   public void enterArray(ArrayContext ctx) {
     super.enterArray(ctx);
@@ -172,15 +166,6 @@ public class SymTableFiller extends B314BaseListener {
     return new ArrayType(type, size);
   }
 
-  @Override
-  public void enterBoard(BoardContext ctx) {
-    super.enterBoard(ctx);
-  }
-
-  @Override
-  public void exitBoard(BoardContext ctx) {
-    super.exitBoard(ctx);
-  }
 
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
@@ -196,366 +181,6 @@ public class SymTableFiller extends B314BaseListener {
 
 
   @Override
-  public void enterImpDecl(ImpDeclContext ctx) {
-    super.enterImpDecl(ctx);
-  }
-
-  @Override
-  public void exitImpDecl(ImpDeclContext ctx) {
-    super.exitImpDecl(ctx);
-  }
-
-  @Override
-  public void enterFileDecl(FileDeclContext ctx) {
-    super.enterFileDecl(ctx);
-  }
-
-  @Override
-  public void exitFileDecl(FileDeclContext ctx) {
-    super.exitFileDecl(ctx);
-  }
-
-  @Override
-  public void enterMove(MoveContext ctx) {
-    super.enterMove(ctx);
-  }
-
-  @Override
-  public void exitMove(MoveContext ctx) {
-    super.exitMove(ctx);
-  }
-
-  @Override
-  public void enterShoot(ShootContext ctx) {
-    super.enterShoot(ctx);
-  }
-
-  @Override
-  public void exitShoot(ShootContext ctx) {
-    super.exitShoot(ctx);
-  }
-
-  @Override
-  public void enterUse(UseContext ctx) {
-    super.enterUse(ctx);
-  }
-
-  @Override
-  public void exitUse(UseContext ctx) {
-    super.exitUse(ctx);
-  }
-
-  @Override
-  public void enterNothing(NothingContext ctx) {
-    super.enterNothing(ctx);
-  }
-
-  @Override
-  public void exitNothing(NothingContext ctx) {
-    super.exitNothing(ctx);
-  }
-
-  @Override
-  public void enterIntVal(IntValContext ctx) {
-    super.enterIntVal(ctx);
-  }
-
-  @Override
-  public void exitIntVal(IntValContext ctx) {
-    super.exitIntVal(ctx);
-  }
-
-  @Override
-  public void enterOpInt(OpIntContext ctx) {
-    super.enterOpInt(ctx);
-  }
-
-  @Override
-  public void exitOpInt(OpIntContext ctx) {
-    super.exitOpInt(ctx);
-  }
-
-  @Override
-  public void enterBoolVal(BoolValContext ctx) {
-    super.enterBoolVal(ctx);
-  }
-
-  @Override
-  public void exitBoolVal(BoolValContext ctx) {
-    super.exitBoolVal(ctx);
-  }
-
-  @Override
-  public void enterOpBool(OpBoolContext ctx) {
-    super.enterOpBool(ctx);
-  }
-
-  @Override
-  public void exitOpBool(OpBoolContext ctx) {
-    super.exitOpBool(ctx);
-  }
-
-  @Override
-  public void enterOpBoolCompare(OpBoolCompareContext ctx) {
-    super.enterOpBoolCompare(ctx);
-  }
-
-  @Override
-  public void exitOpBoolCompare(OpBoolCompareContext ctx) {
-    super.exitOpBoolCompare(ctx);
-  }
-
-  @Override
-  public void enterExprDFct(ExprDFctContext ctx) {
-    super.enterExprDFct(ctx);
-  }
-
-  @Override
-  public void exitExprDFct(ExprDFctContext ctx) {
-    super.exitExprDFct(ctx);
-  }
-
-  @Override
-  public void enterExprD(ExprDContext ctx) {
-    super.enterExprD(ctx);
-  }
-
-  @Override
-  public void exitExprD(ExprDContext ctx) {
-    super.exitExprD(ctx);
-  }
-
-  @Override
-  public void enterExprInt(ExprIntContext ctx) {
-    super.enterExprInt(ctx);
-  }
-
-  @Override
-  public void exitExprInt(ExprIntContext ctx) {
-    super.exitExprInt(ctx);
-  }
-
-  @Override
-  public void enterExprBool(ExprBoolContext ctx) {
-    super.enterExprBool(ctx);
-  }
-
-  @Override
-  public void exitExprBool(ExprBoolContext ctx) {
-    super.exitExprBool(ctx);
-  }
-
-  @Override
-  public void enterEnvCase(EnvCaseContext ctx) {
-    super.enterEnvCase(ctx);
-  }
-
-  @Override
-  public void exitEnvCase(EnvCaseContext ctx) {
-    super.exitEnvCase(ctx);
-  }
-
-  @Override
-  public void enterNearby(NearbyContext ctx) {
-    super.enterNearby(ctx);
-  }
-
-  @Override
-  public void exitNearby(NearbyContext ctx) {
-    super.exitNearby(ctx);
-  }
-
-  @Override
-  public void enterVar(VarContext ctx) {
-    super.enterVar(ctx);
-  }
-
-  @Override
-  public void exitVar(VarContext ctx) {
-    super.exitVar(ctx);
-  }
-
-  @Override
-  public void enterArena(ArenaContext ctx) {
-    super.enterArena(ctx);
-  }
-
-  @Override
-  public void exitArena(ArenaContext ctx) {
-    super.exitArena(ctx);
-  }
-
-  @Override
-  public void enterCase(CaseContext ctx) {
-    super.enterCase(ctx);
-  }
-
-  @Override
-  public void exitCase(CaseContext ctx) {
-    super.exitCase(ctx);
-  }
-
-  @Override
-  public void enterFctDecl(FctDeclContext ctx) {
-    super.enterFctDecl(ctx);
-  }
-
-  @Override
-  public void exitFctDecl(FctDeclContext ctx) {
-    super.exitFctDecl(ctx);
-  }
-
-  @Override
-  public void enterSkip(SkipContext ctx) {
-    super.enterSkip(ctx);
-  }
-
-  @Override
-  public void exitSkip(SkipContext ctx) {
-    super.exitSkip(ctx);
-  }
-
-  @Override
-  public void enterIfThen(IfThenContext ctx) {
-    super.enterIfThen(ctx);
-  }
-
-  @Override
-  public void exitIfThen(IfThenContext ctx) {
-    super.exitIfThen(ctx);
-  }
-
-  @Override
-  public void enterIfThenElse(IfThenElseContext ctx) {
-    super.enterIfThenElse(ctx);
-  }
-
-  @Override
-  public void exitIfThenElse(IfThenElseContext ctx) {
-    super.exitIfThenElse(ctx);
-  }
-
-  @Override
-  public void enterWhile(WhileContext ctx) {
-    super.enterWhile(ctx);
-  }
-
-  @Override
-  public void exitWhile(WhileContext ctx) {
-    super.exitWhile(ctx);
-  }
-
-  @Override
-  public void enterSetTo(SetToContext ctx) {
-    super.enterSetTo(ctx);
-  }
-
-  @Override
-  public void exitSetTo(SetToContext ctx) {
-    super.exitSetTo(ctx);
-  }
-
-  @Override
-  public void enterCompute(ComputeContext ctx) {
-    super.enterCompute(ctx);
-  }
-
-  @Override
-  public void exitCompute(ComputeContext ctx) {
-    super.exitCompute(ctx);
-  }
-
-  @Override
-  public void enterNext(NextContext ctx) {
-    super.enterNext(ctx);
-  }
-
-  @Override
-  public void exitNext(NextContext ctx) {
-    super.exitNext(ctx);
-  }
-
-  @Override
-  public void enterProgram(ProgramContext ctx) {
-    super.enterProgram(ctx);
-  }
-
-  @Override
-  public void exitProgram(ProgramContext ctx) {
-    super.exitProgram(ctx);
-  }
-
-  @Override
-  public void enterProgramMonde(ProgramMondeContext ctx) {
-    super.enterProgramMonde(ctx);
-  }
-
-  @Override
-  public void exitProgramMonde(ProgramMondeContext ctx) {
-    super.exitProgramMonde(ctx);
-  }
-
-  @Override
-  public void enterProgramMondeGlobalDecl(ProgramMondeGlobalDeclContext ctx) {
-    super.enterProgramMondeGlobalDecl(ctx);
-  }
-
-  @Override
-  public void exitProgramMondeGlobalDecl(ProgramMondeGlobalDeclContext ctx) {
-    super.exitProgramMondeGlobalDecl(ctx);
-  }
-
-  @Override
-  public void enterProgramStrat(ProgramStratContext ctx) {
-    super.enterProgramStrat(ctx);
-  }
-
-  @Override
-  public void exitProgramStrat(ProgramStratContext ctx) {
-    super.exitProgramStrat(ctx);
-  }
-
-  @Override
-  public void enterProgramStratGlobalDecl(ProgramStratGlobalDeclContext ctx) {
-    super.enterProgramStratGlobalDecl(ctx);
-  }
-
-  @Override
-  public void exitProgramStratGlobalDecl(ProgramStratGlobalDeclContext ctx) {
-    super.exitProgramStratGlobalDecl(ctx);
-  }
-
-  @Override
-  public void enterClauseDefault(ClauseDefaultContext ctx) {
-    super.enterClauseDefault(ctx);
-  }
-
-  @Override
-  public void exitClauseDefault(ClauseDefaultContext ctx) {
-    super.exitClauseDefault(ctx);
-  }
-
-  @Override
-  public void enterLocalVarDecl(LocalVarDeclContext ctx) {
-    super.enterLocalVarDecl(ctx);
-  }
-
-  @Override
-  public void exitLocalVarDecl(LocalVarDeclContext ctx) {
-    super.exitLocalVarDecl(ctx);
-  }
-
-  @Override
-  public void enterClauseWhen(ClauseWhenContext ctx) {
-    super.enterClauseWhen(ctx);
-  }
-
-  @Override
-  public void exitClauseWhen(ClauseWhenContext ctx) {
-    super.exitClauseWhen(ctx);
-  }
-
-  @Override
   public int hashCode() {
     return super.hashCode();
   }
@@ -566,12 +191,7 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
-  protected Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
-
-  @Override
   public String toString() {
-    return super.toString();
+    return getSymTable().toString();
   }
 }
