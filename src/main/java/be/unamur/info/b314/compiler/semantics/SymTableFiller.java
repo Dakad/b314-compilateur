@@ -1,23 +1,30 @@
-package be.unamur.info.b314.compiler.main;
+package be.unamur.info.b314.compiler.semantics;
 
 import be.unamur.info.b314.compiler.B314BaseListener;
-import be.unamur.info.b314.compiler.B314Parser.ActionContext;
+import be.unamur.info.b314.compiler.B314Parser.ArenaContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.BoardContext;
 import be.unamur.info.b314.compiler.B314Parser.BoolValContext;
+import be.unamur.info.b314.compiler.B314Parser.CaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ClauseDefaultContext;
 import be.unamur.info.b314.compiler.B314Parser.ClauseWhenContext;
+import be.unamur.info.b314.compiler.B314Parser.ComputeContext;
+import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprBoolContext;
-import be.unamur.info.b314.compiler.B314Parser.ExprCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDFctContext;
-import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprIntContext;
 import be.unamur.info.b314.compiler.B314Parser.FctDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.FileDeclContext;
+import be.unamur.info.b314.compiler.B314Parser.IfThenContext;
+import be.unamur.info.b314.compiler.B314Parser.IfThenElseContext;
 import be.unamur.info.b314.compiler.B314Parser.ImpDeclContext;
-import be.unamur.info.b314.compiler.B314Parser.InstrContext;
 import be.unamur.info.b314.compiler.B314Parser.IntValContext;
+import be.unamur.info.b314.compiler.B314Parser.LocalVarDeclContext;
+import be.unamur.info.b314.compiler.B314Parser.MoveContext;
+import be.unamur.info.b314.compiler.B314Parser.NearbyContext;
+import be.unamur.info.b314.compiler.B314Parser.NextContext;
+import be.unamur.info.b314.compiler.B314Parser.NothingContext;
 import be.unamur.info.b314.compiler.B314Parser.OpBoolCompareContext;
 import be.unamur.info.b314.compiler.B314Parser.OpBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.OpIntContext;
@@ -27,33 +34,33 @@ import be.unamur.info.b314.compiler.B314Parser.ProgramMondeGlobalDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.ProgramStratContext;
 import be.unamur.info.b314.compiler.B314Parser.ProgramStratGlobalDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
-
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
+import be.unamur.info.b314.compiler.B314Parser.SetToContext;
+import be.unamur.info.b314.compiler.B314Parser.ShootContext;
+import be.unamur.info.b314.compiler.B314Parser.SkipContext;
 import be.unamur.info.b314.compiler.B314Parser.TypeContext;
+import be.unamur.info.b314.compiler.B314Parser.UseContext;
+import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
-import org.antlr.symtab.GlobalScope;
-import org.antlr.symtab.PrimitiveType;
+import be.unamur.info.b314.compiler.B314Parser.WhileContext;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyGlobalDeclared;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.SymbolTable;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.symtab.VariableSymbol;
 
 /**
  * @overview SymTableFiller has to fills a symbol table
  *  using ANTLR listener for B314 langage.
  *  SymTableFiller is mutable.
  *
- *  @specfield symbolTable : Holds all scope and symbol of the parsed .B314
- *  @specfield currentScope : Represent the last Scope entered
+ *  @specfield symbolTable : Holds all scopes and symbols of the parsed .B314
+ *  @specfield currentScope : Represents the last Scope entered
  *
- *  @inv symbolTable will contains at least the global scope and the predifined types
- *  such as Boolean, Integer, Square
- *
- *
+ *  @inv symbolTable must contains at least the global scope and the predefined types
+ *  such as Boolean, Integer, Square.
  *
  */
-public class SymTableFiller extends B314BaseListener {
+public class SymTableFiller extends  B314BaseListener{
 
   private final SymbolTable symTable;
 
@@ -66,9 +73,10 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   private void definePrimitiveType() {
-    this.symTable.definePredefinedSymbol(new PrimitiveType("boolean"));
-    this.symTable.definePredefinedSymbol(new PrimitiveType("integer"));
-    this.symTable.definePredefinedSymbol(new PrimitiveType("square"));
+    this.symTable.definePredefinedSymbol(PredefinedType.BOOLEAN.type());
+    this.symTable.definePredefinedSymbol(PredefinedType.INTEGER.type());
+    this.symTable.definePredefinedSymbol(PredefinedType.SQUARE.type());
+    this.symTable.definePredefinedSymbol(PredefinedType.VOID.type());
   }
 
 
@@ -80,43 +88,14 @@ public class SymTableFiller extends B314BaseListener {
     currentScope = currentScope.getEnclosingScope();
   }
 
-  /**
-   * @return the number of global variables declared
-   */
-  public int countVariables() {
-    return symTable.GLOBALS.getNumberOfSymbols();
-  }
-
   @Override
   public void enterRoot(RootContext ctx) {
-    GlobalScope gs = symTable.GLOBALS;
-    pushScope(gs);
+    pushScope(symTable.GLOBALS);
   }
 
   @Override
   public void exitRoot(RootContext ctx) {
     popScope();
-  }
-
-  @Override
-  public void enterEveryRule(ParserRuleContext ctx) {
-    super.enterEveryRule(ctx);
-  }
-
-  @Override
-  public void exitEveryRule(ParserRuleContext ctx) {
-    super.exitEveryRule(ctx);
-  }
-
-  @Override
-  public void visitTerminal(TerminalNode node) {
-    node.
-    super.visitTerminal(node);
-  }
-
-  @Override
-  public void visitErrorNode(ErrorNode node) {
-    super.visitErrorNode(node);
   }
 
   @Override
@@ -161,13 +140,15 @@ public class SymTableFiller extends B314BaseListener {
 
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
-    super.enterVarDecl(ctx);
+    String name = ctx.name.getText();
+    try {
+      VariableSymbol var = new VariableSymbol(name);
+      currentScope.define(var);
+    } catch (IllegalArgumentException e){
+      throw new AlreadyGlobalDeclared(name);
+    }
   }
 
-  @Override
-  public void exitVarDecl(VarDeclContext ctx) {
-    super.exitVarDecl(ctx);
-  }
 
   @Override
   public void enterImpDecl(ImpDeclContext ctx) {
@@ -190,13 +171,43 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
-  public void enterAction(ActionContext ctx) {
-    super.enterAction(ctx);
+  public void enterMove(MoveContext ctx) {
+    super.enterMove(ctx);
   }
 
   @Override
-  public void exitAction(ActionContext ctx) {
-    super.exitAction(ctx);
+  public void exitMove(MoveContext ctx) {
+    super.exitMove(ctx);
+  }
+
+  @Override
+  public void enterShoot(ShootContext ctx) {
+    super.enterShoot(ctx);
+  }
+
+  @Override
+  public void exitShoot(ShootContext ctx) {
+    super.exitShoot(ctx);
+  }
+
+  @Override
+  public void enterUse(UseContext ctx) {
+    super.enterUse(ctx);
+  }
+
+  @Override
+  public void exitUse(UseContext ctx) {
+    super.exitUse(ctx);
+  }
+
+  @Override
+  public void enterNothing(NothingContext ctx) {
+    super.enterNothing(ctx);
+  }
+
+  @Override
+  public void exitNothing(NothingContext ctx) {
+    super.exitNothing(ctx);
   }
 
   @Override
@@ -290,23 +301,53 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
-  public void enterExprCase(ExprCaseContext ctx) {
-    super.enterExprCase(ctx);
+  public void enterEnvCase(EnvCaseContext ctx) {
+    super.enterEnvCase(ctx);
   }
 
   @Override
-  public void exitExprCase(ExprCaseContext ctx) {
-    super.exitExprCase(ctx);
+  public void exitEnvCase(EnvCaseContext ctx) {
+    super.exitEnvCase(ctx);
   }
 
   @Override
-  public void enterExprG(ExprGContext ctx) {
-    super.enterExprG(ctx);
+  public void enterNearby(NearbyContext ctx) {
+    super.enterNearby(ctx);
   }
 
   @Override
-  public void exitExprG(ExprGContext ctx) {
-    super.exitExprG(ctx);
+  public void exitNearby(NearbyContext ctx) {
+    super.exitNearby(ctx);
+  }
+
+  @Override
+  public void enterVar(VarContext ctx) {
+    super.enterVar(ctx);
+  }
+
+  @Override
+  public void exitVar(VarContext ctx) {
+    super.exitVar(ctx);
+  }
+
+  @Override
+  public void enterArena(ArenaContext ctx) {
+    super.enterArena(ctx);
+  }
+
+  @Override
+  public void exitArena(ArenaContext ctx) {
+    super.exitArena(ctx);
+  }
+
+  @Override
+  public void enterCase(CaseContext ctx) {
+    super.enterCase(ctx);
+  }
+
+  @Override
+  public void exitCase(CaseContext ctx) {
+    super.exitCase(ctx);
   }
 
   @Override
@@ -320,13 +361,73 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
-  public void enterInstr(InstrContext ctx) {
-    super.enterInstr(ctx);
+  public void enterSkip(SkipContext ctx) {
+    super.enterSkip(ctx);
   }
 
   @Override
-  public void exitInstr(InstrContext ctx) {
-    super.exitInstr(ctx);
+  public void exitSkip(SkipContext ctx) {
+    super.exitSkip(ctx);
+  }
+
+  @Override
+  public void enterIfThen(IfThenContext ctx) {
+    super.enterIfThen(ctx);
+  }
+
+  @Override
+  public void exitIfThen(IfThenContext ctx) {
+    super.exitIfThen(ctx);
+  }
+
+  @Override
+  public void enterIfThenElse(IfThenElseContext ctx) {
+    super.enterIfThenElse(ctx);
+  }
+
+  @Override
+  public void exitIfThenElse(IfThenElseContext ctx) {
+    super.exitIfThenElse(ctx);
+  }
+
+  @Override
+  public void enterWhile(WhileContext ctx) {
+    super.enterWhile(ctx);
+  }
+
+  @Override
+  public void exitWhile(WhileContext ctx) {
+    super.exitWhile(ctx);
+  }
+
+  @Override
+  public void enterSetTo(SetToContext ctx) {
+    super.enterSetTo(ctx);
+  }
+
+  @Override
+  public void exitSetTo(SetToContext ctx) {
+    super.exitSetTo(ctx);
+  }
+
+  @Override
+  public void enterCompute(ComputeContext ctx) {
+    super.enterCompute(ctx);
+  }
+
+  @Override
+  public void exitCompute(ComputeContext ctx) {
+    super.exitCompute(ctx);
+  }
+
+  @Override
+  public void enterNext(NextContext ctx) {
+    super.enterNext(ctx);
+  }
+
+  @Override
+  public void exitNext(NextContext ctx) {
+    super.exitNext(ctx);
   }
 
   @Override
@@ -390,6 +491,16 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
+  public void enterLocalVarDecl(LocalVarDeclContext ctx) {
+    super.enterLocalVarDecl(ctx);
+  }
+
+  @Override
+  public void exitLocalVarDecl(LocalVarDeclContext ctx) {
+    super.exitLocalVarDecl(ctx);
+  }
+
+  @Override
   public void enterClauseWhen(ClauseWhenContext ctx) {
     super.enterClauseWhen(ctx);
   }
@@ -397,6 +508,13 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void exitClauseWhen(ClauseWhenContext ctx) {
     super.exitClauseWhen(ctx);
+  }
+
+  /**
+   * @return the number of global variables declared
+   */
+  public int countVariables() {
+    return symTable.GLOBALS.getNumberOfSymbols();
   }
 
   @Override
