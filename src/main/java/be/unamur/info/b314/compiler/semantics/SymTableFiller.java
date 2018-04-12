@@ -9,6 +9,7 @@ import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
 import be.unamur.info.b314.compiler.B314Parser.TypeContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyLocallyDeclared;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class SymTableFiller extends B314BaseListener {
 
     Type predefType = null;
     String varName = ((VarDeclContext) ctx.getParent()).name.getText();
-    VariableSymbol var =  (VariableSymbol) currentScope.getSymbol(varName);
+    VariableSymbol var = (VariableSymbol) currentScope.getSymbol(varName);
 
     if (type instanceof ScalarContext) {
       predefType = PredefinedType.get(type.getText()).type();
@@ -133,13 +134,15 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
     String name = ctx.name.getText();
-    try {
-      symTable.GLOBALS.getSymbol(name);
-    } catch (IllegalArgumentException e) {
+    if (symTable.GLOBALS.getSymbol(name) != null) {
       throw new AlreadyGloballyDeclared(name);
     }
-    VariableSymbol var = new VariableSymbol(name);
-    currentScope.define(var);
+    try {
+      VariableSymbol var = new VariableSymbol(name);
+      currentScope.define(var);
+    } catch (IllegalArgumentException e) {
+      throw new AlreadyLocallyDeclared(name);
+    }
   }
 
 
