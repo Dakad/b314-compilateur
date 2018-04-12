@@ -186,11 +186,12 @@ public class SymTableFiller extends B314BaseListener {
   public void enterVarDecl(VarDeclContext ctx) {
     String name = ctx.name.getText();
     try {
-      VariableSymbol var = new VariableSymbol(name);
-      currentScope.define(var);
+      symTable.GLOBALS.getSymbol(name);
     } catch (IllegalArgumentException e) {
       throw new AlreadyGlobalDeclared(name);
     }
+    VariableSymbol var = new VariableSymbol(name);
+    currentScope.define(var);
   }
 
 
