@@ -44,9 +44,13 @@ import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.WhileContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGlobalDeclared;
+import java.util.List;
+import org.antlr.symtab.ArrayType;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.SymbolTable;
+import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
+import org.antlr.v4.runtime.RuleContext;
 
 /**
  * @overview SymTableFiller has to fills a symbol table
@@ -98,34 +102,49 @@ public class SymTableFiller extends  B314BaseListener{
     popScope();
   }
 
-  @Override
-  public void enterType(TypeContext ctx) {
-    super.enterType(ctx);
-  }
-
-  @Override
-  public void exitType(TypeContext ctx) {
-    super.exitType(ctx);
-  }
 
   @Override
   public void enterScalar(ScalarContext ctx) {
-    super.enterScalar(ctx);
+    PredefinedType predefType = PredefinedType.valueOf(ctx.getText());
+    Type type = predefType.type();
+    VariableSymbol var = this.getVarFromTypeCtx(ctx.getParent());
+    var.setType(type);
   }
 
-  @Override
-  public void exitScalar(ScalarContext ctx) {
-    super.exitScalar(ctx);
+  /**
+   * @param ctx - The TypeContext from the Scalar or Array Contex.
+   * @return the matching VariableSymbol with this typeContext name;
+   */
+  private VariableSymbol getVarFromTypeCtx(RuleContext ctx){
+    String varName = ((VarDeclContext) ctx.getParent()).name.getText();
+    return (VariableSymbol) currentScope.getSymbol(varName);
   }
 
   @Override
   public void enterArray(ArrayContext ctx) {
-    super.enterArray(ctx);
+    // First, get the type of this array var.
+    PredefinedType predefType = PredefinedType.valueOf(ctx.scalar().getText());
+    Type type = predefType.type();
+    // Get the define var for this array var.
+    VariableSymbol var = this.getVarFromTypeCtx(ctx.getParent());
+    // Init the array
+    ArrayType array = this.createArrayType(ctx.elt, type);
+    var.setType(array);
   }
 
-  @Override
-  public void exitArray(ArrayContext ctx) {
-    super.exitArray(ctx);
+  private ArrayType createArrayType(List<IntValContext> arraySizes, Type type) {
+    if(arraySizes.isEmpty()) return null;
+
+    if(arraySizes.size() > 1){ // ? Is multi-dimension array ?
+      ArrayType nestedArray;
+      for (int i = arraySizes.size() - 1, sizeNested ; i > 0 ; --i) {
+        sizeNested = Integer.parseInt(arraySizes.get(i).INTEGER().getText());
+        nestedArray = new ArrayType(type, sizeNested);
+        type = nestedArray;
+      }
+    }
+    int size = Integer.parseInt(arraySizes.get(0).INTEGER().getText());
+    return new ArrayType(type, size);
   }
 
   @Override
