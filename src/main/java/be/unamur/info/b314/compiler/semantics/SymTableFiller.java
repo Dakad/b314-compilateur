@@ -44,9 +44,12 @@ import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.WhileContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGlobalDeclared;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.antlr.symtab.ArrayType;
 import org.antlr.symtab.Scope;
+import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
@@ -83,6 +86,21 @@ public class SymTableFiller extends  B314BaseListener{
     this.symTable.definePredefinedSymbol(PredefinedType.VOID.type());
   }
 
+  /**
+   * @return a read-only view of the Symbol table.
+   * @throws UnsupportedOperationException if attemps to modifiy the Map in any way.
+   */
+  public Map<String, ? extends Symbol> getSymTable() {
+    return Collections.unmodifiableMap(symTable.GLOBALS.getMembers());
+  }
+
+
+  /**
+   * @return the number of global variables declared
+   */
+  public int countVariables() {
+    return symTable.GLOBALS.getNumberOfSymbols();
+  }
 
   private void pushScope(Scope scope) {
     currentScope = scope;
@@ -101,7 +119,6 @@ public class SymTableFiller extends  B314BaseListener{
   public void exitRoot(RootContext ctx) {
     popScope();
   }
-
 
   @Override
   public void enterScalar(ScalarContext ctx) {
@@ -527,13 +544,6 @@ public class SymTableFiller extends  B314BaseListener{
   @Override
   public void exitClauseWhen(ClauseWhenContext ctx) {
     super.exitClauseWhen(ctx);
-  }
-
-  /**
-   * @return the number of global variables declared
-   */
-  public int countVariables() {
-    return symTable.GLOBALS.getNumberOfSymbols();
   }
 
   @Override
