@@ -48,26 +48,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.antlr.symtab.ArrayType;
+import org.antlr.symtab.GlobalScope;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
- * @overview SymTableFiller has to fills a symbol table
- *  using ANTLR listener for B314 langage.
- *  SymTableFiller is mutable.
- *
- *  @specfield symbolTable : Holds all scopes and symbols of the parsed .B314
- *  @specfield currentScope : Represents the last Scope entered
- *
- *  @inv symbolTable must contains at least the global scope and the predefined types
- *  such as Boolean, Integer, Square.
- *
+ * @overview SymTableFiller has to fills a symbol table using ANTLR listener for B314 langage.
+ * SymTableFiller is mutable.
+ * @specfield symbolTable : Holds all scopes and symbols of the parsed .B314
+ * @specfield currentScope : Represents the last Scope entered
+ * @inv symbolTable must contains at least the global scope and the predefined types such as
+ * Boolean, Integer, Square.
  */
-public class SymTableFiller extends  B314BaseListener{
+public class SymTableFiller extends B314BaseListener {
 
   private final SymbolTable symTable;
 
@@ -120,41 +118,51 @@ public class SymTableFiller extends  B314BaseListener{
     popScope();
   }
 
+
   @Override
-  public void enterScalar(ScalarContext ctx) {
-    PredefinedType predefType = PredefinedType.valueOf(ctx.getText());
-    Type type = predefType.type();
-    VariableSymbol var = this.getVarFromTypeCtx(ctx.getParent());
-    var.setType(type);
+  public void enterType(TypeContext ctx) {
+    ParseTree type = ctx.getChild(0);
+    if (type == null) {
+      return;
+    }
+
+    Type predefType = null;
+    String varName = ((VarDeclContext) ctx.getParent()).name.getText();
+    VariableSymbol var =  (VariableSymbol) currentScope.getSymbol(varName);
+
+    if (type instanceof ScalarContext) {
+      predefType = PredefinedType.get(type.getText()).type();
+      var.setType(predefType);
+    } else {
+      ArrayContext typeArray = (ArrayContext) type;
+      // First, get the type of this array vaWr.
+      predefType = PredefinedType.get(typeArray.scalar().getText()).type();
+
+      // Init the array
+      ArrayType array = this.createArrayType(typeArray.elt, predefType);
+      var.setType(array);
+    }
   }
 
-  /**
-   * @param ctx - The TypeContext from the Scalar or Array Contex.
-   * @return the matching VariableSymbol with this typeContext name;
-   */
-  private VariableSymbol getVarFromTypeCtx(RuleContext ctx){
-    String varName = ((VarDeclContext) ctx.getParent()).name.getText();
-    return (VariableSymbol) currentScope.getSymbol(varName);
+
+  @Override
+  public void enterScalar(ScalarContext ctx) {
+    super.enterScalar(ctx);
   }
 
   @Override
   public void enterArray(ArrayContext ctx) {
-    // First, get the type of this array var.
-    PredefinedType predefType = PredefinedType.valueOf(ctx.scalar().getText());
-    Type type = predefType.type();
-    // Get the define var for this array var.
-    VariableSymbol var = this.getVarFromTypeCtx(ctx.getParent());
-    // Init the array
-    ArrayType array = this.createArrayType(ctx.elt, type);
-    var.setType(array);
+    super.enterArray(ctx);
   }
 
   private ArrayType createArrayType(List<IntValContext> arraySizes, Type type) {
-    if(arraySizes.isEmpty()) return null;
+    if (arraySizes.isEmpty()) {
+      return null;
+    }
 
-    if(arraySizes.size() > 1){ // ? Is multi-dimension array ?
+    if (arraySizes.size() > 1) { // ? Is multi-dimension array ?
       ArrayType nestedArray;
-      for (int i = arraySizes.size() - 1, sizeNested ; i > 0 ; --i) {
+      for (int i = arraySizes.size() - 1, sizeNested; i > 0; --i) {
         sizeNested = Integer.parseInt(arraySizes.get(i).INTEGER().getText());
         nestedArray = new ArrayType(type, sizeNested);
         type = nestedArray;
@@ -180,7 +188,7 @@ public class SymTableFiller extends  B314BaseListener{
     try {
       VariableSymbol var = new VariableSymbol(name);
       currentScope.define(var);
-    } catch (IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       throw new AlreadyGlobalDeclared(name);
     }
   }
