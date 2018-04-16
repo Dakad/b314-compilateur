@@ -1,4 +1,4 @@
-package be.unamur.info.b314.compiler.main.exception;
+package be.unamur.info.b314.compiler.semantics.exception;
 
 
 

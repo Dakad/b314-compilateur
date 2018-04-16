@@ -4,12 +4,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import be.unamur.info.b314.compiler.B314Lexer;
 import be.unamur.info.b314.compiler.B314Parser;
-import be.unamur.info.b314.compiler.main.exception.ParsingException;
+import be.unamur.info.b314.compiler.semantics.exception.ParsingException;
+import be.unamur.info.b314.compiler.semantics.SymTableFiller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;

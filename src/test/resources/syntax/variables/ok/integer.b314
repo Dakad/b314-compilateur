@@ -2,7 +2,7 @@ declare and retain
     import inputFile.wld
     t as integer;
     res as integer[4];
-    res as integer[4,45];
+    res2 as integer[4,45];
 
     f as function( ): boolean
     do
