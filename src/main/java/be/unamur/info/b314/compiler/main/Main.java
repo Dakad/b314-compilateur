@@ -160,7 +160,7 @@ public class Main {
 
         // Build symbol table
         LOG.debug("Building symbol table");
-        Map<String, Integer> symTable = fillSymTable(tree);
+        SymTableFiller symTable = fillSymTable(tree);
         LOG.debug("Building symbol table: done");
 
         // Print PCode
@@ -197,17 +197,17 @@ public class Main {
     /**
      * Builds symbol table from AST.
      */
-    private Map<String, Integer> fillSymTable(B314Parser.RootContext tree) {
+    private SymTableFiller fillSymTable(B314Parser.RootContext tree) {
         SymTableFiller filler = new SymTableFiller();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(filler, tree);
-        return filler.getSymTable();
+        return filler;
     }
 
     /**
      * Print PCode from AST and symtable.
      */
-    private void printPCode(B314Parser.RootContext tree, Map<String, Integer> symTable) throws FileNotFoundException {
+    private void printPCode(B314Parser.RootContext tree, SymTableFiller symTable) throws FileNotFoundException {
         PCodePrinter printer = new PCodePrinter(outputFile);
         PCodeVisitor visitor = new PCodeVisitor(symTable, printer);
         tree.accept(visitor);
