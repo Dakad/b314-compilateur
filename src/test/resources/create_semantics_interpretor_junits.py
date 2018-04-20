@@ -59,42 +59,42 @@ for serie in [x for x in os.listdir(semanticsDir) if not x.startswith('.')]:
                 input1 = [i for i in b314file.readline().strip().split(',') if not len(i) == 0]
                 output1 = [o for o in b314file.readline().strip().split(',') if not len(o) == 0]
                 fout.write('        result = PCodeInterpreter.getInterpreter().execute(pcodeFile, 1')
-                for i in input1:
-                    fout.write(', "{}"'.format(i));
+                # for i in input1:
+                    #fout.write(', "{}"'.format(i));
                 fout.write(');\n')
                 fout.write('        assertThat("Interpreter exist status was not 0", result.getExitStatus(), equalTo(0));\n')
                 fout.write('        assertThat("Wrong number of outputs, there was 1 turn", result.getOutLines(), hasSize(1));\n')
                 fout.write('        assertThat(result.getOutLines(), contains("{}"'.format(output1[0]))
-                for o in output1[1:]:
-                    fout.write(', "{}"'.format(o));
+                # for o in output1[1:]:
+                    # fout.write(', "{}"'.format(o));
                 fout.write('));\n')
                 fout.write('        // Turns: 3\n')
                 fout.write('        LOG.debug("Starting interpretation with 3 turn");\n')
                 input1 = [i for i in b314file.readline().strip().split(',') if not len(i) == 0]
                 output1 = [o for o in b314file.readline().strip().split(',') if not len(o) == 0]
                 fout.write('        result = PCodeInterpreter.getInterpreter().execute(pcodeFile, 3')
-                for i in input1:
-                    fout.write(', "{}"'.format(i));
+                # for i in input1:
+                    # fout.write(', "{}"'.format(i));
                 fout.write(');\n')
                 fout.write('        assertThat("Interpreter exist status was not 0", result.getExitStatus(), equalTo(0));\n')
                 fout.write('        assertThat("Wrong number of outputs, there was 1 turn", result.getOutLines(), hasSize(3));\n')
                 fout.write('        assertThat(result.getOutLines(), contains("{}"'.format(output1[0]))
-                for o in output1[1:]:
-                    fout.write(', "{}"'.format(o));
+                # for o in output1[1:]:
+                    # fout.write(', "{}"'.format(o));
                 fout.write('));\n')
                 fout.write('        // Turns 5\n')
                 fout.write('        LOG.debug("Starting interpretation with 5 turn");\n')
                 input1 = [i for i in b314file.readline().strip().split(',') if not len(i) == 0]
                 output1 = [o for o in b314file.readline().strip().split(',') if not len(o) == 0]
                 fout.write('        result = PCodeInterpreter.getInterpreter().execute(pcodeFile, 5')
-                for i in input1:
-                    fout.write(', "{}"'.format(i));
+                # for i in input1:
+                    # fout.write(', "{}"'.format(i));
                 fout.write(');\n')
                 fout.write('        assertThat("Interpreter exist status was not 0", result.getExitStatus(), equalTo(0));\n')
                 fout.write('        assertThat("Wrong number of outputs, there was 1 turn", result.getOutLines(), hasSize(5));\n')
                 fout.write('        assertThat(result.getOutLines(), contains("{}"'.format(output1[0]))
-                for o in output1[1:]:
-                    fout.write(', "{}"'.format(o));
+                # for o in output1[1:]:
+                    # fout.write(', "{}"'.format(o));
                 fout.write('));\n')
             fout.write('    }\n\n')
         fout.write('}')
