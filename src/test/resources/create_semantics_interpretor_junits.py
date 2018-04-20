@@ -11,7 +11,7 @@ filePath=os.path.dirname(os.path.realpath(__file__))
 semanticsDir=os.path.join(filePath, 'semantics') 
 
 for serie in [x for x in os.listdir(semanticsDir) if not x.startswith('.')]:
-    junitName = 'B314{}SemanticsTest'.format(serie)
+    junitName = 'B314{}SemanticsInterpretorTest'.format(serie)
     with open('{}/../java/be/unamur/info/b314/compiler/main/{}.java'.format(filePath, junitName),'w') as fout:
         b314filesDir=os.path.join(semanticsDir, serie)
         fout.write('package be.unamur.info.b314.compiler.main;\n\n')
@@ -60,7 +60,7 @@ for serie in [x for x in os.listdir(semanticsDir) if not x.startswith('.')]:
                 output1 = [o for o in b314file.readline().strip().split(',') if not len(o) == 0]
                 fout.write('        result = PCodeInterpreter.getInterpreter().execute(pcodeFile, 1')
                 for i in input1:
-                    fout.write(', {}'.format(i));
+                    fout.write(', "{}"'.format(i));
                 fout.write(');\n')
                 fout.write('        assertThat("Interpreter exist status was not 0", result.getExitStatus(), equalTo(0));\n')
                 fout.write('        assertThat("Wrong number of outputs, there was 1 turn", result.getOutLines(), hasSize(1));\n')
@@ -74,7 +74,7 @@ for serie in [x for x in os.listdir(semanticsDir) if not x.startswith('.')]:
                 output1 = [o for o in b314file.readline().strip().split(',') if not len(o) == 0]
                 fout.write('        result = PCodeInterpreter.getInterpreter().execute(pcodeFile, 3')
                 for i in input1:
-                    fout.write(', {}'.format(i));
+                    fout.write(', "{}"'.format(i));
                 fout.write(');\n')
                 fout.write('        assertThat("Interpreter exist status was not 0", result.getExitStatus(), equalTo(0));\n')
                 fout.write('        assertThat("Wrong number of outputs, there was 1 turn", result.getOutLines(), hasSize(3));\n')
@@ -88,7 +88,7 @@ for serie in [x for x in os.listdir(semanticsDir) if not x.startswith('.')]:
                 output1 = [o for o in b314file.readline().strip().split(',') if not len(o) == 0]
                 fout.write('        result = PCodeInterpreter.getInterpreter().execute(pcodeFile, 5')
                 for i in input1:
-                    fout.write(', {}'.format(i));
+                    fout.write(', "{}"'.format(i));
                 fout.write(');\n')
                 fout.write('        assertThat("Interpreter exist status was not 0", result.getExitStatus(), equalTo(0));\n')
                 fout.write('        assertThat("Wrong number of outputs, there was 1 turn", result.getOutLines(), hasSize(5));\n')
