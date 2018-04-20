@@ -22,8 +22,8 @@ when your turn
 
 	when b1
 	declare local
-		b11 as integer;
-		i11 as boolean;
+		b1 as integer;
+		i1 as boolean;
 		loc3 as square;
 		loc4 as integer[5];
 	do

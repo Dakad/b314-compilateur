@@ -2,7 +2,7 @@ declare and retain
     import inputFile.wld
     t as boolean;
     res as boolean[3];
-    res2 as boolean[3,43];
+    res as boolean[3,43];
 
     f as function( ): boolean
     do
