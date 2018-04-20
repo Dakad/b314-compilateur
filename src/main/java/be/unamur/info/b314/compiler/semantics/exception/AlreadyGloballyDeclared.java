@@ -1,14 +1,14 @@
 package be.unamur.info.b314.compiler.semantics.exception;
 
-public class AlreadyGlobalDeclared extends RuntimeException {
+public class AlreadyGloballyDeclared extends RuntimeException {
 
   private static final String msg = "A global variable has already been defined with the name : ";
 
-  public AlreadyGlobalDeclared(String name) {
+  public AlreadyGloballyDeclared(String name) {
     super(msg + name);
   }
 
-  public AlreadyGlobalDeclared() {
+  public AlreadyGloballyDeclared() {
     this("undefined");
   }
 }

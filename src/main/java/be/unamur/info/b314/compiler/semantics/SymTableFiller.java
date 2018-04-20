@@ -43,7 +43,7 @@ import be.unamur.info.b314.compiler.B314Parser.UseContext;
 import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.WhileContext;
-import be.unamur.info.b314.compiler.semantics.exception.AlreadyGlobalDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
