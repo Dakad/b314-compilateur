@@ -1,0 +1,34 @@
+declare and retain
+	b1 as boolean;
+	b2 as boolean;
+    i1 as integer;
+    i2 as integer;
+    v1 as boolean[5, 7];
+    v2 as integer[42];
+
+    fct1 as function():boolean
+		declare local
+			b1 as integer;
+			i1 as boolean;
+			loc3 as square;
+			loc4 as integer[5];
+    	do
+    		set i1 to true
+    		set b1 to 34
+    		set fct1 to i1 and b1 < 42
+    	return fct1;
+    	done
+
+when your turn
+
+	when false do
+		next move west
+	done
+
+	when fct1() do
+		next move north
+	done
+
+	by default do
+		next do nothing
+	done
