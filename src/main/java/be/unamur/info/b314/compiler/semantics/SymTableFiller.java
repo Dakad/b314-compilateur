@@ -44,6 +44,7 @@ import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.WhileContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -154,11 +155,26 @@ public class SymTableFiller extends B314BaseListener {
     } else {
       ArrayContext typeArray = (ArrayContext) type;
 
+      // Check for the positivity of the array' size
+      int sizeArray = Integer.parseInt(typeArray.one.INTEGER().getText());
+      if(sizeArray <= 0){
+        throw new NotPositiveSizeForArray(""+sizeArray);
+      }
+
+      int secondSizeArray = 0;
+      // If defined, check for the positivity of the second array' size
+      if(typeArray.second != null) {
+        secondSizeArray = Integer.parseInt(typeArray.second.INTEGER().getText());
+        if (secondSizeArray <= 0) {
+          throw new NotPositiveSizeForArray("" + secondSizeArray);
+        }
+      }
+
       // First, get the type of this array vaWr.
       varType = PredefinedType.get(typeArray.scalar().getText()).type();
 
       // Init the array
-      ArrayType array = this.createArrayType(varType, typeArray.one, typeArray.second);
+      ArrayType array = this.createArrayType(varType, sizeArray, secondSizeArray);
       var.setType(array);
     }
   }
@@ -166,18 +182,16 @@ public class SymTableFiller extends B314BaseListener {
   /**
    *
    * @requires type - The scalar type of the array. Must be defined
-   * @requires one - The size of the array
-   * @return the {@link ArrayType} with the nested type if second is defined.
+   * @requires size - The size of the array
+   * @return the {@link ArrayType} with the nested type if sizeSecondArray is defined.
    */
-  private ArrayType createArrayType(Type type,IntValContext one, IntValContext second) {
-    if (second != null) {
+  private ArrayType createArrayType(Type type,int size, int sizeSecondArray) {
+    if (sizeSecondArray > 0) {
       // Create an nested array if the array two-dimensional
-      int sizeSecondArray = Integer.parseInt(second.INTEGER().getText());
       ArrayType nestedArray = new ArrayType(type, sizeSecondArray);
       type = nestedArray;
     }
 
-    int size = Integer.parseInt(one.INTEGER().getText());
     return new ArrayType(type, size);
   }
 
