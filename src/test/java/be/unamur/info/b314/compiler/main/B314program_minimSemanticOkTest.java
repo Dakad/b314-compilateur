@@ -30,8 +30,8 @@ public class B314program_minimSemanticOkTest {
     // Serie program_minim OK
     //
     @Test
-    public void testprogram_minim_empty_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/program_minim/ok/empty.b314", testFolder.newFile(), true, "program_minim: empty");
+    public void testprogram_minim_basic_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/program_minim/ok/basic.b314", testFolder.newFile(), true, "program_minim: basic");
     }
 
 }
