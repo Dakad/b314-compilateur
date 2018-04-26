@@ -110,7 +110,30 @@ public class SymTableFiller extends B314BaseListener {
     popScope();
   }
 
-/*
+  /**
+   * @effects Insert a new {@link VariableSymbol} into the current scope.
+   * @throws AlreadyGloballyDeclared if the scope is global and another variable has been declared <br>
+   *        with the same name.
+   */
+  @Override
+  public void enterVarDecl(VarDeclContext ctx) {
+    String name = ctx.name.getText();
+//    if(currentScope instanceof  GlobalScope) {
+    if (ctx.getParent() instanceof ProgramMondeGlobalDeclContext) {
+      if(symTable.GLOBALS.getSymbol(name) != null)
+        throw new AlreadyGloballyDeclared(name);
+    }
+    try {
+      VariableSymbol var = new VariableSymbol(name);
+      currentScope.define(var);
+    } catch (IllegalArgumentException e) {
+      // Will throw IllegalArgumentException  if the symbol cannot be defined
+      return;
+    }
+  }
+
+
+  /*
   @Override
   public void enterType(TypeContext ctx) {
     ParseTree type = ctx.getChild(0);
