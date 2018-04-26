@@ -127,13 +127,16 @@ public class SymTableFiller extends B314BaseListener {
       VariableSymbol var = new VariableSymbol(name);
       currentScope.define(var);
     } catch (IllegalArgumentException e) {
-      // Will throw IllegalArgumentException  if the symbol cannot be defined
+      // throw IllegalArgumentException  if the symbol cannot be defined
       return;
     }
   }
 
 
-  /*
+  /**
+   * @effects Define the type of an SymbolVariable already inserted in the symbtable.
+   *
+   */
   @Override
   public void enterType(TypeContext ctx) {
     ParseTree type = ctx.getChild(0);
@@ -141,77 +144,42 @@ public class SymTableFiller extends B314BaseListener {
       return;
     }
 
-    Type predefType = null;
+    Type varType;
     String varName = ((VarDeclContext) ctx.getParent()).name.getText();
     VariableSymbol var =  (VariableSymbol) currentScope.getSymbol(varName);
 
     if (type instanceof ScalarContext) {
-      predefType = PredefinedType.get(type.getText()).type();
-      var.setType(predefType);
+      varType = PredefinedType.get(type.getText()).type();
+      var.setType(varType);
     } else {
       ArrayContext typeArray = (ArrayContext) type;
+
       // First, get the type of this array vaWr.
-      predefType = PredefinedType.get(typeArray.scalar().getText()).type();
+      varType = PredefinedType.get(typeArray.scalar().getText()).type();
 
       // Init the array
-      ArrayType array = this.createArrayType(typeArray.elt, predefType);
+      ArrayType array = this.createArrayType(varType, typeArray.one, typeArray.second);
       var.setType(array);
     }
   }
 
-
-  @Override
-  public void enterScalar(ScalarContext ctx) {
-    super.enterScalar(ctx);
-  }
-
-  @Override
-  public void enterArray(ArrayContext ctx) {
-    super.enterArray(ctx);
-  }
-
-  private ArrayType createArrayType(List<IntValContext> arraySizes, Type type) {
-    if (arraySizes.isEmpty()) {
-      return null;
+  /**
+   *
+   * @requires type - The scalar type of the array. Must be defined
+   * @requires one - The size of the array
+   * @return the {@link ArrayType} with the nested type if second is defined.
+   */
+  private ArrayType createArrayType(Type type,IntValContext one, IntValContext second) {
+    if (second != null) {
+      // Create an nested array if the array two-dimensional
+      int sizeSecondArray = Integer.parseInt(second.INTEGER().getText());
+      ArrayType nestedArray = new ArrayType(type, sizeSecondArray);
+      type = nestedArray;
     }
 
-    if (arraySizes.size() > 1) { // ? Is multi-dimension array ?
-      ArrayType nestedArray;
-      for (int i = arraySizes.size() - 1, sizeNested; i > 0; --i) {
-        sizeNested = Integer.parseInt(arraySizes.get(i).INTEGER().getText());
-        nestedArray = new ArrayType(type, sizeNested);
-        type = nestedArray;
-      }
-    }
-    int size = Integer.parseInt(arraySizes.get(0).INTEGER().getText());
+    int size = Integer.parseInt(one.INTEGER().getText());
     return new ArrayType(type, size);
   }
-
-  @Override
-  public void enterBoard(BoardContext ctx) {
-    super.enterBoard(ctx);
-  }
-
-  @Override
-  public void exitBoard(BoardContext ctx) {
-    super.exitBoard(ctx);
-  }
-
-  @Override
-  public void enterVarDecl(VarDeclContext ctx) {
-    String name = ctx.name.getText();
-    if (symTable.GLOBALS.getSymbol(name) != null) {
-      throw new AlreadyGloballyDeclared(name);
-    }
-    try {
-      VariableSymbol var = new VariableSymbol(name);
-      currentScope.define(var);
-    } catch (IllegalArgumentException e) {
-      return;
-    }
-  }
-*/
-
 
 
   @Override
