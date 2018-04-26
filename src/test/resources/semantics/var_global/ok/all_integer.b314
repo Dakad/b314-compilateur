@@ -1,0 +1,11 @@
+/* My commentaire*/
+
+declare and retain
+    i1 as integer;
+    i2 as integer [2];
+    i3 as integer [3,3];
+
+    when your turn
+        by default do
+            skip
+        done
