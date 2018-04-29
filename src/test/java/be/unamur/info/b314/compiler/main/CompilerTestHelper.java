@@ -6,18 +6,14 @@ import static org.junit.Assert.assertThat;
 import be.unamur.info.b314.compiler.B314Parser;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.semantics.SymTableFiller;
-import be.unamur.info.b314.compiler.semantics.exception.ParsingException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import org.antlr.v4.runtime.ANTLRInputStream;
 
 /**
  * @author Xavier Devroey - xavier.devroey@unamur.be
@@ -52,43 +48,45 @@ class CompilerTestHelper {
         endsWith(expected)); // Check that the output ends with OK/KO
   }
 
-/*
+
   public static SymTableFiller getSymTable(String input) {
     try {
-      URL ress = CompilerTestHelper.class.getResource(input);
-      File inputFile = new File(ress.toURI());
+      File inputFile = new File(CompilerTestHelper.class.getResource(input).toURI());
       ByteArrayOutputStream errContent = new ByteArrayOutputStream();
       System.setErr(new PrintStream(errContent));
 
-      Main mainClazz = Main.class.newInstance();
+      File outputFile = File.createTempFile(Long.toString(System.currentTimeMillis()),".tmp");
+      outputFile.deleteOnExit();
+
+      Constructor mainCons = Main.class.getDeclaredConstructor();
+      mainCons.setAccessible(true);
+      Object mainInstance = mainCons.newInstance();
 
       // Set private field Main.inputFile
       Field fInputFile = Main.class.getDeclaredField("inputFile");
       fInputFile.setAccessible(true);
-      fInputFile.set(mainClazz, inputFile);
+      fInputFile.set(mainInstance, inputFile);
 
       // Set private field Main.outputFile
-//      Field fOutputFile = Main.class.getDeclaredField("outputFile");
-//      fInputFile.setAccessible(true);
-//      fInputFile.set(mainClazz, outputFile);
+      Field fOutputFile = Main.class.getDeclaredField("outputFile");
+      fOutputFile.setAccessible(true);
+      fOutputFile.set(mainInstance, outputFile);
 
       // Call Main.parseInputFile()
-      Method methParse = Main.class.getDeclaredMethod("parseInputFile");
+      Method methParse = Main.class.getDeclaredMethod("parse");
       methParse.setAccessible(true);
-      B314Parser.RootContext tree = (RootContext) methParse.invoke(mainClazz);
+      RootContext tree = (RootContext) methParse.invoke(mainInstance);
 
-      // Call Main.fillSymTAble() and return the result
-      Method methFillSymTable = Main.class.getDeclaredMethod("fillSymTable");
+      // Call Main.fillSymTable() and return the result
+      Method methFillSymTable = Main.class.getDeclaredMethod("fillSymTable", B314Parser.RootContext.class);
       methFillSymTable.setAccessible(true);
-      return(SymTableFiller) methFillSymTable.invoke(mainClazz, tree);
+      return(SymTableFiller) methFillSymTable.invoke(mainInstance, tree);
 
     } catch (Exception e) {
       System.err.println(e);
       return null;
     }
   }
-*/
-
 
 
 }
