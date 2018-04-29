@@ -119,8 +119,7 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
     String name = ctx.name.getText();
-//    if(currentScope instanceof  GlobalScope) {
-    if (ctx.getParent() instanceof ProgramMondeGlobalDeclContext) {
+    if (currentScope instanceof GlobalScope) {
       if(symTable.GLOBALS.getSymbol(name) != null)
         throw new AlreadyGloballyDeclared(name);
     }
