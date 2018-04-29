@@ -154,7 +154,7 @@ public class Main {
     private void compile() throws IOException, ParsingException {
         // Get AST : Abstract Syntax Tree
         LOG.debug("Parsing input");
-        B314Parser.RootContext tree = parse(new ANTLRInputStream(new FileInputStream(inputFile)));
+        B314Parser.RootContext tree = parse();
         LOG.debug("Parsing input: done");
         LOG.debug("AST is {}", tree.toStringTree(parser));
 
@@ -172,7 +172,11 @@ public class Main {
     /**
      * Builds the abstract syntax tree from input.
      */
-    private B314Parser.RootContext parse(ANTLRInputStream input) throws ParseCancellationException, ParsingException {
+    private B314Parser.RootContext parse()
+        throws ParseCancellationException, ParsingException, IOException {
+
+        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(inputFile));
+
         // Create the token stream
         CommonTokenStream tokens = new CommonTokenStream(new B314Lexer(input));
         // Intialise parser
