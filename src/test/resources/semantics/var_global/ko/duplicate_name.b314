@@ -1,8 +1,8 @@
 /* My commentaire*/
 
 declare and retain
-    b1 as boolean;
-    b2 as boolean [2];
+    ab as boolean;
+    ab as boolean [2];
     b3 as boolean [3,3];
 
     when your turn
