@@ -3,8 +3,6 @@ package be.unamur.info.b314.compiler.main;
 import static org.hamcrest.Matchers.endsWith;
 import static org.junit.Assert.assertThat;
 
-import be.unamur.info.b314.compiler.B314Parser;
-import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.semantics.SymTableFiller;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -12,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 
@@ -50,17 +49,22 @@ class CompilerTestHelper {
 
 
   public static SymTableFiller getSymTable(String input) {
+    File inputFile;
+    File outputFile;
+    Object mainInstance = null;
+    Method methFillSymTable;
+
     try {
-      File inputFile = new File(CompilerTestHelper.class.getResource(input).toURI());
+      inputFile = new File(CompilerTestHelper.class.getResource(input).toURI());
       ByteArrayOutputStream errContent = new ByteArrayOutputStream();
       System.setErr(new PrintStream(errContent));
 
-      File outputFile = File.createTempFile(Long.toString(System.currentTimeMillis()),".tmp");
+      outputFile = File.createTempFile(Long.toString(System.currentTimeMillis()), ".tmp");
       outputFile.deleteOnExit();
 
       Constructor mainCons = Main.class.getDeclaredConstructor();
       mainCons.setAccessible(true);
-      Object mainInstance = mainCons.newInstance();
+      mainInstance = mainCons.newInstance();
 
       // Set private field Main.inputFile
       Field fInputFile = Main.class.getDeclaredField("inputFile");
@@ -75,16 +79,27 @@ class CompilerTestHelper {
       // Call Main.parseInputFile()
       Method methParse = Main.class.getDeclaredMethod("parse");
       methParse.setAccessible(true);
-      RootContext tree = (RootContext) methParse.invoke(mainInstance);
+      methParse.invoke(mainInstance);
 
-      // Call Main.fillSymTable() and return the result
-      Method methFillSymTable = Main.class.getDeclaredMethod("fillSymTable", B314Parser.RootContext.class);
-      methFillSymTable.setAccessible(true);
-      return(SymTableFiller) methFillSymTable.invoke(mainInstance, tree);
-
-    } catch (Exception e) {
-      System.err.println(e);
+    } catch (URISyntaxException | IOException e) {
+      System.err.println("Error from in/output files");
       return null;
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
+      System.err.println("Reflection Error from Main methods");
+      return null;
+    }
+
+    try {
+      // Call Main.fillSymTable() and return the result
+      methFillSymTable = Main.class.getDeclaredMethod("fillSymTable");
+      methFillSymTable.setAccessible(true);
+      return (SymTableFiller) methFillSymTable.invoke(mainInstance);
+
+    } catch (IllegalAccessException | NoSuchMethodException e) {
+      System.err.println("Reflection Error from Main.fillSymTable()");
+      return null;
+    } catch (InvocationTargetException e) {
+      throw (RuntimeException) e.getCause();
     }
   }
 
