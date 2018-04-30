@@ -40,6 +40,11 @@ public class B314computeSemanticOkTest {
     }
 
     @Test
+    public void testcompute_function_inside_compute_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/compute/ok/function_inside_compute.b314", testFolder.newFile(), true, "compute: function_inside_compute");
+    }
+
+    @Test
     public void testcompute_array_in_compute_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/semantics/compute/ok/array_in_compute.b314", testFolder.newFile(), true, "compute: array_in_compute");
     }

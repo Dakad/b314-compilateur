@@ -1,8 +1,0 @@
-/*my commentaire */
-
-declare and retain
-  comput x
-
-  by default do
-    skip
-  done
