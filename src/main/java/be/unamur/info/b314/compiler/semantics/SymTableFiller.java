@@ -2,11 +2,15 @@ package be.unamur.info.b314.compiler.semantics;
 
 import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
+import be.unamur.info.b314.compiler.B314Parser.SetToContext;
 import be.unamur.info.b314.compiler.B314Parser.TypeContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
 import java.util.Collections;
@@ -153,6 +157,24 @@ public class SymTableFiller extends B314BaseListener {
     }
 
     return new ArrayType(type, size);
+  }
+
+  /**
+   * @effects Check the type of the instructions, if both Expr named <i>var</i> and <i>value</i> are
+   *          same type.
+   * @throws NotMatchingType if both expr in instruction are not the same type.
+   */
+  @Override
+  public void enterSetTo(SetToContext ctx) {
+//    if(!TypeChecker.check(ctx.var, ctx.value)) {
+    if(!checkExprType(ctx.var, ctx.value)) {
+      throw new NotMatchingType(ctx);
+    }
+    super.enterSetTo(ctx);
+  }
+
+  private boolean checkExprType(ExprGContext var, ExprDContext value) {
+    return false;
   }
 
 
