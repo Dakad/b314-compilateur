@@ -1,60 +1,22 @@
 package be.unamur.info.b314.compiler.semantics;
 
 import be.unamur.info.b314.compiler.B314BaseListener;
-import be.unamur.info.b314.compiler.B314Parser.ArenaContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
-import be.unamur.info.b314.compiler.B314Parser.BoardContext;
-import be.unamur.info.b314.compiler.B314Parser.BoolValContext;
-import be.unamur.info.b314.compiler.B314Parser.CaseContext;
-import be.unamur.info.b314.compiler.B314Parser.ClauseDefaultContext;
-import be.unamur.info.b314.compiler.B314Parser.ClauseWhenContext;
-import be.unamur.info.b314.compiler.B314Parser.ComputeContext;
-import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
-import be.unamur.info.b314.compiler.B314Parser.ExprBoolContext;
-import be.unamur.info.b314.compiler.B314Parser.ExprDContext;
-import be.unamur.info.b314.compiler.B314Parser.ExprDFctContext;
-import be.unamur.info.b314.compiler.B314Parser.ExprIntContext;
-import be.unamur.info.b314.compiler.B314Parser.FctDeclContext;
-import be.unamur.info.b314.compiler.B314Parser.FileDeclContext;
-import be.unamur.info.b314.compiler.B314Parser.IfThenContext;
-import be.unamur.info.b314.compiler.B314Parser.IfThenElseContext;
-import be.unamur.info.b314.compiler.B314Parser.ImpDeclContext;
-import be.unamur.info.b314.compiler.B314Parser.IntValContext;
-import be.unamur.info.b314.compiler.B314Parser.LocalVarDeclContext;
-import be.unamur.info.b314.compiler.B314Parser.MoveContext;
-import be.unamur.info.b314.compiler.B314Parser.NearbyContext;
-import be.unamur.info.b314.compiler.B314Parser.NextContext;
-import be.unamur.info.b314.compiler.B314Parser.NothingContext;
-import be.unamur.info.b314.compiler.B314Parser.OpBoolCompareContext;
-import be.unamur.info.b314.compiler.B314Parser.OpBoolContext;
-import be.unamur.info.b314.compiler.B314Parser.OpIntContext;
-import be.unamur.info.b314.compiler.B314Parser.ProgramContext;
-import be.unamur.info.b314.compiler.B314Parser.ProgramMondeContext;
-import be.unamur.info.b314.compiler.B314Parser.ProgramMondeGlobalDeclContext;
-import be.unamur.info.b314.compiler.B314Parser.ProgramStratContext;
-import be.unamur.info.b314.compiler.B314Parser.ProgramStratGlobalDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
-import be.unamur.info.b314.compiler.B314Parser.SetToContext;
-import be.unamur.info.b314.compiler.B314Parser.ShootContext;
-import be.unamur.info.b314.compiler.B314Parser.SkipContext;
 import be.unamur.info.b314.compiler.B314Parser.TypeContext;
-import be.unamur.info.b314.compiler.B314Parser.UseContext;
-import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
-import be.unamur.info.b314.compiler.B314Parser.WhileContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
+import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import org.antlr.symtab.ArrayType;
 import org.antlr.symtab.GlobalScope;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -110,7 +72,32 @@ public class SymTableFiller extends B314BaseListener {
     popScope();
   }
 
-/*
+  /**
+   * @effects Insert a new {@link VariableSymbol} into the current scope.
+   * @throws AlreadyGloballyDeclared if the scope is global and another variable has been declared <br>
+   *        with the same name.
+   */
+  @Override
+  public void enterVarDecl(VarDeclContext ctx) {
+    String name = ctx.name.getText();
+    if (currentScope instanceof GlobalScope) {
+      if(symTable.GLOBALS.getSymbol(name) != null)
+        throw new AlreadyGloballyDeclared(name);
+    }
+    try {
+      VariableSymbol var = new VariableSymbol(name);
+      currentScope.define(var);
+    } catch (IllegalArgumentException e) {
+      // throw IllegalArgumentException  if the symbol cannot be defined
+      return;
+    }
+  }
+
+
+  /**
+   * @effects Define the type of an SymbolVariable already inserted in the symbtable.
+   *
+   */
   @Override
   public void enterType(TypeContext ctx) {
     ParseTree type = ctx.getChild(0);
@@ -118,77 +105,55 @@ public class SymTableFiller extends B314BaseListener {
       return;
     }
 
-    Type predefType = null;
+    Type varType;
     String varName = ((VarDeclContext) ctx.getParent()).name.getText();
     VariableSymbol var =  (VariableSymbol) currentScope.getSymbol(varName);
 
     if (type instanceof ScalarContext) {
-      predefType = PredefinedType.get(type.getText()).type();
-      var.setType(predefType);
+      varType = PredefinedType.get(type.getText()).type();
+      var.setType(varType);
     } else {
       ArrayContext typeArray = (ArrayContext) type;
+
+      // Check for the positivity of the array' size
+      int sizeArray = Integer.parseInt(typeArray.one.INTEGER().getText());
+      if(sizeArray <= 0){
+        throw new NotPositiveSizeForArray(""+sizeArray);
+      }
+
+      int secondSizeArray = 0;
+      // If defined, check for the positivity of the second array' size
+      if(typeArray.second != null) {
+        secondSizeArray = Integer.parseInt(typeArray.second.INTEGER().getText());
+        if (secondSizeArray <= 0) {
+          throw new NotPositiveSizeForArray("" + secondSizeArray);
+        }
+      }
+
       // First, get the type of this array vaWr.
-      predefType = PredefinedType.get(typeArray.scalar().getText()).type();
+      varType = PredefinedType.get(typeArray.scalar().getText()).type();
 
       // Init the array
-      ArrayType array = this.createArrayType(typeArray.elt, predefType);
+      ArrayType array = this.createArrayType(varType, sizeArray, secondSizeArray);
       var.setType(array);
     }
   }
 
-
-  @Override
-  public void enterScalar(ScalarContext ctx) {
-    super.enterScalar(ctx);
-  }
-
-  @Override
-  public void enterArray(ArrayContext ctx) {
-    super.enterArray(ctx);
-  }
-
-  private ArrayType createArrayType(List<IntValContext> arraySizes, Type type) {
-    if (arraySizes.isEmpty()) {
-      return null;
+  /**
+   *
+   * @requires type - The scalar type of the array. Must be defined
+   * @requires size - The size of the array
+   * @return the {@link ArrayType} with the nested type if sizeSecondArray is defined.
+   */
+  private ArrayType createArrayType(Type type,int size, int sizeSecondArray) {
+    if (sizeSecondArray > 0) {
+      // Create an nested array if the array two-dimensional
+      ArrayType nestedArray = new ArrayType(type, sizeSecondArray);
+      type = nestedArray;
     }
 
-    if (arraySizes.size() > 1) { // ? Is multi-dimension array ?
-      ArrayType nestedArray;
-      for (int i = arraySizes.size() - 1, sizeNested; i > 0; --i) {
-        sizeNested = Integer.parseInt(arraySizes.get(i).INTEGER().getText());
-        nestedArray = new ArrayType(type, sizeNested);
-        type = nestedArray;
-      }
-    }
-    int size = Integer.parseInt(arraySizes.get(0).INTEGER().getText());
     return new ArrayType(type, size);
   }
-
-  @Override
-  public void enterBoard(BoardContext ctx) {
-    super.enterBoard(ctx);
-  }
-
-  @Override
-  public void exitBoard(BoardContext ctx) {
-    super.exitBoard(ctx);
-  }
-
-  @Override
-  public void enterVarDecl(VarDeclContext ctx) {
-    String name = ctx.name.getText();
-    if (symTable.GLOBALS.getSymbol(name) != null) {
-      throw new AlreadyGloballyDeclared(name);
-    }
-    try {
-      VariableSymbol var = new VariableSymbol(name);
-      currentScope.define(var);
-    } catch (IllegalArgumentException e) {
-      return;
-    }
-  }
-*/
-
 
 
   @Override

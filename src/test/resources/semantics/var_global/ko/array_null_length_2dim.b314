@@ -1,0 +1,9 @@
+/* My commentaire*/
+
+declare and retain
+    myVar as square[0,0];
+
+    when your turn
+        by default do
+            skip
+        done
