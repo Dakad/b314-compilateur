@@ -15,12 +15,12 @@ root: program ;
 // nbVal   : NUMBER;
 type    : scalar | array;
 scalar  : BOOL_TYPE | INT_TYPE | SQR_TYPE;
-array   : scalar LBRACK elt+=intVal (COMMA elt+=intVal)? RBRACK ;       // boolean[2]  or square[2,3]
+array   : scalar LBRACK one=intVal (COMMA second=intVal)? RBRACK ;       // boolean[2]  or square[2,3]
 
 
 
   // Plateau de jeu declaration
-board   : ARENA AS SQR_TYPE LBRACK elt+=intVal COMMA elt+=intVal RBRACK; // arena as square [9, 9]
+board   : ARENA AS SQR_TYPE LBRACK one=intVal COMMA second=intVal RBRACK; // arena as square [9, 9]
 
   // Variable declaration
 varDecl : name=ID AS type;                                        // nomVar as integer, boolean[2]

@@ -1,0 +1,11 @@
+/* My commentaire*/
+
+declare and retain
+    s1 as square;
+    s2 as square[12];
+    s3 as square[12,3];
+
+    when your turn
+        by default do
+            skip
+    done
