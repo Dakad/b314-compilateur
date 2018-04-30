@@ -1,0 +1,13 @@
+/*my commentaire */
+
+declare and retain
+  f as function( t as boolean ) : boolean
+    do
+      compute x
+      return t;
+    done
+
+  when your turn
+    by default do
+      skip
+    done
