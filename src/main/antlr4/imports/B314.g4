@@ -119,7 +119,7 @@ instr : SKP                                                   # Skip
       | IF condition=exprD THEN (instr)+ DONE                 # IfThen
       | IF condition=exprD THEN (instr)+ ELSE (instr)+ DONE   # IfThenElse
       | WHILE condition=exprD DO (instr)+ DONE                # While
-      | SET exprG TO value=exprD                              # SetTo
+      | SET var=exprG TO value=exprD                          # SetTo
       | COMPUTE exprD                                         # Compute
       | NEXT action                                           # Next
       ;
