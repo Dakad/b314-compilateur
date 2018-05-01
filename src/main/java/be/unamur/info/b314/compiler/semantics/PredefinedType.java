@@ -7,6 +7,12 @@ public enum PredefinedType {
   BOOLEAN,
   INTEGER,
   SQUARE,
+  FUNCTION,
+  CASE,
+  CASE_ITEM,
+  VARIABLE,
+  VALUE,
+  ARRAY,
   VOID;
 
   private PrimitiveType is;
