@@ -1,0 +1,16 @@
+/*my commentaire */
+
+declare and retain
+  x as integer;
+  res as square[43,43];
+
+  f as function (t as boolean) : boolean
+  do
+    set t to true
+    return res;
+  done
+
+  by default do
+    compute (f)
+
+  done
