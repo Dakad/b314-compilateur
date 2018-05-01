@@ -23,6 +23,7 @@ import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
+import be.unamur.info.b314.compiler.semantics.exception.UndeclaredVariable;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
 import java.util.Collections;
 import java.util.Map;
@@ -179,33 +180,36 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterSetTo(SetToContext ctx) {
 //    if(!TypeChecker.check(ctx.var, ctx.value)) {
-    checkIfExprCompatible(ctx.var, ctx.value);
-
-    super.enterSetTo(ctx);
-  }
-
-  /**
-   * @requires exprG to be not null
-   * @requires exprD to be not null
-   * @effects
-   * @throws NotMatchingType if the types of both expr in instruction are not compatible.
-   */
-  private void checkIfExprCompatible(ExprGContext exprG, ExprDContext exprD) {
+    ExprGContext exprG = ctx.var;
+    ExprDContext exprD = ctx.value;
     PredefinedType exprGType = getTypeOfExprG(exprG);
     PredefinedType exprDType = getTypeOfExprD(exprD);
 
     if(exprGType == PredefinedType.CASE) {
       if(exprDType == null || !exprDType.equals(PredefinedType.CASE_ITEM)) {
-        throw new NotMatchingType(exprG.parent.getText());
+        throw new NotMatchingType(ctx.toString());
       }
     } else{
       // Check if the exprG var or array is in the symtab
+      String symName;
+      Symbol sym;
 
+      if(exprG instanceof VarContext){
+        symName = ((VarContext)exprG).name.getText();
+      }else{
+        symName = ((ArrayEltContext)exprG).name.getText();
+      }
+      sym = currentScope.resolve(symName);
+      if(sym == null)
+        throw new UndeclaredVariable(symName);
 
       // Check for the type' matching
 
     }
+
+    super.enterSetTo(ctx);
   }
+
 
   /**
    * @return The corresponding the {@see PredefinedType} for this expression <br>
