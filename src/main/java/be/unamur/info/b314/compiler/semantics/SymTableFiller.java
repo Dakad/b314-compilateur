@@ -9,10 +9,12 @@ import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDFctContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDGContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDIntContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDOpBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDOpIntContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDParContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprFctContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
@@ -23,10 +25,12 @@ import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
+import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredVariable;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
 import java.util.Collections;
 import java.util.Map;
+import org.antlr.symtab.FunctionSymbol;
 import org.antlr.symtab.GlobalScope;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
@@ -185,25 +189,39 @@ public class SymTableFiller extends B314BaseListener {
     PredefinedType exprGType = getTypeOfExprG(exprG);
     PredefinedType exprDType = getTypeOfExprD(exprD);
 
-    if(exprGType == PredefinedType.CASE) {
-      if(exprDType == null || !exprDType.equals(PredefinedType.CASE_ITEM)) {
+    if(exprGType == PredefinedType.SQUARE) {
+      if(exprDType == null || !exprDType.equals(PredefinedType.SQUARE_ITEM)) {
         throw new NotMatchingType(ctx.toString());
       }
     } else{
-      // Check if the exprG var or array is in the symtab
       String symName;
-      Symbol sym;
+      VariableSymbol sym;
 
-      if(exprG instanceof VarContext){
+      boolean isScalarVar = exprG instanceof VarContext;
+      if(isScalarVar)
         symName = ((VarContext)exprG).name.getText();
-      }else{
+      else
         symName = ((ArrayEltContext)exprG).name.getText();
-      }
-      sym = currentScope.resolve(symName);
+
+      // Check if the exprG var or array is inside the symtab
+      sym = (VariableSymbol) currentScope.resolve(symName);
       if(sym == null)
         throw new UndeclaredVariable(symName);
 
-      // Check for the type' matching
+      // Check for the type's matching
+      if(exprDType.equals(PredefinedType.FUNCTION)) {
+        exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
+        // Check if the type is VOID
+      }
+      if(isScalarVar) {
+        if(!sym.getType().equals(exprDType.type()))
+          throw new NotMatchingType(ctx.toString());
+      } else {
+        // Check for the array var
+
+      }
+
+
 
     }
 
@@ -218,7 +236,7 @@ public class SymTableFiller extends B314BaseListener {
   private PredefinedType getTypeOfExprG(ExprGContext expr) {
     RuleContext ctx = expr.getRuleContext();
     if(ctx instanceof ArenaEltContext)
-      return PredefinedType.CASE;
+      return PredefinedType.SQUARE;
 
     if (ctx instanceof ArrayEltContext)
       return PredefinedType.ARRAY;
@@ -228,7 +246,7 @@ public class SymTableFiller extends B314BaseListener {
 
   /**
    * @requires expr to be not null
-   * @return The corresponding the {@see PredefinedType} for this expression <br>
+   * @return The corresponding {@see PredefinedType} for this expression <br>
    *          otherwise <b>null</b>.
    */
   private PredefinedType getTypeOfExprD(ExprDContext expr) {
@@ -242,13 +260,13 @@ public class SymTableFiller extends B314BaseListener {
 
     if(ctx instanceof ExprDCaseContext){
       if(((ExprDCaseContext)ctx).children.get(0) instanceof EnvCaseContext)
-        return PredefinedType.CASE_ITEM;
+        return PredefinedType.SQUARE_ITEM;
       else
         return null;
     }
 
-    if(ctx instanceof ExprDCaseContext)
-      return PredefinedType.VALUE;
+    if(ctx instanceof ExprDGContext)
+      return this.getTypeOfExprG(((ExprGContext)ctx.getChild(0)));
 
     if(ctx instanceof ExprDFctContext)
       return PredefinedType.FUNCTION;
@@ -259,6 +277,24 @@ public class SymTableFiller extends B314BaseListener {
     return null;
   }
 
+  /**
+   * @requires exprFct o be not null.
+   * @effects Check the existence of the function and the matching of its parameters.
+   * @return the corresponding {@see PredefinedType} of the expression function
+   */
+  private PredefinedType getTypeOfExprFunction(ExprFctContext exprFct) {
+    String symName = exprFct.name.getText();
+    // Check if the exprFct var or array is inside the symtab
+    FunctionSymbol fctSym = (FunctionSymbol) currentScope.resolve(symName);
+    if(fctSym == null)
+      throw new UndeclaredFunction(exprFct.toString());
+
+    // Check if the nb of parameters matches
+    if(fctSym.getNumberOfParameters() != exprFct.param.size())
+      throw new UndeclaredFunction(exprFct.toString());
+
+    return PredefinedType.get(fctSym.getType());
+  }
 
 
   @Override
