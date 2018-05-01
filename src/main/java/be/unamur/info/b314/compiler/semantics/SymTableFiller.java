@@ -1,13 +1,24 @@
 package be.unamur.info.b314.compiler.semantics;
 
 import be.unamur.info.b314.compiler.B314BaseListener;
+import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
+import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
+import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDFctContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDIntContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDOpBoolContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDOpIntContext;
+import be.unamur.info.b314.compiler.B314Parser.ExprDParContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
 import be.unamur.info.b314.compiler.B314Parser.SetToContext;
 import be.unamur.info.b314.compiler.B314Parser.TypeContext;
+import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
@@ -21,6 +32,7 @@ import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -160,22 +172,89 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @effects Check the type of the instructions, if both Expr named <i>var</i> and <i>value</i> are
-   *          same type.
-   * @throws NotMatchingType if both expr in instruction are not the same type.
+   * @effects Check the type of the instructions, if the types of the Expr named <i>var</i> and <i>value</i> are
+   *          compatible.
+   * @throws NotMatchingType if the types of both expr in instruction are not compatible.
    */
   @Override
   public void enterSetTo(SetToContext ctx) {
 //    if(!TypeChecker.check(ctx.var, ctx.value)) {
-    if(!checkExprType(ctx.var, ctx.value)) {
-      throw new NotMatchingType(ctx);
-    }
+    checkIfExprCompatible(ctx.var, ctx.value);
+
     super.enterSetTo(ctx);
   }
 
-  private boolean checkExprType(ExprGContext var, ExprDContext value) {
-    return false;
+  /**
+   * @requires exprG to be not null
+   * @requires exprD to be not null
+   * @effects
+   * @throws NotMatchingType if the types of both expr in instruction are not compatible.
+   */
+  private void checkIfExprCompatible(ExprGContext exprG, ExprDContext exprD) {
+    PredefinedType exprGType = getTypeOfExprG(exprG);
+    PredefinedType exprDType = getTypeOfExprD(exprD);
+
+    if(exprGType == PredefinedType.CASE) {
+      if(exprDType == null || !exprDType.equals(PredefinedType.CASE_ITEM)) {
+        throw new NotMatchingType(exprG.parent.getText());
+      }
+    } else{
+      // Check if the exprG var or array is in the symtab
+
+
+      // Check for the type' matching
+
+    }
   }
+
+  /**
+   * @return The corresponding the {@see PredefinedType} for this expression <br>
+   *          otherwise <b>null</b>.
+   */
+  private PredefinedType getTypeOfExprG(ExprGContext expr) {
+    RuleContext ctx = expr.getRuleContext();
+    if(ctx instanceof ArenaEltContext)
+      return PredefinedType.CASE;
+
+    if (ctx instanceof ArrayEltContext)
+      return PredefinedType.ARRAY;
+
+    return PredefinedType.VARIABLE;
+  }
+
+  /**
+   * @requires expr to be not null
+   * @return The corresponding the {@see PredefinedType} for this expression <br>
+   *          otherwise <b>null</b>.
+   */
+  private PredefinedType getTypeOfExprD(ExprDContext expr) {
+    RuleContext ctx = expr.getRuleContext();
+
+    if(ctx instanceof ExprDIntContext || ctx instanceof ExprDOpIntContext)
+      return PredefinedType.INTEGER;
+
+    if(ctx instanceof ExprDBoolContext || ctx instanceof ExprDOpBoolContext)
+      return PredefinedType.BOOLEAN;
+
+    if(ctx instanceof ExprDCaseContext){
+      if(((ExprDCaseContext)ctx).children.get(0) instanceof EnvCaseContext)
+        return PredefinedType.CASE_ITEM;
+      else
+        return null;
+    }
+
+    if(ctx instanceof ExprDCaseContext)
+      return PredefinedType.VALUE;
+
+    if(ctx instanceof ExprDFctContext)
+      return PredefinedType.FUNCTION;
+
+    if(ctx instanceof ExprDParContext)
+      return this.getTypeOfExprD(((ExprDParContext)ctx).expr);
+
+    return null;
+  }
+
 
 
   @Override
