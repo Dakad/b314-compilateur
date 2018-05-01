@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
+import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredVariable;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class B314instr_set_toSemanticKoTest {
 
     for (String name : b314Files) {
       try {
-        String file = "/semantics/instr_set_to/ko/arena_case_to_boolean_" + name+ ".b314";
+        String file = "/semantics/instr_set_to/ko/arena_case_to_boolean_" + name + ".b314";
         CompilerTestHelper.getSymTable(file);
         fail("[Unthrowed] This .b314 is invalid. Should have thrown an Exception.\n" + file);
       } catch (RuntimeException e) {
@@ -57,20 +58,42 @@ public class B314instr_set_toSemanticKoTest {
 
   }
 
-@Test
+  @Test
   public void testinstr_set_to_undeclared_variable_ko() {
     String[] b314Files = {
         "var", "array", "array_2dim",
     };
+    String file = "";
 
     for (String b314 : b314Files) {
       try {
-        String file = "/semantics/instr_set_to/ko/undeclared_" + b314 + ".b314";
+        file = "/semantics/instr_set_to/ko/undeclared_" + b314 + ".b314";
         CompilerTestHelper.getSymTable(file);
         fail("[Unthrowed] This .b314 is invalid. Should have thrown an Exception.\n" + file);
       } catch (RuntimeException e) {
         assertThat("Incorrect type of Exception throwned", e,
             instanceOf(UndeclaredVariable.class));
+        assertThat("Must contain a detailed msg of the error", e.getMessage(), notNullValue());
+      }
+    }
+
+  }
+
+  @Test
+  public void testinstr_set_to_undeclared_function_ko() {
+    String[] b314Files = {
+        "call", "params", "params2",
+    };
+    String file = "";
+
+    for (String b314 : b314Files) {
+      try {
+        file = "/semantics/instr_set_to/ko/undeclared_fct_" + b314 + ".b314";
+        CompilerTestHelper.getSymTable(file);
+        fail("[Unthrowed] This .b314 is invalid. Should have thrown an Exception.\n" + file);
+      } catch (RuntimeException e) {
+        assertThat("Incorrect type of Exception throwned\n" + file, e,
+            instanceOf(UndeclaredFunction.class));
         assertThat("Must contain a detailed msg of the error", e.getMessage(), notNullValue());
       }
     }
