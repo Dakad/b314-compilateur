@@ -1,5 +1,11 @@
 package be.unamur.info.b314.compiler.main;
 
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -11,27 +17,44 @@ import org.slf4j.LoggerFactory;
 
 public class B314instr_set_toSemanticKoTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(B314instr_set_toSemanticKoTest.class);
+  private static final Logger LOG = LoggerFactory.getLogger(B314instr_set_toSemanticKoTest.class);
 
-    @Rule
-    public TemporaryFolder testFolder = new TemporaryFolder(); // Create a temporary folder for outputs deleted after tests
+  @Rule
+  public TemporaryFolder testFolder = new TemporaryFolder(); // Create a temporary folder for outputs deleted after tests
 
-    @Rule
-    public TestRule watcher = new TestWatcher() { // Prints message on logger before each test
-        @Override
-        protected void starting(Description description) {
-            LOG.info(String.format("Starting test: %s()...",
-                    description.getMethodName()));
-        }
+  @Rule
+  public TestRule watcher = new TestWatcher() { // Prints message on logger before each test
+    @Override
+    protected void starting(Description description) {
+      LOG.info(String.format("Starting test: %s()...",
+          description.getMethodName()));
+    }
+
     ;
+  };
+
+  //
+  // Serie instr_set_to KO
+  //
+  @Test
+  public void testinstr_set_arena_case_to_boolean_ko() {
+    String[] b314Files = {
+        "and", "or", "eq", "gt", "lge", "lt", "lte", "or", "par", "true", "false"
     };
 
-    //
-    // Serie instr_set_to OK
-    //
-    @Test
-    public void testinstr_set_to_arena_case_to_item_ko() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/instr_set_to/ko/arena_case_to_item.b314", testFolder.newFile(), true, "instr_set_to: arena_case_to_item");
+    for (String b314 : b314Files) {
+      try {
+        String file = "/semantics/instr_set_to/ko/arena_case_to_boolean_" + b314;
+        CompilerTestHelper.getSymTable(file + ".b314");
+        fail("[Unthrowed] This .b314 is invalid. Should have thrown an Exception.\n" + file);
+      } catch (RuntimeException e) {
+        assertThat("Incorrect type of Exception throwned", e,
+            instanceOf(NotMatchingType.class));
+        assertThat("Must contain a detailed msg of the error", e.getMessage(), notNullValue());
+      }
     }
+
+  }
+
 
 }
