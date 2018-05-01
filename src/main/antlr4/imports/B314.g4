@@ -62,10 +62,7 @@ exprD : exprInt                                 #ExprDInt
       | exprG                                   #ExprDG
 
     /* Expressions avec les fonctions */
-      | name=ID
-        LPAR
-          (param+=exprD (COMMA param+=exprD)*)?
-        RPAR                                    #ExprDFct
+      | exprFct                                 #ExprDFct
 
     /* Expressions avec parenthèse */
       | LPAR expr=exprD RPAR                    #ExprDPar
@@ -92,7 +89,12 @@ exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
          | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # Nearby
          ;
 
-
+    /* Appel de function */
+exprFct  : name=ID
+            LPAR
+              (param+=exprD (COMMA param+=exprD)*)?
+            RPAR
+         ;
 
 /* Expression Gauche */
 
