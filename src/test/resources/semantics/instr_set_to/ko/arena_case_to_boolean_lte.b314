@@ -1,0 +1,9 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as bool;
+    arena as square[27,27];
+
+  by default do
+    set arena[10,10] to 78 <= 89
+  done

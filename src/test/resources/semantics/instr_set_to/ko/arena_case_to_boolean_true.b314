@@ -1,0 +1,20 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as bool;
+    arena as square[27,27];
+
+  while i < 17 do
+    while j < 17 do
+        set arena [i , j] to vines
+    done
+  done
+
+  while j < 18 do
+    set arena[0,j] to true
+  set j to j+1
+  done
+
+  by default do
+    skip
+  done

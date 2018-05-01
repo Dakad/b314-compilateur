@@ -1,0 +1,29 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as bool;
+    arena as square[27,27];
+
+  while i < 17 do
+    while j < 17 do
+        set arena [i , j] to vines
+    done
+  done
+
+  while j < 18 do
+    set arena[0,j] to true
+    set arena[17,j] to false
+  set j to j+1
+  done
+
+  by default do
+    set arena[1,1] to player and ennemi
+    set arena[8,12] to zombie or rock
+    set arena[3,7] to 12 < 23
+    set arena[3,6] to 34 > 45
+    set arena[6,7] to 56 = 67
+    set arena[10,10] to 78 <= 89
+    set arena[2,16] to 90 >= 10
+    set arena[2,16] to j
+
+  done
