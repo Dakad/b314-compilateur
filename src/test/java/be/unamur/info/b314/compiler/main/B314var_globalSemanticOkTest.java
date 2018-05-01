@@ -30,8 +30,8 @@ public class B314var_globalSemanticOkTest {
     // Serie var_global OK
     //
     @Test
-    public void testvar_global_variable_mixing_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/var_global/ok/variable_mixing.b314", testFolder.newFile(), true, "var_global: variable_mixing");
+    public void testvar_global_all_boolean_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/var_global/ok/all_boolean.b314", testFolder.newFile(), true, "var_global: all_boolean");
     }
 
     @Test
@@ -45,13 +45,13 @@ public class B314var_globalSemanticOkTest {
     }
 
     @Test
-    public void testvar_global_all_boolean_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/var_global/ok/all_boolean.b314", testFolder.newFile(), true, "var_global: all_boolean");
+    public void testvar_global_one_square_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/var_global/ok/one_square.b314", testFolder.newFile(), true, "var_global: one_square");
     }
 
     @Test
-    public void testvar_global_one_square_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/var_global/ok/one_square.b314", testFolder.newFile(), true, "var_global: one_square");
+    public void testvar_global_variable_mixing_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/var_global/ok/variable_mixing.b314", testFolder.newFile(), true, "var_global: variable_mixing");
     }
 
 }
