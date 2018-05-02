@@ -1,12 +1,17 @@
 package be.unamur.info.b314.compiler.semantics;
 
 import org.antlr.symtab.PrimitiveType;
+import org.antlr.symtab.Type;
 
 public enum PredefinedType {
 
   BOOLEAN,
   INTEGER,
   SQUARE,
+  FUNCTION,
+  SQUARE_ITEM,
+  VARIABLE,
+  ARRAY,
   VOID;
 
   private PrimitiveType is;
@@ -16,9 +21,9 @@ public enum PredefinedType {
   }
 
   PredefinedType(String type) {
-    if (type == null) {
+    if (type == null)
       type = this.name();
-    }
+
     this.is = new PrimitiveType(type.toLowerCase());
   }
 
@@ -33,5 +38,9 @@ public enum PredefinedType {
     } catch (IllegalArgumentException e) {
       return PredefinedType.VOID;
     }
+  }
+
+  public static PredefinedType get(Type type) {
+    return get(type.getName());
   }
 }
