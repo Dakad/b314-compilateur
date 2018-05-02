@@ -1,0 +1,9 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer[1];
+    arena as square[27,27];
+
+  by default do
+    set i[1] to life or vines
+  done

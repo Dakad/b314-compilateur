@@ -97,7 +97,28 @@ public class B314instr_set_toSemanticKoTest {
         assertThat("Must contain a detailed msg of the error", e.getMessage(), notNullValue());
       }
     }
+  }
 
+  @Test
+  public void testinstr_set_to_wrong_type_ko() {
+    String[] types = {"boolean_", "integer_"};
+    String[] b314Files = {"array", "array_op", "op", "var"};
+    String file;
+
+    for (String type : types) {
+      for (String name : b314Files) {
+        file = type + name;
+        try {
+          file = "/semantics/instr_set_to/ko/wrong_type_" + file + ".b314";
+          CompilerTestHelper.getSymTable(file);
+          fail("[Unthrowed] This .b314 is invalid. Should have thrown an Exception.\n" + file);
+        } catch (RuntimeException e) {
+          assertThat("Incorrect type of Exception throwned\n" + file, e,
+              instanceOf(NotMatchingType.class));
+          assertThat("Must contain a detailed msg of the error", e.getMessage(), notNullValue());
+        }
+      }
+    }
   }
 
 

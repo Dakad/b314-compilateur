@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.Map;
 import org.antlr.symtab.FunctionSymbol;
 import org.antlr.symtab.GlobalScope;
+import org.antlr.symtab.PrimitiveType;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
@@ -163,7 +164,7 @@ public class SymTableFiller extends B314BaseListener {
   /**
    *
    * @requires type - The scalar type of the array. Must be defined
-   * @requires size - The size of the array
+   * @requires size - The size of the array. Must be > 0
    * @return the {@link ArrayType} with the nested type if sizeSecondArray is defined.
    */
   private ArrayType createArrayType(Type type,int size, int sizeSecondArray) {
@@ -177,52 +178,68 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
+   *
+   * @requries varSym - The Symbol representing the array variable. Must be defined
+   * @return the @see {@link PredefinedType} of the array or the nested one inside.
+   */
+  private PredefinedType getArrayType(VariableSymbol varSym) {
+    // Check for the array var
+    ArrayType arr = (ArrayType) varSym.getType();
+    PredefinedType arrPredefType;
+
+    // Check if contains nested array ?
+    if(arr.getType() instanceof ArrayType) {
+      // Then, get the type from the nested
+      arr  = (ArrayType) arr.getType();
+    }
+
+    return PredefinedType.get(arr.getType());
+  }
+  /**
    * @effects Check the type of the instructions, if the types of the Expr named <i>var</i> and <i>value</i> are
    *          compatible.
    * @throws NotMatchingType if the types of both expr in instruction are not compatible.
    */
   @Override
   public void enterSetTo(SetToContext ctx) {
-//    if(!TypeChecker.check(ctx.var, ctx.value)) {
     ExprGContext exprG = ctx.var;
     ExprDContext exprD = ctx.value;
     PredefinedType exprGType = getTypeOfExprG(exprG);
     PredefinedType exprDType = getTypeOfExprD(exprD);
 
     if(exprGType == PredefinedType.SQUARE) {
-      if(exprDType == null || !exprDType.equals(PredefinedType.SQUARE_ITEM)) {
+      if(exprDType == null || !exprDType.equals(PredefinedType.SQUARE_ITEM))
         throw new NotMatchingType(ctx.toString());
-      }
-    } else{
-      String symName;
-      VariableSymbol sym;
+    } else {
+      String varSymName;
+      VariableSymbol varSym;
 
       boolean isScalarVar = exprG instanceof VarContext;
       if(isScalarVar)
-        symName = ((VarContext)exprG).name.getText();
+        varSymName = ((VarContext)exprG).name.getText();
       else
-        symName = ((ArrayEltContext)exprG).name.getText();
+        varSymName = ((ArrayEltContext)exprG).name.getText();
 
       // Check if the exprG var or array is inside the symtab
-      sym = (VariableSymbol) currentScope.resolve(symName);
-      if(sym == null)
-        throw new UndeclaredVariable(symName);
+      varSym = (VariableSymbol) currentScope.resolve(varSymName);
+      if(varSym == null)
+        throw new UndeclaredVariable(varSymName);
 
-      // Check for the type's matching
+      // Check for it type's matching
       if(exprDType.equals(PredefinedType.FUNCTION)) {
         exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
-        // Check if the type is VOID
+        //TODO Check if the function type is VOID. Cannot be set
       }
+
       if(isScalarVar) {
-        if(!sym.getType().equals(exprDType.type()))
+        // Check if both expr's (var to exprD) type matches
+        if(!varSym.getType().equals(exprDType.type()))
           throw new NotMatchingType(ctx.toString());
       } else {
-        // Check for the array var
-
+        // Check if both expr's (arrayVar to exprD) type matches
+        if(!exprDType.equals(getArrayType(varSym)))
+          throw new NotMatchingType(ctx.toString());
       }
-
-
-
     }
 
     super.enterSetTo(ctx);
