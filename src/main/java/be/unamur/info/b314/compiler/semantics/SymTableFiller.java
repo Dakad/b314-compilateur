@@ -225,8 +225,8 @@ public class SymTableFiller extends B314BaseListener {
         throw new UndeclaredVariable(varSymName);
 
       // Check for it type's matching
-      if(exprDType.equals(PredefinedType.FUNCTION)) {
-        exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
+
+      if(exprDType.equals(PredefinedType.VOID)) {
         //TODO Check if the function type is VOID. Cannot be set
       }
 
@@ -285,7 +285,7 @@ public class SymTableFiller extends B314BaseListener {
       return this.getTypeOfExprG(((ExprGContext)ctx.getChild(0)));
 
     if(ctx instanceof ExprDFctContext)
-      return PredefinedType.FUNCTION;
+      return getTypeOfExprFunction((ExprFctContext)ctx.getChild(0));
 
     if(ctx instanceof ExprDParContext)
       return this.getTypeOfExprD(((ExprDParContext)ctx).expr);
