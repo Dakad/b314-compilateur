@@ -1,0 +1,16 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as boolean;
+    arena as square[27,27];
+
+  if true then
+    skip
+  done
+
+  by default do
+    if arena[1, 2] = player or arena[3,4] = ennemi then
+      skip
+    done
+
+  done

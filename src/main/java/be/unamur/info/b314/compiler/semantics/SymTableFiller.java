@@ -16,6 +16,7 @@ import be.unamur.info.b314.compiler.B314Parser.ExprDOpIntContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDParContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprFctContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
+import be.unamur.info.b314.compiler.B314Parser.IfThenElseContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
 import be.unamur.info.b314.compiler.B314Parser.SetToContext;
@@ -23,6 +24,7 @@ import be.unamur.info.b314.compiler.B314Parser.TypeContext;
 import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
@@ -32,7 +34,6 @@ import java.util.Collections;
 import java.util.Map;
 import org.antlr.symtab.FunctionSymbol;
 import org.antlr.symtab.GlobalScope;
-import org.antlr.symtab.PrimitiveType;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
@@ -62,7 +63,7 @@ public class SymTableFiller extends B314BaseListener {
 
   /**
    * @return a read-only view of the Symbol table.
-   * @throws UnsupportedOperationException if attemps to modifiy the Map in any way.
+   * @throws UnsupportedOperationException if attempts to modify the Map in any way.
    */
   public Map<String, ? extends Symbol> getSymTable() {
     return Collections.unmodifiableMap(symTable.GLOBALS.getMembers());
@@ -70,7 +71,7 @@ public class SymTableFiller extends B314BaseListener {
 
 
   /**
-   * @return the number of global variables declared
+   * @return the number of global variables stored
    */
   public int countVariables() {
     return symTable.GLOBALS.getNumberOfSymbols();
@@ -117,8 +118,7 @@ public class SymTableFiller extends B314BaseListener {
 
 
   /**
-   * @effects Define the type of an SymbolVariable already inserted in the symbtable.
-   *
+   * @effects Define the type of an SymbolVariable already inserted in the symtable.
    */
   @Override
   public void enterType(TypeContext ctx) {
@@ -178,8 +178,7 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   *
-   * @requries varSym - The Symbol representing the array variable. Must be defined
+   * @requires varSym - The Symbol representing the array variable. Must be defined
    * @return the @see {@link PredefinedType} of the array or the nested one inside.
    */
   private PredefinedType getArrayType(VariableSymbol varSym) {
@@ -195,6 +194,7 @@ public class SymTableFiller extends B314BaseListener {
 
     return PredefinedType.get(arr.getType());
   }
+
   /**
    * @effects Check the type of the instructions, if the types of the Expr named <i>var</i> and <i>value</i> are
    *          compatible.
@@ -226,8 +226,8 @@ public class SymTableFiller extends B314BaseListener {
         throw new UndeclaredVariable(varSymName);
 
       // Check for it type's matching
-      if(exprDType.equals(PredefinedType.FUNCTION)) {
-        exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
+
+      if(exprDType.equals(PredefinedType.VOID)) {
         //TODO Check if the function type is VOID. Cannot be set
       }
 
@@ -286,7 +286,7 @@ public class SymTableFiller extends B314BaseListener {
       return this.getTypeOfExprG(((ExprGContext)ctx.getChild(0)));
 
     if(ctx instanceof ExprDFctContext)
-      return PredefinedType.FUNCTION;
+      return getTypeOfExprFunction((ExprFctContext)ctx.getChild(0));
 
     if(ctx instanceof ExprDParContext)
       return this.getTypeOfExprD(((ExprDParContext)ctx).expr);
@@ -295,7 +295,7 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @requires exprFct o be not null.
+   * @requires exprFct to be not null.
    * @effects Check the existence of the function and the matching of its parameters.
    * @return the corresponding {@see PredefinedType} of the expression function
    */
@@ -313,6 +313,16 @@ public class SymTableFiller extends B314BaseListener {
     return PredefinedType.get(fctSym.getType());
   }
 
+
+  @Override
+  public void enterIfThenElse(IfThenElseContext ctx) {
+    PredefinedType condType = this.getTypeOfExprD(ctx.condition);
+
+    if(condType == null || !condType.equals(PredefinedType.BOOLEAN))
+      throw new NotBooleanCondition(ctx.getText());
+
+    super.enterIfThenElse(ctx);
+  }
 
   @Override
   public int hashCode() {
