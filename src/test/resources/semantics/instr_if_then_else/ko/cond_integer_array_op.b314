@@ -11,4 +11,10 @@
 
   by default do
     set i[1] to life
+
+    if i[1] * 12 then
+      skip
+    else
+      set i[1] to i[1] + 1
+    done
   done

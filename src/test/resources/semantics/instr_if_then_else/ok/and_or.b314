@@ -7,6 +7,12 @@
     skip
   done
 
+  if true then
+    skip
+  else
+    set i to false
+  done
+
   by default do
     if false then
       skip

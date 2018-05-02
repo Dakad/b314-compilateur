@@ -8,6 +8,15 @@
     set j to j+1
   done
 
+
+
   by default do
-    skip
+    if i and true then
+      skip
+    else
+      if i or true then
+        skip
+      done
+    done
+
   done
