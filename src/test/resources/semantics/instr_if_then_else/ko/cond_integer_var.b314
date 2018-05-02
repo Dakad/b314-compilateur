@@ -9,5 +9,8 @@
   done
 
   by default do
-    skip
+    if not i then
+      skip
+      set i to i+1
+    done
   done
