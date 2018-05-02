@@ -65,8 +65,8 @@ public class B314varDeclSemanticOkTest {
     }
 
     @Test
-    public void testvarDecl_one_square_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/varDecl/ok/one_square.b314", testFolder.newFile(), true, "varDecl: one_square");
+    public void testvarDecl_one_integer_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/varDecl/ok/one_integer.b314", testFolder.newFile(), true, "varDecl: one_integer");
     }
 
     @Test
