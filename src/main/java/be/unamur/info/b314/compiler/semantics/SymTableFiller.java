@@ -24,6 +24,7 @@ import be.unamur.info.b314.compiler.B314Parser.TypeContext;
 import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
@@ -312,6 +313,16 @@ public class SymTableFiller extends B314BaseListener {
     return PredefinedType.get(fctSym.getType());
   }
 
+
+  @Override
+  public void enterIfThenElse(IfThenElseContext ctx) {
+    PredefinedType condType = this.getTypeOfExprD(ctx.condition);
+
+    if(condType == null || !condType.equals(PredefinedType.BOOLEAN))
+      throw new NotBooleanCondition(ctx.getText());
+
+    super.enterIfThenElse(ctx);
+  }
 
   @Override
   public int hashCode() {
