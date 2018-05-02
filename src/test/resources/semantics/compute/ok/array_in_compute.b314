@@ -1,0 +1,11 @@
+/*my commentaire */
+
+declare and retain
+    b as boolean;
+    i as integer;
+    s as square;
+when your turn
+by default
+    do
+        compute nearby[2 + 3 , (42  % 5) * 0]
+    done
