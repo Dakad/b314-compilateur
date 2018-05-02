@@ -45,26 +45,27 @@ action  : MOVE direction=(NORTH | SOUTH | EAST | WEST)      # Move
 intVal  : INTEGER;
 opInt   : (ADD | SUB | MULT | DIV | MOD);
 boolVal : (TRUE | FALSE);
-opBool  : (AND | OR);
-opBoolCompare : (LT | GT | EQ | LE | GE);
-
-exprDFct : fctName=ID LPAR (param+=exprD (COMMA param+=exprD)*)? RPAR;
 
     /* Expressions entières */
-exprD : LPAR exprD RPAR
-      | exprInt
-      | left=exprD opInt right=exprD                // int + int, map count * 3
+exprD : exprInt                                 #ExprDInt
+      | left=exprD opInt right=exprD            #ExprDOpInt
 
     /* Expressions booléennes */
-      | exprBool
-      | left=exprD opBool right=exprD
-      | left=exprD opBoolCompare right=exprD
+      | exprBool                                #ExprDBool
+      | left=exprD
+        op=(AND | OR | LT | GT | EQ | LE | GE)
+        right=exprD                             #ExprDOpBool
 
     /* Expressions sur les types de cases */
-      | exprCase
+      | exprCase                                #ExprDCase
 
-      | exprG
-      | exprDFct
+      | exprG                                   #ExprDG
+
+    /* Expressions avec les fonctions */
+      | exprFct                                 #ExprDFct
+
+    /* Expressions avec parenthèse */
+      | LPAR expr=exprD RPAR                    #ExprDPar
       ;
 
 
@@ -88,13 +89,18 @@ exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)
          | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # Nearby
          ;
 
-
+    /* Appel de function */
+exprFct  : name=ID
+            LPAR
+              (param+=exprD (COMMA param+=exprD)*)?
+            RPAR
+         ;
 
 /* Expression Gauche */
 
-exprG : name=ID                                               # Var
-      | ARENA LBRACK (intVal|ID) COMMA (intVal|ID) RBRACK     # Arena
-      | name=ID LBRACK elt+=exprD (COMMA elt+=exprD)? RBRACK  # Case
+exprG : name=ID                                                 # Var
+      | ARENA LBRACK (intVal|ID) COMMA (intVal|ID) RBRACK       # ArenaElt
+      | name=ID LBRACK one=exprD (COMMA second=exprD)? RBRACK   # ArrayElt
       ;
 
 
@@ -119,7 +125,7 @@ instr : SKP                                                   # Skip
       | IF condition=exprD THEN (instr)+ DONE                 # IfThen
       | IF condition=exprD THEN (instr)+ ELSE (instr)+ DONE   # IfThenElse
       | WHILE condition=exprD DO (instr)+ DONE                # While
-      | SET exprG TO value=exprD                              # SetTo
+      | SET var=exprG TO value=exprD                          # SetTo
       | COMPUTE exprD                                         # Compute
       | NEXT action                                           # Next
       ;

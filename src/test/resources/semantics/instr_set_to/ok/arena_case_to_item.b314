@@ -1,0 +1,34 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer;
+    j as integer;
+    arena as square[27,27];
+
+  while i < 17 do
+    while j < 17 do
+        set arena [i , j] to vines
+    done
+  done
+
+  while j < 18 do
+    set arena[0,j] to rock
+    set arena[17,j] to rock
+  set j to j+1
+  done
+
+  by default do
+    set arena[1,1] to player
+    set arena[12,10] to ennemi
+    set arena[8,12] to zombie
+    set arena[5,5] to zombie
+    set arena[2,7] to rock
+    set arena[3,7] to rock
+    set arena[4,7] to dirt
+    set arena[3,6] to rock
+    set arena[6,7] to fruits
+    set arena[10,10] to map
+    set arena[2,16] to radio
+    set arena[16,4] to soda
+    set arena[26,26] to graal
+  done
