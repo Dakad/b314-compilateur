@@ -40,18 +40,13 @@ public class B314commentsSemanticOkTest {
     }
 
     @Test
-    public void testcomments_no_comments_multiple_lines_and_tab_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/comments/ok/no_comments_multiple_lines_and_tab.b314", testFolder.newFile(), true, "comments: no_comments_multiple_lines_and_tab");
-    }
-
-    @Test
     public void testcomments_original_comments_everywhere_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/semantics/comments/ok/original_comments_everywhere.b314", testFolder.newFile(), true, "comments: original_comments_everywhere");
     }
 
     @Test
-    public void testcomments_original_no_comments_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/comments/ok/original_no_comments.b314", testFolder.newFile(), true, "comments: original_no_comments");
+    public void testcomments_no_comments_multiple_lines_and_tab_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/comments/ok/no_comments_multiple_lines_and_tab.b314", testFolder.newFile(), true, "comments: no_comments_multiple_lines_and_tab");
     }
 
     @Test
