@@ -122,8 +122,10 @@ fctDecl : fctName=ID AS FUNCTION
 /* Instructions */
 
 instr : SKP                                                   # Skip
-      | IF condition=exprD THEN (instr)+ DONE                 # IfThen
-      | IF condition=exprD THEN (instr)+ ELSE (instr)+ DONE   # IfThenElse
+      | IF condition=exprD
+        THEN (instr)+
+        (ELSE (instr)+)?
+        DONE                                                  # IfThenElse
       | WHILE condition=exprD DO (instr)+ DONE                # While
       | SET var=exprG TO value=exprD                          # SetTo
       | COMPUTE exprD                                         # Compute
