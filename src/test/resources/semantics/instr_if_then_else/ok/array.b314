@@ -1,0 +1,28 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    b as boolean[2];
+    i as integer[2];
+
+  if b[0] = true then
+    skip
+  done
+
+  if i[1] = 12 then
+    skip
+  done
+
+  by default do
+    set b[0] to false
+    set b[1] to true
+    set i[0] to 12
+    set i[1] to 23+34
+
+    if i[0] = 12 then
+      skip
+    done
+
+    if b[1] = false then
+      skip
+    done
+  done
