@@ -1,0 +1,13 @@
+declare and retain
+  b as boolean;
+
+
+  f as function(): boolean
+  do
+    set b to true
+    return false
+  done
+
+  by default do
+    skip
+  done

@@ -1,0 +1,18 @@
+declare and retain
+  b as boolean;
+
+  f as function(i as integer, i as boolean): boolean
+  do
+    set b to true
+    return false
+  done
+
+  fun as function(bol as boolean): integer
+  do
+    set b to false
+    return true
+  done
+
+  by default do
+    skip
+  done

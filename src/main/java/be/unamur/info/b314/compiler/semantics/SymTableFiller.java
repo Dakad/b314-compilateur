@@ -17,6 +17,7 @@ import be.unamur.info.b314.compiler.B314Parser.ExprDOpIntContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDParContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprFctContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
+import be.unamur.info.b314.compiler.B314Parser.FctDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.IfThenElseContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
@@ -25,7 +26,10 @@ import be.unamur.info.b314.compiler.B314Parser.TypeContext;
 import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.WhileContext;
-import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredAsFunction;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredFunction;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredVariable;
+import be.unamur.info.b314.compiler.semantics.exception.DuplicateParameter;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
@@ -37,12 +41,12 @@ import java.util.Collections;
 import java.util.Map;
 import org.antlr.symtab.FunctionSymbol;
 import org.antlr.symtab.GlobalScope;
+import org.antlr.symtab.ParameterSymbol;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -100,19 +104,39 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @effects Insert a new {@link VariableSymbol} into the current scope.
-   * @throws AlreadyGloballyDeclared if the scope is global and another variable has been declared <br>
+   * @effects Insert a new {@link VariableSymbol} or {@link ParameterSymbol} <br>
+   *          depending on the current scope into the current scope.
+   * @throws AlreadyDeclaredVariable if the scope is global and another variable has been declared <br>
    *        with the same name.
+   * @throws AlreadyDeclaredAsFunction if the current scope is a function <br>
+   *         and the the parameter uses the same name as the function.
+   * @throws DuplicateParameter if the current scope is a function <br>
+ *           and the parameter uses the same name as another.
    */
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
     String name = ctx.name.getText();
-    if (currentScope instanceof GlobalScope) {
-      if(symTable.GLOBALS.getSymbol(name) != null)
-        throw new AlreadyGloballyDeclared(name);
-    }
+    VariableSymbol var = null;
+
     try {
-      VariableSymbol var = new VariableSymbol(name);
+      // ? Am i inside a function ?
+      if(currentScope instanceof FunctionSymbol) {
+        if(currentScope.getName().equals(name)) // Param name == Function name ?
+          throw  new AlreadyDeclaredAsFunction(name);
+
+        // Check for duplicate parameter
+        if(currentScope.getSymbol(name) != null)
+          throw new DuplicateParameter(name);
+
+        var = new ParameterSymbol(name);
+      } else {
+        if (currentScope instanceof GlobalScope)
+          if(symTable.GLOBALS.getSymbol(name) != null)
+            throw new AlreadyDeclaredVariable(name);
+
+        var = new VariableSymbol(name);
+      }
+
       currentScope.define(var);
     } catch (IllegalArgumentException e) {
       // throw IllegalArgumentException  if the symbol cannot be defined
@@ -346,6 +370,43 @@ public class SymTableFiller extends B314BaseListener {
       throw new NotReturnVoidFucntion(ctx.getText());
 
     super.enterCompute(ctx);
+  }
+
+  /**
+   * @effects Insert a new {@link FunctionSymbol} <br> into the current scope <br>
+   *          and use it to replace the current scope.
+   * @throws AlreadyDeclaredFunction if the current function name has already used for another function
+   */
+  @Override
+  public void enterFctDecl(FctDeclContext ctx) {
+    String name = ctx.name.getText();
+
+    Symbol fctSym = symTable.GLOBALS.getSymbol(name);
+
+    if(fctSym != null && fctSym instanceof FunctionSymbol)
+      throw new AlreadyDeclaredFunction(name);
+    else
+      fctSym = new FunctionSymbol(name);
+
+    // Set the current context to the symbol
+    ((FunctionSymbol) fctSym).setDefNode(ctx);
+    ((FunctionSymbol) fctSym).setEnclosingScope(symTable.GLOBALS);
+
+    // Set the type of this function
+    PredefinedType fctPredefType = PredefinedType.VOID;
+    if(ctx.fctType != null)
+      fctPredefType = PredefinedType.get(ctx.fctType.getText());
+
+    ((FunctionSymbol) fctSym).setType(fctPredefType.type());
+    currentScope.define(fctSym); // Add the function to this scope
+    pushScope((Scope) fctSym); // Place this fctSymbol as the current scope
+
+    super.enterFctDecl(ctx); // Continue the exploration
+  }
+
+  @Override
+  public void exitFctDecl(FctDeclContext ctx) {
+    popScope();
   }
 
   @Override

@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredVariable;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class B314var_globalSemanticKoTest {
       fail("[Unthrowed] This .b314 contains duplicate global variable");
     } catch (RuntimeException e) {
       assertThat("Incorrect type of Exception throwned", e,
-          instanceOf(AlreadyGloballyDeclared.class));
+          instanceOf(AlreadyDeclaredVariable.class));
     }
   }
 
