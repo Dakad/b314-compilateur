@@ -1,0 +1,12 @@
+declare and retain
+  b as boolean;
+
+  fun as function(i as integer, s as square): void
+  do
+    set b to true
+    return void
+  done
+
+  by default do
+    skip
+  done
