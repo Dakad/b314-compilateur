@@ -4,9 +4,12 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import be.unamur.info.b314.compiler.semantics.PredefinedType;
 import be.unamur.info.b314.compiler.semantics.SymTableFiller;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.antlr.symtab.BaseScope;
@@ -16,7 +19,9 @@ import org.antlr.symtab.ParameterSymbol;
 import org.antlr.symtab.PrimitiveType;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolWithScope;
+import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
+import org.hamcrest.collection.IsIn;
 import org.hamcrest.collection.IsMapContaining;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,12 +55,12 @@ public class B314fctDeclSemanticTest {
   };
 
 
-  private List<ParameterSymbol> collectParams(List<? extends Symbol> symbols) {
-    List<ParameterSymbol> params = Collections.emptyList();
+  private Map<String, ParameterSymbol> collectParams(List<? extends Symbol> symbols) {
+    Map<String, ParameterSymbol> params = new HashMap<>(symbols.size());
 
     for (Symbol sb : symbols) {
       if(sb instanceof ParameterSymbol)
-        params.add((ParameterSymbol) sb);
+        params.putIfAbsent(sb.getName(), (ParameterSymbol) sb);
     }
     return params;
   }
@@ -92,18 +97,24 @@ public class B314fctDeclSemanticTest {
 
     // Verify
     assertThat("Must contain all global variables and functions", symbTab.size(), is(2));
-
-    assertThat("Must contain at least : f():boolean", symbTab, IsMapContaining.hasKey("f"));
-    assertThat("Must be an function : f():boolean", symbTab.get("f"), instanceOf(FunctionSymbol.class));
+        // Verify - Symbol
+    assertThat("Must contain at least : f(integer):boolean", symbTab, IsMapContaining.hasKey("f"));
+    assertThat("Must be an function : f(integer):boolean", symbTab.get("f"), instanceOf(FunctionSymbol.class));
+        // Verify - Function
     FunctionSymbol myFct = (FunctionSymbol) symbTab.get("f");
-
     PrimitiveType myFctType = (PrimitiveType) myFct.getType();
-    assertThat("Must be an booleanType : f():boolean", myFctType.getName(),  is("boolean"));
+    assertThat("Must be an booleanType : f(integer):boolean", myFctType.getName(),  is("boolean"));
 
+    // Verify - Params
     int nbFctParams = myFct.getNumberOfParameters();
-    assertThat("Must be has any parameter : f():boolean", nbFctParams, is(1));
+    assertThat("Must be has any parameter : f(integer):boolean", nbFctParams, is(1));
 
-    List<ParameterSymbol> myFctParams = collectParams(myFct.getSymbols());
+    Map<String, ParameterSymbol> myFctParams = collectParams(myFct.getSymbols());
+    
+    assertThat("Must contain at least paremeter i : f(integer):boolean", myFctParams, IsMapContaining.hasKey("i") );
+
+    PrimitiveType paramType = (PrimitiveType)  myFctParams.get("i").getType();
+    assertThat("Must contain at least paremeter i : f(integer):boolean", paramType.getName(), is("integer"));
   }
 
 
