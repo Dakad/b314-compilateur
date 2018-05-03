@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Map;
 import org.antlr.symtab.FunctionSymbol;
 import org.antlr.symtab.GlobalScope;
+import org.antlr.symtab.ParameterSymbol;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
@@ -121,15 +122,15 @@ public class SymTableFiller extends B314BaseListener {
         if(currentScope.getSymbol(name) != null)
           throw new DuplicateParameter(name);
 
+        var = new ParameterSymbol(name);
       } else {
-        if (currentScope instanceof GlobalScope) {
+        if (currentScope instanceof GlobalScope)
           if(symTable.GLOBALS.getSymbol(name) != null)
             throw new AlreadyDeclaredVariable(name);
-        }
 
+        var = new VariableSymbol(name);
       }
 
-      var = new VariableSymbol(name);
       currentScope.define(var);
     } catch (IllegalArgumentException e) {
       // throw IllegalArgumentException  if the symbol cannot be defined
@@ -380,16 +381,6 @@ public class SymTableFiller extends B314BaseListener {
     currentScope.define(fctSym);
     pushScope((Scope) fctSym);
     super.enterFctDecl(ctx);
-  }
-
-  @Override
-  public void enterCompute(ComputeContext ctx) {
-    this.
-    PredefinedType cond = this.getTypeOfExprD(ctx.fct);
-    if(cond == null || !cond.equals(PredefinedType.VOID ))
-      throw new NotVoidCondition(ctx.getText());
-
-    super.enterCompute(ctx);
   }
 
   @Override
