@@ -114,7 +114,7 @@ fctDecl : name=ID AS FUNCTION
               COLON (fctType=scalar | VOID)
           localVarDecl?
           DO (instr)+
-          RETURN (returnVal=exprD | VOID)
+          RETURN returnVal=ID SEMI
           DONE
         ;
 
