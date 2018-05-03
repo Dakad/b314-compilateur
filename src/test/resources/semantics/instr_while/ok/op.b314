@@ -1,0 +1,27 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer;
+
+  while 12 = 12 do
+    skip
+  done
+
+  while 12 > 23 do
+    skip
+  done
+
+  while 12 < 23 do
+    skip
+  done
+
+  by default do
+    while 23 <= 12  do
+      skip
+    done
+
+    while i >= 12  do
+      skip
+    done
+
+  done

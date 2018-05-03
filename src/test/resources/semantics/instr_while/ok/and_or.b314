@@ -1,0 +1,24 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as boolean;
+
+  while true
+  do
+    skip
+  done
+
+  if true then
+    while (true and i = false) do
+        set i to false
+    done
+  done
+
+  by default
+  do
+    while false do
+      if true then
+        set i to false
+      done
+    done
+  done

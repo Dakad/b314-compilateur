@@ -23,6 +23,7 @@ import be.unamur.info.b314.compiler.B314Parser.SetToContext;
 import be.unamur.info.b314.compiler.B314Parser.TypeContext;
 import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
+import be.unamur.info.b314.compiler.B314Parser.WhileContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
@@ -39,6 +40,7 @@ import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -325,6 +327,17 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
+  public void enterWhile(WhileContext ctx) {
+    PredefinedType condType = this.getTypeOfExprD(ctx.condition);
+
+    if(condType == null || !condType.equals(PredefinedType.BOOLEAN))
+      throw new NotBooleanCondition(ctx.getText());
+
+    super.enterWhile(ctx);
+  }
+
+
+  @Override
   public int hashCode() {
     return super.hashCode();
   }
@@ -343,4 +356,6 @@ public class SymTableFiller extends B314BaseListener {
   public String toString() {
     return super.toString();
   }
+
+
 }

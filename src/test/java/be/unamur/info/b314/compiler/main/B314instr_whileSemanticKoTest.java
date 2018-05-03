@@ -15,9 +15,9 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class B314instr_if_then_elseSemanticKoTest {
+public class B314instr_whileSemanticKoTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(B314instr_if_then_elseSemanticKoTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(B314instr_whileSemanticKoTest.class);
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder(); // Create a temporary folder for outputs deleted after tests
@@ -37,7 +37,7 @@ public class B314instr_if_then_elseSemanticKoTest {
     //
 
     @Test
-    public void testinstr_if_then_else_wrong_expr_type_ko() {
+    public void testinstr_while_wrong_expr_type_ko() {
         String[] types = {"integer_"};
         String[] b314Files = {"array", "array_op", "op", "var"};
         String file = "";
@@ -45,7 +45,7 @@ public class B314instr_if_then_elseSemanticKoTest {
         for (String type : types) {
             for (String name : b314Files) {
                 try {
-                    file = "/semantics/instr_if_then_else/ko/cond_" + type + name + ".b314";
+                    file = "/semantics/instr_while/ko/cond_" + type + name + ".b314";
                     CompilerTestHelper.getSymTable(file);
                     fail("[Unthrowed] This .b314 is invalid. Should have thrown an Exception.\n" + file);
                 } catch (RuntimeException e) {
