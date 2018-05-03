@@ -4,6 +4,7 @@ import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
+import be.unamur.info.b314.compiler.B314Parser.ComputeContext;
 import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
@@ -30,6 +31,7 @@ import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredVariable;
+import be.unamur.info.b314.compiler.semantics.exception.NotReturnVoidFucntion;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
 import java.util.Collections;
 import java.util.Map;
@@ -336,6 +338,15 @@ public class SymTableFiller extends B314BaseListener {
     super.enterWhile(ctx);
   }
 
+  @Override
+  public void enterCompute(ComputeContext ctx) {
+    PredefinedType condType = this.getTypeOfExprD(ctx.fct);
+
+    if (condType == null || !condType.equals(PredefinedType.VOID))
+      throw new NotReturnVoidFucntion(ctx.getText());
+
+    super.enterCompute(ctx);
+  }
 
   @Override
   public int hashCode() {
