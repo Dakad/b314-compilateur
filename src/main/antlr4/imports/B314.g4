@@ -168,7 +168,7 @@ localVarDecl : DECLARE LOCAL (localVars+=varDecl SEMI)+;
 
 /* Clause When */
 
-clauseWhen : WHEN exprD
+clauseWhen : WHEN condition=exprD
               localVarDecl?
               DO instr+ DONE
            ;
