@@ -103,9 +103,14 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @effects Insert a new {@link VariableSymbol} into the current scope.
+   * @effects Insert a new {@link VariableSymbol} or {@link ParameterSymbol} <br>
+   *          depending on the current scope into the current scope.
    * @throws AlreadyDeclaredVariable if the scope is global and another variable has been declared <br>
    *        with the same name.
+   * @throws AlreadyDeclaredAsFunction if the current scope is a function <br>
+   *         and the the parameter uses the same name as the function.
+   * @throws DuplicateParameter if the current scope is a function <br>
+ *           and the parameter uses the same name as another.
    */
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
@@ -357,6 +362,11 @@ public class SymTableFiller extends B314BaseListener {
   }
 
 
+  /**
+   * @effects Insert a new {@link FunctionSymbol} <br> into the current scope <br>
+   *          and use it to replace the current scope.
+   * @throws AlreadyDeclaredFunction if the current function name has already used for another function
+   */
   @Override
   public void enterFctDecl(FctDeclContext ctx) {
     String name = ctx.name.getText();
@@ -378,9 +388,10 @@ public class SymTableFiller extends B314BaseListener {
       fctPredefType = PredefinedType.get(ctx.fctType.getText());
 
     ((FunctionSymbol) fctSym).setType(fctPredefType.type());
-    currentScope.define(fctSym);
-    pushScope((Scope) fctSym);
-    super.enterFctDecl(ctx);
+    currentScope.define(fctSym); // Add the function to this scope
+    pushScope((Scope) fctSym); // Place this fctSymbol as the current scope
+
+    super.enterFctDecl(ctx); // Continue the exploration
   }
 
   @Override
