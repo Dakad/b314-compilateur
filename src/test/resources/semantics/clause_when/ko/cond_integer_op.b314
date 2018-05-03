@@ -1,0 +1,22 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer;
+
+  when 12+53 do
+    skip
+    set j to j+1
+  done
+
+
+
+  by default do
+    if i = 0 then
+      skip
+    else
+      when i or true do
+        skip
+      done
+    done
+
+  done
