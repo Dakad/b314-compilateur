@@ -106,7 +106,7 @@ exprG : name=ID                                                 # Var
 
 /* Fonction */
 
-fctDecl : fctName=ID AS FUNCTION
+fctDecl : name=ID AS FUNCTION
               LPAR
                 (param+=varDecl
                 (COMMA param+=varDecl)*)*
