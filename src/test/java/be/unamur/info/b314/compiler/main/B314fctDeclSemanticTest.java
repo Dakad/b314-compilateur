@@ -110,13 +110,87 @@ public class B314fctDeclSemanticTest {
     assertThat("Must be has any parameter : f(integer):boolean", nbFctParams, is(1));
 
     Map<String, ParameterSymbol> myFctParams = collectParams(myFct.getSymbols());
-    
+
     assertThat("Must contain at least paremeter i : f(integer):boolean", myFctParams, IsMapContaining.hasKey("i") );
 
     PrimitiveType paramType = (PrimitiveType)  myFctParams.get("i").getType();
     assertThat("Must contain at least paremeter i : f(integer):boolean", paramType.getName(), is("integer"));
   }
 
+  @Test
+  public void testfctDecl_with_params2_ok() {
+    // Setup
+    Object[][] configs = {
+        {"f", "boolean",
+            new String[]{"i", "boolean"}
+        },
+        {"fun", "void",
+            new String[]{"i", "integer"},
+            new String[]{"s", "square"}
+        },
+    };
 
+    // Exercice
+
+    symTableFiller = CompilerTestHelper.getSymTable("/semantics/fctDecl/ok/with_params_2.b314");
+    symbTab = symTableFiller.getSymTable();
+
+    assertThat("Must contain all global variables and functions", symbTab.size(), is(3));
+
+
+    // Verify first function : f(integer)
+
+    // Verify - Symbol
+    assertThat("Must contain at least : f(integer):boolean", symbTab, IsMapContaining.hasKey("f"));
+    assertThat("Must be an function : f(integer):boolean", symbTab.get("f"), instanceOf(FunctionSymbol.class));
+    // Verify - Function
+    FunctionSymbol myFct = (FunctionSymbol) symbTab.get("f");
+    PrimitiveType myFctType = (PrimitiveType) myFct.getType();
+    assertThat("Must be an booleanType : f(integer):boolean", myFctType.getName(),  is("boolean"));
+
+    // Verify - Params
+    int nbFctParams = myFct.getNumberOfParameters();
+    assertThat("Must be has any parameter : f(integer):boolean", nbFctParams, is(1));
+
+    Map<String, ParameterSymbol> myFctParams = collectParams(myFct.getSymbols());
+
+    assertThat("Must contain at least paremeter i : f(integer):boolean", myFctParams, IsMapContaining.hasKey("i") );
+
+    PrimitiveType paramType = (PrimitiveType)  myFctParams.get("i").getType();
+    assertThat("Must contain at least paremeter i : f(integer):boolean", paramType.getName(), is("integer"));
+
+
+
+
+    // Verify second function : fun(integer, square)
+
+    // Verify - Symbol
+    assertThat("Must contain at least : fun(integer, square):void", symbTab, IsMapContaining.hasKey("fun"));
+    assertThat("Must be an function : fun(integer, square):void", symbTab.get("fun"), instanceOf(FunctionSymbol.class));
+    // Verify - Function
+     myFct = (FunctionSymbol) symbTab.get("fun");
+     myFctType = (PrimitiveType) myFct.getType();
+    assertThat("Must be an booleanType : fun(integer, square):void", myFctType.getName(),  is("void"));
+
+    // Verify - Params
+    nbFctParams = myFct.getNumberOfParameters();
+    assertThat("Must be has any parameter : fun(integer, square):void", nbFctParams, is(2));
+
+     myFctParams = collectParams(myFct.getSymbols());
+
+    // Verify - first parameter i
+    assertThat("Must contain at least parameter i : fun(integer, square):void", myFctParams, IsMapContaining.hasKey("i") );
+
+    paramType = (PrimitiveType)  myFctParams.get("i").getType();
+    assertThat("Must contain at least parameter i : fun(integer, square):void", paramType.getName(), is("integer"));
+
+    // Verify - se cond parameter s
+    assertThat("Must contain at least parameter s : fun(integer, square):void", myFctParams, IsMapContaining.hasKey("s") );
+
+    paramType = (PrimitiveType)  myFctParams.get("s").getType();
+    assertThat("Must contain at least parameter i : fun(integer, square):void", paramType.getName(), is("square"));
+
+
+  }
 
 }
