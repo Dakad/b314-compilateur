@@ -30,13 +30,18 @@ public class B314instr_if_then_elseSemanticOkTest {
     // Serie instr_if_then_else OK
     //
     @Test
+    public void testinstr_if_then_else_and_or_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/instr_if_then_else/ok/and_or.b314", testFolder.newFile(), true, "instr_if_then_else: and_or");
+    }
+
+    @Test
     public void testinstr_if_then_else_array_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/semantics/instr_if_then_else/ok/array.b314", testFolder.newFile(), true, "instr_if_then_else: array");
     }
 
     @Test
-    public void testinstr_if_then_else_and_or_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/instr_if_then_else/ok/and_or.b314", testFolder.newFile(), true, "instr_if_then_else: and_or");
+    public void testinstr_if_then_else_op_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/instr_if_then_else/ok/op.b314", testFolder.newFile(), true, "instr_if_then_else: op");
     }
 
     @Test
@@ -47,11 +52,6 @@ public class B314instr_if_then_elseSemanticOkTest {
     @Test
     public void testinstr_if_then_else_true_false_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/semantics/instr_if_then_else/ok/true_false.b314", testFolder.newFile(), true, "instr_if_then_else: true_false");
-    }
-
-    @Test
-    public void testinstr_if_then_else_op_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/instr_if_then_else/ok/op.b314", testFolder.newFile(), true, "instr_if_then_else: op");
     }
 
     @Test

@@ -1,0 +1,16 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer;
+
+  while i do
+    skip
+    set i to i+1
+  done
+
+  by default do
+    while not i do
+      skip
+      set i to i+1
+    done
+  done
