@@ -16,6 +16,7 @@ import be.unamur.info.b314.compiler.B314Parser.ExprDOpIntContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDParContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprFctContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
+import be.unamur.info.b314.compiler.B314Parser.FctDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.IfThenElseContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
@@ -24,7 +25,7 @@ import be.unamur.info.b314.compiler.B314Parser.TypeContext;
 import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.WhileContext;
-import be.unamur.info.b314.compiler.semantics.exception.AlreadyGloballyDeclared;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredVariable;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
@@ -40,7 +41,6 @@ import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -99,7 +99,7 @@ public class SymTableFiller extends B314BaseListener {
 
   /**
    * @effects Insert a new {@link VariableSymbol} into the current scope.
-   * @throws AlreadyGloballyDeclared if the scope is global and another variable has been declared <br>
+   * @throws AlreadyDeclaredVariable if the scope is global and another variable has been declared <br>
    *        with the same name.
    */
   @Override
@@ -107,7 +107,7 @@ public class SymTableFiller extends B314BaseListener {
     String name = ctx.name.getText();
     if (currentScope instanceof GlobalScope) {
       if(symTable.GLOBALS.getSymbol(name) != null)
-        throw new AlreadyGloballyDeclared(name);
+        throw new AlreadyDeclaredVariable(name);
     }
     try {
       VariableSymbol var = new VariableSymbol(name);
@@ -336,6 +336,19 @@ public class SymTableFiller extends B314BaseListener {
     super.enterWhile(ctx);
   }
 
+
+  @Override
+  public void enterFctDecl(FctDeclContext ctx) {
+    String name = ctx.name.getText();
+
+
+    super.enterFctDecl(ctx);
+  }
+
+  @Override
+  public void exitFctDecl(FctDeclContext ctx) {
+    popScope();
+  }
 
   @Override
   public int hashCode() {
