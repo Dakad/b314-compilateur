@@ -35,7 +35,7 @@ public enum PredefinedType {
   public static PredefinedType get(String text) {
     try {
       return PredefinedType.valueOf(text.toUpperCase());
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | NullPointerException e) {
       return PredefinedType.VOID;
     }
   }
