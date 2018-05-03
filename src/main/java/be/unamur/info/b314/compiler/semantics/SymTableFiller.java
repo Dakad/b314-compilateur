@@ -25,7 +25,10 @@ import be.unamur.info.b314.compiler.B314Parser.TypeContext;
 import be.unamur.info.b314.compiler.B314Parser.VarContext;
 import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.WhileContext;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredAsFunction;
+import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredVariable;
+import be.unamur.info.b314.compiler.semantics.exception.DuplicateParameter;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
@@ -105,12 +108,28 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
     String name = ctx.name.getText();
-    if (currentScope instanceof GlobalScope) {
-      if(symTable.GLOBALS.getSymbol(name) != null)
-        throw new AlreadyDeclaredVariable(name);
-    }
+    VariableSymbol var = null;
+
     try {
-      VariableSymbol var = new VariableSymbol(name);
+
+      if(currentScope instanceof FunctionSymbol) { // ? Am i inside a function ?
+        if(currentScope.getName().equals(name))
+          throw  new AlreadyDeclaredAsFunction(name);
+
+        // Check for duplicate parameter
+
+        if(currentScope.getSymbol(name) != null)
+          throw new DuplicateParameter(name);
+
+      } else {
+        if (currentScope instanceof GlobalScope) {
+          if(symTable.GLOBALS.getSymbol(name) != null)
+            throw new AlreadyDeclaredVariable(name);
+        }
+
+      }
+
+      var = new VariableSymbol(name);
       currentScope.define(var);
     } catch (IllegalArgumentException e) {
       // throw IllegalArgumentException  if the symbol cannot be defined
@@ -341,6 +360,26 @@ public class SymTableFiller extends B314BaseListener {
   public void enterFctDecl(FctDeclContext ctx) {
     String name = ctx.name.getText();
 
+    Symbol fctSym = symTable.GLOBALS.getSymbol(name);
+
+    if(fctSym != null && fctSym instanceof FunctionSymbol)
+      throw new AlreadyDeclaredFunction(name);
+    else
+      fctSym = new FunctionSymbol(name);
+
+    // Set the current context to the symbol
+    ((FunctionSymbol) fctSym).setDefNode(ctx);
+    ((FunctionSymbol) fctSym).setEnclosingScope(symTable.GLOBALS);
+
+    // Set the type of this function
+    PredefinedType fctPredefType = PredefinedType.VOID;
+
+    if(ctx.fctType != null)
+      fctPredefType = PredefinedType.get(ctx.fctType.getText());
+
+    ((FunctionSymbol) fctSym).setType(fctPredefType.type());
+
+    pushScope((Scope) fctSym);
 
     super.enterFctDecl(ctx);
   }
