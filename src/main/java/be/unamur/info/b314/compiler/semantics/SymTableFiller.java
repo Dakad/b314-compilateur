@@ -4,7 +4,6 @@ import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
-import be.unamur.info.b314.compiler.B314Parser.ClauseWhenContext;
 import be.unamur.info.b314.compiler.B314Parser.ComputeContext;
 import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
@@ -30,7 +29,6 @@ import be.unamur.info.b314.compiler.B314Parser.WhileContext;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredAsFunction;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredVariable;
-import be.unamur.info.b314.compiler.semantics.exception.CannotUseFunctionAsVariable;
 import be.unamur.info.b314.compiler.semantics.exception.DuplicateParameter;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
@@ -242,39 +240,32 @@ public class SymTableFiller extends B314BaseListener {
         throw new NotMatchingType(ctx.toString());
     } else {
       String varSymName;
-      Symbol varSym;
+      VariableSymbol varSym;
 
       boolean isScalarVar = exprG instanceof VarContext;
-      if(isScalarVar) {
+      if(isScalarVar)
         varSymName = ((VarContext)exprG).name.getText();
-      }
-      else {
+      else
         varSymName = ((ArrayEltContext)exprG).name.getText();
-      }
 
       // Check if the exprG var or array is inside the symtab
-      varSym = currentScope.resolve(varSymName);
-
+      varSym = (VariableSymbol) currentScope.resolve(varSymName);
       if(varSym == null)
         throw new UndeclaredVariable(varSymName);
-
-      // Check if the variable is really defined as variable
-      if(!(varSym instanceof VariableSymbol))
-        throw new CannotUseFunctionAsVariable(ctx.getText());
 
       // Check for it type's matching
 
       if(exprDType.equals(PredefinedType.VOID)) {
-        throw new NotReturnVoidFucntion(ctx.getText());
+        //TODO Check if the function type is VOID. Cannot be set
       }
 
       if(isScalarVar) {
         // Check if both expr's (var to exprD) type matches
-        if(!((VariableSymbol)varSym).getType().equals(exprDType.type()))
+        if(!varSym.getType().equals(exprDType.type()))
           throw new NotMatchingType(ctx.toString());
       } else {
         // Check if both expr's (arrayVar to exprD) type matches
-        if(!exprDType.equals(getArrayType((VariableSymbol)varSym)))
+        if(!exprDType.equals(getArrayType(varSym)))
           throw new NotMatchingType(ctx.toString());
       }
     }
@@ -416,16 +407,6 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void exitFctDecl(FctDeclContext ctx) {
     popScope();
-  }
-
-  @Override
-  public void enterClauseWhen(ClauseWhenContext ctx) {
-    PredefinedType condType = this.getTypeOfExprD(ctx.condition);
-
-    if(condType == null || !condType.equals(PredefinedType.BOOLEAN))
-      throw new NotBooleanCondition(ctx.getText());
-
-    super.enterClauseWhen(ctx);
   }
 
   @Override
