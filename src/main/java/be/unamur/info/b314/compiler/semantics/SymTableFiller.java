@@ -4,6 +4,7 @@ import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
+import be.unamur.info.b314.compiler.B314Parser.ComputeContext;
 import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
@@ -111,13 +112,12 @@ public class SymTableFiller extends B314BaseListener {
     VariableSymbol var = null;
 
     try {
-
-      if(currentScope instanceof FunctionSymbol) { // ? Am i inside a function ?
-        if(currentScope.getName().equals(name))
+      // ? Am i inside a function ?
+      if(currentScope instanceof FunctionSymbol) {
+        if(currentScope.getName().equals(name)) // Param name == Function name ?
           throw  new AlreadyDeclaredAsFunction(name);
 
         // Check for duplicate parameter
-
         if(currentScope.getSymbol(name) != null)
           throw new DuplicateParameter(name);
 
@@ -373,15 +373,23 @@ public class SymTableFiller extends B314BaseListener {
 
     // Set the type of this function
     PredefinedType fctPredefType = PredefinedType.VOID;
-
     if(ctx.fctType != null)
       fctPredefType = PredefinedType.get(ctx.fctType.getText());
 
     ((FunctionSymbol) fctSym).setType(fctPredefType.type());
-
+    currentScope.define(fctSym);
     pushScope((Scope) fctSym);
-
     super.enterFctDecl(ctx);
+  }
+
+  @Override
+  public void enterCompute(ComputeContext ctx) {
+    this.
+    PredefinedType cond = this.getTypeOfExprD(ctx.fct);
+    if(cond == null || !cond.equals(PredefinedType.VOID ))
+      throw new NotVoidCondition(ctx.getText());
+
+    super.enterCompute(ctx);
   }
 
   @Override
