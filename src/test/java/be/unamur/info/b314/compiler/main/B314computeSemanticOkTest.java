@@ -40,13 +40,13 @@ public class B314computeSemanticOkTest {
     }
 
     @Test
-    public void testcompute_many_compute_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/compute/ok/many_compute.b314", testFolder.newFile(), true, "compute: many_compute");
+    public void testcompute_function_with_one_compute_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/compute/ok/function_with_one_compute.b314", testFolder.newFile(), true, "compute: function_with_one_compute");
     }
 
     @Test
-    public void testcompute_function_with_one_compute_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/compute/ok/function_with_one_compute.b314", testFolder.newFile(), true, "compute: function_with_one_compute");
+    public void testcompute_many_compute_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/compute/ok/many_compute.b314", testFolder.newFile(), true, "compute: many_compute");
     }
 
 }
