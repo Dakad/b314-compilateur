@@ -241,26 +241,9 @@ public class SymTableFiller extends B314BaseListener {
       if(exprDType == null || !exprDType.equals(PredefinedType.SQUARE_ITEM))
         throw new NotMatchingType(ctx.toString());
     } else {
-      String varSymName;
-      Symbol varSym;
 
-      boolean isScalarVar = exprG instanceof VarContext;
-      if(isScalarVar) {
-        varSymName = ((VarContext)exprG).name.getText();
-      }
-      else {
-        varSymName = ((ArrayEltContext)exprG).name.getText();
-      }
-
-      // Check if the exprG var or array is inside the symtab
-      varSym = currentScope.resolve(varSymName);
-
-      if(varSym == null)
-        throw new UndeclaredVariable(varSymName);
-
-      // Check if the variable is really defined as variable
-      if(!(varSym instanceof VariableSymbol))
-        throw new CannotUseFunctionAsVariable(ctx.getText());
+      // Retrieve the variable from the exprGContext
+      Symbol varSym = getVarFromSymTab(exprG);
 
       // Check for it type's matching
 
@@ -268,7 +251,7 @@ public class SymTableFiller extends B314BaseListener {
         throw new NotReturnVoidFucntion(ctx.getText());
       }
 
-      if(isScalarVar) {
+      if(exprG instanceof VarContext) {
         // Check if both expr's (var to exprD) type matches
         if(!((VariableSymbol)varSym).getType().equals(exprDType.type()))
           throw new NotMatchingType(ctx.toString());
@@ -282,6 +265,30 @@ public class SymTableFiller extends B314BaseListener {
     super.enterSetTo(ctx);
   }
 
+
+  private Symbol getVarFromSymTab(ExprGContext exprG) {
+    boolean isScalarVar = exprG instanceof VarContext;
+    String varSymName;
+    if(isScalarVar) {
+      varSymName = ((VarContext)exprG).name.getText();
+    } else {
+      varSymName = ((ArrayEltContext)exprG).name.getText();
+    }
+    return getVarFromSymTab(varSymName);
+  }
+
+  private Symbol getVarFromSymTab(String varName) {
+    Symbol varSym = currentScope.resolve(varName);
+
+    if(varSym == null)
+      throw new UndeclaredVariable(varName);
+
+    // Check if the variable is really defined as variable
+    if(!(varSym instanceof VariableSymbol))
+      throw new CannotUseFunctionAsVariable(varName);
+
+    return varSym;
+  }
 
   /**
    * @return The corresponding the {@see PredefinedType} for this expression <br>
@@ -361,6 +368,7 @@ public class SymTableFiller extends B314BaseListener {
     super.enterIfThenElse(ctx);
   }
 
+
   @Override
   public void enterWhile(WhileContext ctx) {
     PredefinedType condType = this.getTypeOfExprD(ctx.condition);
@@ -422,11 +430,21 @@ public class SymTableFiller extends B314BaseListener {
   public void enterClauseWhen(ClauseWhenContext ctx) {
     PredefinedType condType = this.getTypeOfExprD(ctx.condition);
 
-    if(condType == null || !condType.equals(PredefinedType.BOOLEAN))
+    if(condType == null)
+        throw new NotBooleanCondition(ctx.getText());
+
+    if(condType.equals(PredefinedType.VARIABLE)) {
+      VarContext varCtx = (VarContext) ((ExprDGContext)ctx.condition).children.get(0);
+      Symbol varSym = getVarFromSymTab(varCtx.name.getText());
+      condType = PredefinedType.get(((VariableSymbol) varSym).getType());
+    }
+
+    if(!condType.equals(PredefinedType.BOOLEAN))
       throw new NotBooleanCondition(ctx.getText());
 
     super.enterClauseWhen(ctx);
   }
+
 
   @Override
   public int hashCode() {
