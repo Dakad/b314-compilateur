@@ -121,7 +121,7 @@ public class SymTableFiller extends B314BaseListener {
     VariableSymbol var = null;
 
     try {
-      // ? Am i inside a function ?
+      // ? Am I inside a function ?
       if(currentScope instanceof FunctionSymbol) {
         if(currentScope.getName().equals(name)) // Param name == Function name ?
           throw  new AlreadyDeclaredAsFunction(name);
@@ -145,7 +145,6 @@ public class SymTableFiller extends B314BaseListener {
       return;
     }
   }
-
 
   /**
    * @effects Define the type of an SymbolVariable already inserted in the symtable.
@@ -226,9 +225,10 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @effects Check the type of the instructions, if the types of the Expr named <i>var</i> and <i>value</i> are
+   * @effects Check the types of the instruction, if the types of the Expr named <i>var</i> and <i>value</i> are
    *          compatible.
    * @throws NotMatchingType if the types of both expr in instruction are not compatible.
+   * @throws NotReturnVoidFucntion if try to set a void function.
    */
   @Override
   public void enterSetTo(SetToContext ctx) {
@@ -265,11 +265,13 @@ public class SymTableFiller extends B314BaseListener {
     super.enterSetTo(ctx);
   }
 
-
+  /**
+   * @effects Retrieve the name from the exprG and use it to fetch the Symbol.s
+   * @see SymTableFiller#getVarFromSymTab(String)
+   */
   private Symbol getVarFromSymTab(ExprGContext exprG) {
-    boolean isScalarVar = exprG instanceof VarContext;
     String varSymName;
-    if(isScalarVar) {
+    if(exprG instanceof VarContext) { // ? is var Scalar?
       varSymName = ((VarContext)exprG).name.getText();
     } else {
       varSymName = ((ArrayEltContext)exprG).name.getText();
@@ -277,9 +279,14 @@ public class SymTableFiller extends B314BaseListener {
     return getVarFromSymTab(varSymName);
   }
 
+  /**
+   * @effects Fetch the corresponding Symbol with the provided name from the Symbol Table.
+   * @returns the corresponding Symbol
+   * @throws UndeclaredVariable if the retrieved name is not in the Symbol Table
+   * @throws CannotUseFunctionAsVariable if the fetched symbol is not a variable.
+   */
   private Symbol getVarFromSymTab(String varName) {
     Symbol varSym = currentScope.resolve(varName);
-
     if(varSym == null)
       throw new UndeclaredVariable(varName);
 
@@ -306,7 +313,6 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @requires expr to be not null
    * @return The corresponding {@see PredefinedType} for this expression <br>
    *          otherwise <b>null</b>.
    */
@@ -339,7 +345,6 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @requires exprFct to be not null.
    * @effects Check the existence of the function and the matching of its parameters.
    * @return the corresponding {@see PredefinedType} of the expression function
    */
@@ -367,7 +372,6 @@ public class SymTableFiller extends B314BaseListener {
 
     super.enterIfThenElse(ctx);
   }
-
 
   @Override
   public void enterWhile(WhileContext ctx) {
@@ -426,10 +430,15 @@ public class SymTableFiller extends B314BaseListener {
     popScope();
   }
 
+  /**
+   * @effects Check if the condition statement is a boolean type.
+   * @throws NotBooleanCondition if the condition statement is not a boolean type.
+   * @throws UndeclaredVariable if the condition statement use an undeclared variable.
+   * @throws CannotUseFunctionAsVariable if the condition statement tries to use an function as a variable.
+   */
   @Override
   public void enterClauseWhen(ClauseWhenContext ctx) {
     PredefinedType condType = this.getTypeOfExprD(ctx.condition);
-
     if(condType == null)
         throw new NotBooleanCondition(ctx.getText());
 
