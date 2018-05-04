@@ -9,30 +9,30 @@ declare and retain
   fct2 as function(x as integer, y as boolean):integer
     do
       skip
-      return i2;
+      return i2
     done
 
   fct3 as function():boolean
     do
       skip
-      return b1;
+      return b1
     done
 
   fct4 as function():square
     do
       skip
-      return s1;
+      return s1
     done
 
   fct5 as function(x as integer, y as boolean, z as square):integer
     do
       skip
-      return i1;
+      return i1
     done
 
   when your turn
 
-    when true and b1 or v1[0, i1 + 2 * 5] do
+    when true and b1 or (i1 + 2 * 5) = 7 do
       skip
     done
 
@@ -40,7 +40,7 @@ declare and retain
       skip
     done
 
-    when not graal is north and i2 > 5 and v2[4] < 42 or s1 = dirt do
+    when not graal is north and i2 > 5 and i2 < 42 or s1 = dirt do
       skip
     done
 

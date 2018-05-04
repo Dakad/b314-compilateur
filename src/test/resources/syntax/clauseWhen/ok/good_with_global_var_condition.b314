@@ -7,7 +7,7 @@ declare and retain
     fct1 as function():boolean
     	do
     		set fct1 to true
-    		return fct1;
+    		return b1
     	done
 
 when your turn
