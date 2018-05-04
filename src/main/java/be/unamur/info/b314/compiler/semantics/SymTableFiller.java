@@ -457,11 +457,6 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
-  protected Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
-
-  @Override
   public String toString() {
     return super.toString();
   }
