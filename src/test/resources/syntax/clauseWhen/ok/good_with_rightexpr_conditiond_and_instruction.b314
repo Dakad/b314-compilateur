@@ -8,34 +8,34 @@ declare and retain
     s1 as square;
     s2 as square;
 
-    fct1 as function():square
+    fct1 as function():void
     	do
     		skip
-    		return fct1;
+    		return void
     	done
 
     fct2 as function(x as integer, y as boolean):integer
     	do
     		skip
-    		return fct2;
+    		return i1
     	done
 
     fct3 as function():boolean
     	do
     		skip
-    		return fct3;
+    		return b1
     	done
 
     fct4 as function():square
     	do
     		skip
-    		return fct4 ;
+    		return s1
     	done
 
     fct5 as function(x as integer, y as boolean, z as square):integer
     	do
     		skip
-    		return fct5;
+    		return i2
     	done
 
 when your turn
@@ -58,8 +58,8 @@ when your turn
 
 	when not graal is north and i2 > 5 and v2[4] < 42 or s1 = dirt do
     	compute fct1()
-    	set s1 to fct1()
-    	if fct5(i1 + 2, s2 = ammo, ennemi) > 2 then
+    	set s1 to fct4()
+    	if fct5(i1 + 2, s2 = ammo, latitude) > 2 then
     		skip
     	done
     	while fct3() do

@@ -10,25 +10,25 @@ declare and retain
     fct2 as function(x as integer, y as boolean):integer
     	do
     		skip
-    		return fct2;
+    		return i1
     	done
 
     fct3 as function():boolean
     	do
     		skip
-    		return fct3;
+    		return b1
     	done
 
     fct4 as function():square
     	do
     		skip
-    		return fct4;
+    		return s1
     	done
 
     fct5 as function(x as integer, y as boolean, z as square):integer
     	do
     		skip
-    		return fct5;
+    		return i2
     	done
 
 when your turn
@@ -37,7 +37,7 @@ when your turn
 		skip
 	done
 
-	when false do
+	when fct5(1, false) = i1 do
 		skip
 	done
 
