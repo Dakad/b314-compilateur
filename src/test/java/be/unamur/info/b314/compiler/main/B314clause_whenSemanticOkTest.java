@@ -50,6 +50,26 @@ public class B314clause_whenSemanticOkTest {
     }
 
     @Test
+    public void testclause_when_good_with_fct_call_condition_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/clause_when/ok/good_with_fct_call_condition.b314", testFolder.newFile(), true, "clause_when: good_with_fct_call_condition");
+    }
+
+    @Test
+    public void testclause_when_good_with_fct_call_condition_skip_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/clause_when/ok/good_with_fct_call_condition_skip.b314", testFolder.newFile(), true, "clause_when: good_with_fct_call_condition_skip");
+    }
+
+    @Test
+    public void testclause_when_good_with_global_var_condition_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/clause_when/ok/good_with_global_var_condition.b314", testFolder.newFile(), true, "clause_when: good_with_global_var_condition");
+    }
+
+    @Test
+    public void testclause_when_good_with_rightexpr_conditiond_and_instruction_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/clause_when/ok/good_with_rightexpr_conditiond_and_instruction.b314", testFolder.newFile(), true, "clause_when: good_with_rightexpr_conditiond_and_instruction");
+    }
+
+    @Test
     public void testclause_when_good_with_rightexpr_conditions_skip_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/semantics/clause_when/ok/good_with_rightexpr_conditions_skip.b314", testFolder.newFile(), true, "clause_when: good_with_rightexpr_conditions_skip");
     }
