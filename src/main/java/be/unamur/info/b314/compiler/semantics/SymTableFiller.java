@@ -243,7 +243,7 @@ public class SymTableFiller extends B314BaseListener {
     } else {
 
       // Retrieve the variable from the exprGContext
-      Symbol varSym = getVarFromSymTab(exprG);
+      Symbol varSym = getVarFromSymTable(exprG);
 
       // Check for it type's matching
 
@@ -267,16 +267,16 @@ public class SymTableFiller extends B314BaseListener {
 
   /**
    * @effects Retrieve the name from the exprG and use it to fetch the Symbol.s
-   * @see SymTableFiller#getVarFromSymTab(String)
+   * @see SymTableFiller#getVarFromSymTable(String)
    */
-  private Symbol getVarFromSymTab(ExprGContext exprG) {
+  private Symbol getVarFromSymTable(ExprGContext exprG) {
     String varSymName;
     if(exprG instanceof VarContext) { // ? is var Scalar?
       varSymName = ((VarContext)exprG).name.getText();
     } else {
       varSymName = ((ArrayEltContext)exprG).name.getText();
     }
-    return getVarFromSymTab(varSymName);
+    return getVarFromSymTable(varSymName);
   }
 
   /**
@@ -285,7 +285,7 @@ public class SymTableFiller extends B314BaseListener {
    * @throws UndeclaredVariable if the retrieved name is not in the Symbol Table
    * @throws CannotUseFunctionAsVariable if the fetched symbol is not a variable.
    */
-  private Symbol getVarFromSymTab(String varName) {
+  private Symbol getVarFromSymTable(String varName) {
     Symbol varSym = currentScope.resolve(varName);
     if(varSym == null)
       throw new UndeclaredVariable(varName);
@@ -444,7 +444,7 @@ public class SymTableFiller extends B314BaseListener {
 
     if(condType.equals(PredefinedType.VARIABLE)) {
       VarContext varCtx = (VarContext) ((ExprDGContext)ctx.condition).children.get(0);
-      Symbol varSym = getVarFromSymTab(varCtx.name.getText());
+      Symbol varSym = getVarFromSymTable(varCtx.name.getText());
       condType = PredefinedType.get(((VariableSymbol) varSym).getType());
     }
 
