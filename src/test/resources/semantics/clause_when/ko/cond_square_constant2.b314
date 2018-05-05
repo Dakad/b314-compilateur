@@ -15,7 +15,7 @@ declare and retain
       skip
     done
 
-    when ennemi is north do
+    when ennemi do
       skip
     done
 

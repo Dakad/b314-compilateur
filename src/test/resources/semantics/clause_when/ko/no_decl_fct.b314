@@ -4,14 +4,19 @@
     i as integer;
 
   when your turn
-    when i do
+    when j() do
     skip
-    set i to i+1
   done
 
+
+
   by default do
-    if i = 2 then
+    if i = 0 then
       skip
-      set i to i+1
+    else
+      if i = 0 or true then
+        skip
+      done
     done
+
   done

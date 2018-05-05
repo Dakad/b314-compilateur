@@ -1,0 +1,28 @@
+/* Comments are between delimiters */
+declare and retain
+  /* Global declarations */
+  i as integer;
+
+
+  j as function (t as boolean) : boolean
+  do
+    set t to true
+    return t
+  done
+
+  when your turn
+    when j do
+    skip
+  done
+
+
+  by default do
+    if i = 0 then
+      skip
+    else
+      if i = 0 or true then
+        skip
+      done
+    done
+
+  done
