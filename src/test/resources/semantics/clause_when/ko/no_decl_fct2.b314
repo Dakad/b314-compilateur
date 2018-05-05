@@ -1,12 +1,17 @@
   /* Comments are between delimiters */
-  declare and retain
-    /* Global declarations */
-    i as integer;
+declare and retain
+  /* Global declarations */
+  i as integer;
+
+  j as function (t as boolean) : boolean
+  do
+    set t to true
+    return t
+  done
 
   when your turn
-    when 12+53 do
+    when fun() do
     skip
-    set j to j+1
   done
 
 

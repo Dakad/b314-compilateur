@@ -1,0 +1,29 @@
+declare and retain
+	b1 as boolean;
+  i1 as integer;
+  s1 as square;
+
+  fct2 as function(x as integer, y as boolean):integer
+  do
+    skip
+    return i1
+  done
+
+  when your turn
+
+    when b1 = false  do
+      skip
+    done
+
+    when s1 do
+      skip
+    done
+
+    when false do
+      skip
+    done
+
+	by default do
+		skip
+	done
+
