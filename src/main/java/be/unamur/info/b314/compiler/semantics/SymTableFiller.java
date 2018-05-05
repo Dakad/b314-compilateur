@@ -20,6 +20,7 @@ import be.unamur.info.b314.compiler.B314Parser.ExprFctContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
 import be.unamur.info.b314.compiler.B314Parser.FctDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.IfThenElseContext;
+import be.unamur.info.b314.compiler.B314Parser.LocalVarDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
 import be.unamur.info.b314.compiler.B314Parser.SetToContext;
@@ -31,7 +32,7 @@ import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredAsFunctio
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredVariable;
 import be.unamur.info.b314.compiler.semantics.exception.CannotUseFunctionAsVariable;
-import be.unamur.info.b314.compiler.semantics.exception.DuplicateParameter;
+import be.unamur.info.b314.compiler.semantics.exception.DuplicateVariable;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
@@ -43,6 +44,7 @@ import java.util.Collections;
 import java.util.Map;
 import org.antlr.symtab.FunctionSymbol;
 import org.antlr.symtab.GlobalScope;
+import org.antlr.symtab.LocalScope;
 import org.antlr.symtab.ParameterSymbol;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
@@ -112,8 +114,8 @@ public class SymTableFiller extends B314BaseListener {
    *        with the same name.
    * @throws AlreadyDeclaredAsFunction if the current scope is a function <br>
    *         and the the parameter uses the same name as the function.
-   * @throws DuplicateParameter if the current scope is a function <br>
- *           and the parameter uses the same name as another.
+   * @throws DuplicateVariable if the current scope is a function <br>
+ *           and the variable/parameter uses the same name as another.
    */
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
@@ -123,12 +125,12 @@ public class SymTableFiller extends B314BaseListener {
     try {
       // ? Am I inside a function ?
       if(currentScope instanceof FunctionSymbol) {
-        if(currentScope.getName().equals(name)) // Param name == Function name ?
+        if(currentScope.getName().equals(name)) // (Local var | Param) name == Function name ?
           throw  new AlreadyDeclaredAsFunction(name);
 
         // Check for duplicate parameter
         if(currentScope.getSymbol(name) != null)
-          throw new DuplicateParameter(name);
+          throw new DuplicateVariable(name);
 
         var = new ParameterSymbol(name);
       } else {
@@ -454,6 +456,20 @@ public class SymTableFiller extends B314BaseListener {
     super.enterClauseWhen(ctx);
   }
 
+  @Override
+  public void enterLocalVarDecl(LocalVarDeclContext ctx) {
+    Scope localScope = new LocalScope(currentScope);
+
+    if(currentScope instanceof FunctionSymbol)
+      currentScope.nest(localScope);
+
+    super.enterLocalVarDecl(ctx);
+  }
+
+  @Override
+  public void exitLocalVarDecl(LocalVarDeclContext ctx) {
+    popScope();
+  }
 
   @Override
   public int hashCode() {
