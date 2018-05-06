@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 public class ExceptionHandler {
 
   private static final String ERR_MSG_ALREADY_DECLARED_FUNCTION = "Cannot use the function name as identifier for a parameter : ";
+  private static final String ERR_MSG_DUPLICATE_PARAMETER = "A parameter has been already defined for this function with the identifier : ";
 
   /**
    *
@@ -44,6 +45,29 @@ public class ExceptionHandler {
   public static void throwAlreadyDeclaredAsFunction(ParserRuleContext ctx, String name) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_FUNCTION)+name;
     throw  new AlreadyDeclaredAsFunction(formatMsg);
+  }
+
+
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws DuplicateParameter with the pretty msg.
+   */
+  public static void throwDuplicateParameter(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_PARAMETER);
+    throw  new DuplicateParameter(formatMsg);
+  }
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   *@requires name - name function declared
+   * @throws DuplicateParameter with the pretty msg.
+   */
+  public static void throwDuplicateParameter(ParserRuleContext ctx, String name) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_PARAMETER)+name;
+    throw  new DuplicateParameter(formatMsg);
   }
 
 }
