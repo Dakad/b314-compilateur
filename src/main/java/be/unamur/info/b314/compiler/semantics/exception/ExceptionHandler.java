@@ -14,6 +14,7 @@ public class ExceptionHandler {
   private static final String ERR_MSG_ALREADY_DECLARED_VARIABLE = "A global variable has already been defined with the name : ";
   private static final String ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY = "The array's size is null or not positive - Size : ";
   private static final String ERR_MSG_NOT_MATCHING_TYPE = "The type of the instruction is incorrect - Instr : ";
+  private static final String ERR_MSG_UNDECLARED_VARIABLE = "Undeclared identifier : ";
 
   /**
    *
@@ -142,6 +143,29 @@ public class ExceptionHandler {
   public static void throwNotMatchingType(ParserRuleContext ctx, String name) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_MATCHING_TYPE)+name;
     throw  new NotMatchingType(formatMsg);
+  }
+
+
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws UndeclaredVariable with the pretty msg.
+   */
+  public static void throwUndeclaredVariable(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_UNDECLARED_VARIABLE);
+    throw  new UndeclaredVariable(formatMsg);
+  }
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   *@requires id - id du variable
+   * @throws UndeclaredVariable with the pretty msg.
+   */
+  public static void throwUndeclaredVariable(ParserRuleContext ctx, String id) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_UNDECLARED_VARIABLE)+id;
+    throw  new UndeclaredVariable(formatMsg);
   }
 
 }
