@@ -16,7 +16,7 @@ declare and retain
         set i1 to true
         set b1 to 34
         set b2 to i1 < 42 and b1
-      return b1
+      return false
   done
 
 when your turn
