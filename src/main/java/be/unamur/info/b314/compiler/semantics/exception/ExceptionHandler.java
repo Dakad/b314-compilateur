@@ -13,6 +13,7 @@ public class ExceptionHandler {
   private static final String ERR_MSG_DUPLICATE_PARAMETER = "A parameter has been already defined for this function with the identifier : ";
   private static final String ERR_MSG_ALREADY_DECLARED_VARIABLE = "A global variable has already been defined with the name : ";
   private static final String ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY = "The array's size is null or not positive - Size : ";
+  private static final String ERR_MSG_NOT_MATCHING_TYPE = "The type of the instruction is incorrect - Instr : ";
 
   /**
    *
@@ -66,7 +67,7 @@ public class ExceptionHandler {
   /**
    *
    *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - name function declared
+   *@requires name - parameter
    * @throws DuplicateParameter with the pretty msg.
    */
   public static void throwDuplicateParameter(ParserRuleContext ctx, String name) {
@@ -89,7 +90,7 @@ public class ExceptionHandler {
   /**
    *
    *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - name function declared
+   *@requires name - name variable
    * @throws AlreadyDeclaredVariable with the pretty msg.
    */
   public static void throwAlreadyDeclaredVariable(ParserRuleContext ctx, String name) {
@@ -112,12 +113,35 @@ public class ExceptionHandler {
   /**
    *
    *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - name function declared
+   *@requires name - name array
    * @throws NotPositiveSizeForArray with the pretty msg.
    */
   public static void throwNotPositiveSizeForArray(ParserRuleContext ctx, String name) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY)+name;
     throw  new NotPositiveSizeForArray(formatMsg);
+  }
+
+
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws NotMatchingType with the pretty msg.
+   */
+  public static void throwNotMatchingType(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_MATCHING_TYPE);
+    throw  new NotMatchingType(formatMsg);
+  }
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   *@requires name - name type
+   * @throws NotMatchingType with the pretty msg.
+   */
+  public static void throwNotMatchingType(ParserRuleContext ctx, String name) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_MATCHING_TYPE)+name;
+    throw  new NotMatchingType(formatMsg);
   }
 
 }
