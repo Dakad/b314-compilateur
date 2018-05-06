@@ -15,6 +15,7 @@ public class ExceptionHandler {
   private static final String ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY = "The array's size is null or not positive - Size : ";
   private static final String ERR_MSG_NOT_MATCHING_TYPE = "The type of the instruction is incorrect - Instr : ";
   private static final String ERR_MSG_UNDECLARED_VARIABLE = "Undeclared identifier : ";
+  private static final String ERR_MSG_NOT_BOOLEAN_CONDITION = "The type of the condition statement is not boolean - Instr : ";
 
   /**
    *
@@ -166,6 +167,29 @@ public class ExceptionHandler {
   public static void throwUndeclaredVariable(ParserRuleContext ctx, String id) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_UNDECLARED_VARIABLE)+id;
     throw  new UndeclaredVariable(formatMsg);
+  }
+
+
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws NotBooleanCondition with the pretty msg.
+   */
+  public static void throwNotBooleanCondition(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_BOOLEAN_CONDITION);
+    throw  new NotBooleanCondition(formatMsg);
+  }
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   *@requires instr - instruction
+   * @throws NotBooleanCondition with the pretty msg.
+   */
+  public static void throwNotBooleanCondition(ParserRuleContext ctx, String instr) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_BOOLEAN_CONDITION)+instr;
+    throw  new NotBooleanCondition(formatMsg);
   }
 
 }
