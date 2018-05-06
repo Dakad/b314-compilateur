@@ -12,6 +12,7 @@ public class ExceptionHandler {
   private static final String ERR_MSG_ALREADY_DECLARED_FUNCTION = "Cannot use the function name as identifier for a parameter : ";
   private static final String ERR_MSG_DUPLICATE_PARAMETER = "A parameter has been already defined for this function with the identifier : ";
   private static final String ERR_MSG_ALREADY_DECLARED_VARIABLE = "A global variable has already been defined with the name : ";
+  private static final String ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY = "The array's size is null or not positive - Size : ";
 
   /**
    *
@@ -26,6 +27,8 @@ public class ExceptionHandler {
     String msgError = "ERROR LINE : "+lnNb+". "+msg;
     return msgError;
   }
+
+
 
   /**
    *
@@ -92,6 +95,29 @@ public class ExceptionHandler {
   public static void throwAlreadyDeclaredVariable(ParserRuleContext ctx, String name) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_VARIABLE)+name;
     throw  new AlreadyDeclaredVariable(formatMsg);
+  }
+
+
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws NotPositiveSizeForArray with the pretty msg.
+   */
+  public static void throwNotPositiveSizeForArray(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY);
+    throw  new NotPositiveSizeForArray(formatMsg);
+  }
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   *@requires name - name function declared
+   * @throws NotPositiveSizeForArray with the pretty msg.
+   */
+  public static void throwNotPositiveSizeForArray(ParserRuleContext ctx, String name) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY)+name;
+    throw  new NotPositiveSizeForArray(formatMsg);
   }
 
 }
