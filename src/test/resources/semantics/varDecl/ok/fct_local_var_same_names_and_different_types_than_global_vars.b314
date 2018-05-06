@@ -48,7 +48,7 @@ declare and retain
     		loc4 as integer[5];
     	do
     	    skip
-    	    return s3
+    	    return s2
     	done
 
     fct5 as function(x as integer, y as boolean, z as square):integer
