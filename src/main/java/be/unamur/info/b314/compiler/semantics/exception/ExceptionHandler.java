@@ -9,6 +9,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
  */
 public class ExceptionHandler {
 
+  private static final String ERR_MSG_ALREADY_DECLARED_FUNCTION = "Cannot use the function name as identifier for a parameter : ";
+
   /**
    *
    * @requires ctx - Must be defined
@@ -21,6 +23,27 @@ public class ExceptionHandler {
     int lnNb = ctx.start.getLine();
     String msgError = "ERROR LINE : "+lnNb+". "+msg;
     return msgError;
+  }
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws AlreadyDeclaredAsFunction with the pretty msg.
+   */
+  public static void throwAlreadyDeclaredAsFunction(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_FUNCTION);
+    throw  new AlreadyDeclaredAsFunction(formatMsg);
+  }
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   *@requires name - name function declared
+   * @throws AlreadyDeclaredAsFunction with the pretty msg.
+   */
+  public static void throwAlreadyDeclaredAsFunction(ParserRuleContext ctx, String name) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_FUNCTION)+name;
+    throw  new AlreadyDeclaredAsFunction(formatMsg);
   }
 
 }
