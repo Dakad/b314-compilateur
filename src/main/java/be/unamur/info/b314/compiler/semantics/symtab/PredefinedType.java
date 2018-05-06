@@ -1,9 +1,10 @@
-package be.unamur.info.b314.compiler.semantics;
+package be.unamur.info.b314.compiler.semantics.symtab;
 
-import org.antlr.symtab.PrimitiveType;
-import org.antlr.symtab.Type;
 
-public enum PredefinedType implements Type {
+/**
+ * @overview
+ */
+public enum PredefinedType implements org.antlr.symtab.Type {
 
   BOOLEAN,
   INTEGER,
@@ -14,22 +15,6 @@ public enum PredefinedType implements Type {
   ARRAY,
   VOID;
 
-  private final PrimitiveType is;
-
-  PredefinedType() {
-    this(null);
-  }
-
-  PredefinedType(String type) {
-    if (type == null)
-      type = this.name();
-
-    this.is = new PrimitiveType(type.toLowerCase());
-  }
-
-  PrimitiveType type() {
-    return is;
-  }
 
   @Override
   public String getName() {
@@ -46,18 +31,18 @@ public enum PredefinedType implements Type {
    * @effects Get the mathing {@link PredefinedType} for the provided type.
    * @return the {@link PredefinedType}.
    */
-  public static PredefinedType get(Type type) {
+  public static PredefinedType get(org.antlr.symtab.Type type) {
     return get(type.getName());
   }
 
   /**
-   * @effects Get the mathing {@link PredefinedType} for the provided type.
+   * @effects Get the matching {@link PredefinedType} for the provided type.
    * @return the {@link PredefinedType} <br>
    *         or {@link PredefinedType#VOID}
    */
-  public static PredefinedType get(String text) {
+  public static PredefinedType get(String type) {
     try {
-      return PredefinedType.valueOf(text.toUpperCase());
+      return PredefinedType.valueOf(type.toUpperCase());
     } catch (IllegalArgumentException | NullPointerException e) {
       return PredefinedType.VOID;
     }
