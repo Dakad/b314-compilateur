@@ -114,7 +114,7 @@ fctDecl : name=ID AS FUNCTION
               COLON (fctType=scalar | VOID)
           localVarDecl?
           DO (instr)+
-          RETURN returnVal=ID SEMI
+          RETURN (returnVal=exprD | VOID)
           DONE
         ;
 
@@ -168,7 +168,7 @@ localVarDecl : DECLARE LOCAL (localVars+=varDecl SEMI)+;
 
 /* Clause When */
 
-clauseWhen : WHEN exprD
+clauseWhen : WHEN condition=exprD
               localVarDecl?
               DO instr+ DONE
            ;

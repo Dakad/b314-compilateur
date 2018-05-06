@@ -1,0 +1,23 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer;
+
+  when your turn
+    when 12+53 do
+    skip
+    set j to j+1
+  done
+
+
+
+  by default do
+    if i = 0 then
+      skip
+    else
+      if i = 0 or true then
+        skip
+      done
+    done
+
+  done
