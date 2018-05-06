@@ -2,7 +2,7 @@
 
 declare and retain
     moyvar as integer;
-    v2 as square [0];
+    v2 as square [2];
     v3 as boolean;
 
     when your turn
