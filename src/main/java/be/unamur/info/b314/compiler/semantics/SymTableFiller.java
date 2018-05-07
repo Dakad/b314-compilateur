@@ -294,7 +294,7 @@ public class SymTableFiller extends B314BaseListener {
    * @throws CannotUseFunctionAsVariable if the fetched symbol is not a variable.
    */
   private Symbol getVarFromSymTable(String varName) {
-    VariableSymbol varSym;
+    Symbol varSym;
 
     // Check in localScope, if exist
     if (!( currentScope instanceof GlobalScope)) {
@@ -306,7 +306,7 @@ public class SymTableFiller extends B314BaseListener {
       }
     }
 
-    varSym = (VariableSymbol) currentScope.resolve(varName);
+    varSym = currentScope.resolve(varName);
     if(varSym == null)
       throw new UndeclaredVariable(varName);
 
@@ -387,7 +387,7 @@ public class SymTableFiller extends B314BaseListener {
 
     // Check if the nb of parameters matches
     if(fctSym.getNumberOfParameters() != exprFct.param.size())
-      throw new UndeclaredFunction(exprFct.toString());
+      throw new UndeclaredFunction(exprFct.getText());
 
     return ((B314FunctionType)fctSym.getType()).getReturnType();
   }
@@ -409,10 +409,11 @@ public class SymTableFiller extends B314BaseListener {
   private void checkConditionStatement(ExprDContext condition) {
     PredefinedType condType = this.getTypeOfExprD(condition);
 
+    if(condType == null)
+      throw new NotBooleanCondition(condition.parent.getText());
+
     switch (condType) {
       default:
-        if(condType == null)
-          throw new NotBooleanCondition(condition.parent.getText());
         break;
       case VARIABLE:
         VarContext varCtx = (VarContext) ((ExprDGContext)condition).children.get(0);
@@ -446,7 +447,7 @@ public class SymTableFiller extends B314BaseListener {
 
     ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)ctx.fct).children.get(0);
     FunctionSymbol fctSym = getFctFromSymTable(fctCtx.name.getText());
-    condType = (PredefinedType) fctSym.getType();
+    condType = ((B314FunctionType)fctSym.getType()).getReturnType();
 
     if (!condType.equals(PredefinedType.VOID))
       throw new NotReturnVoidFucntion(ctx.getText());
@@ -502,7 +503,9 @@ public class SymTableFiller extends B314BaseListener {
     PredefinedType fctReturnType = ((B314FunctionType) fctSym.getType()).getReturnType();
 
     // Get the return value type
-    PredefinedType returnValType = getTypeOfExprD(ctx.returnVal);
+    PredefinedType returnValType = PredefinedType.VOID;
+    if(ctx.returnVal != null)
+      returnValType = getTypeOfExprD(ctx.returnVal);
 
     switch (returnValType) {
       case VARIABLE:
