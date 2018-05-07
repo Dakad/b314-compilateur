@@ -57,7 +57,6 @@ import org.antlr.symtab.ParameterSymbol;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
-import org.antlr.symtab.SymbolWithScope;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
 import org.antlr.v4.runtime.RuleContext;
@@ -546,6 +545,11 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
+  public void exitClauseWhen(ClauseWhenContext ctx) {
+    popScope();
+  }
+
+  @Override
   public void enterLocalVarDecl(LocalVarDeclContext ctx) {
     Scope localScope = new LocalScope(currentScope);
     currentScope.nest(localScope);
@@ -555,10 +559,6 @@ public class SymTableFiller extends B314BaseListener {
 
   @Override
   public void exitLocalVarDecl(LocalVarDeclContext ctx) {
-    popScope();
-  }
-  @Override
-  public void exitClauseWhen(ClauseWhenContext ctx) {
     popScope();
   }
 
