@@ -1,0 +1,11 @@
+/* My commentaire*/
+
+declare and retain
+    ab as boolean;
+    ab as boolean [2];
+    b3 as boolean [3,3];
+
+    when your turn
+        by default do
+            skip
+        done

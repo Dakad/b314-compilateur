@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredAsFunction;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredFunction;
-import be.unamur.info.b314.compiler.semantics.exception.DuplicateParameter;
+import be.unamur.info.b314.compiler.semantics.exception.DuplicateVariable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -43,12 +43,12 @@ public class B314fctDeclSemanticKoTest {
     CompilerTestHelper.getSymTable("/semantics/fctDecl/ko/duplicate_name.b314");
   }
 
-  @Test(expected = DuplicateParameter.class)
+  @Test(expected = DuplicateVariable.class)
   public void testfct_decl_duplicate_param_ko() {
     CompilerTestHelper.getSymTable("/semantics/fctDecl/ko/duplicate_param.b314");
   }
 
-  @Test(expected = DuplicateParameter.class)
+  @Test(expected = DuplicateVariable.class)
   public void testfct_decl_duplicate_param2_ko() {
     CompilerTestHelper.getSymTable("/semantics/fctDecl/ko/duplicate_param2.b314");
   }
