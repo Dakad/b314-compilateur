@@ -59,7 +59,7 @@ declare and retain
       loc4 as integer[5];
       v1 as integer[42];
     do
-      set v1[0] to 42
+      set v2[0] to 42
       return i2
     done
 
