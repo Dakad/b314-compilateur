@@ -8,7 +8,7 @@ declare and retain
     declare local t as boolean;
   do
     set t to true
-    return res
+    return t
   done
 
   by default do

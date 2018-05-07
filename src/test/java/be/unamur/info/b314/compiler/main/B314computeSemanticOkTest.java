@@ -29,10 +29,6 @@ public class B314computeSemanticOkTest {
     //
     // Serie compute OK
     //
-    @Test
-    public void testcompute_array_in_compute_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/compute/ok/array_in_compute.b314", testFolder.newFile(), true, "compute: array_in_compute");
-    }
 
     @Test
     public void testcompute_function_inside_compute_ok() throws Exception{
@@ -44,9 +40,5 @@ public class B314computeSemanticOkTest {
         CompilerTestHelper.launchCompilation("/semantics/compute/ok/function_with_one_compute.b314", testFolder.newFile(), true, "compute: function_with_one_compute");
     }
 
-    @Test
-    public void testcompute_many_compute_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/semantics/compute/ok/many_compute.b314", testFolder.newFile(), true, "compute: many_compute");
-    }
 
 }
