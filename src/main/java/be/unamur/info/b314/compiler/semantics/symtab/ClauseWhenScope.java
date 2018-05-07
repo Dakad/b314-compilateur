@@ -9,6 +9,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
  */
 public class ClauseWhenScope extends org.antlr.symtab.SymbolWithScope {
 
+  private static int ID = 1;
+
   private ParserRuleContext defNode;
 
   /**
@@ -16,7 +18,7 @@ public class ClauseWhenScope extends org.antlr.symtab.SymbolWithScope {
    * @effects Initialise the Scope.
    */
   public ClauseWhenScope(Scope enclosingScope) {
-    super("clause_when");
+    super("clause_when_"+(ID++));
     this.setEnclosingScope(enclosingScope);
   }
 
