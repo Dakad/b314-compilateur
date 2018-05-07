@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import be.unamur.info.b314.compiler.semantics.PredefinedType;
+import be.unamur.info.b314.compiler.semantics.symtab.PredefinedType;
 import be.unamur.info.b314.compiler.semantics.SymTableFiller;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
 import java.util.ArrayList;
