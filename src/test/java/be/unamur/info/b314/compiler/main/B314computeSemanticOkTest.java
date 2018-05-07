@@ -29,7 +29,6 @@ public class B314computeSemanticOkTest {
     //
     // Serie compute OK
     //
-
     @Test
     public void testcompute_function_inside_compute_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/semantics/compute/ok/function_inside_compute.b314", testFolder.newFile(), true, "compute: function_inside_compute");
@@ -39,6 +38,5 @@ public class B314computeSemanticOkTest {
     public void testcompute_function_with_one_compute_ok() throws Exception{
         CompilerTestHelper.launchCompilation("/semantics/compute/ok/function_with_one_compute.b314", testFolder.newFile(), true, "compute: function_with_one_compute");
     }
-
 
 }
