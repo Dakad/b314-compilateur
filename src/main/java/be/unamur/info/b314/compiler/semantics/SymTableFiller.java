@@ -44,6 +44,7 @@ import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredVariable;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
 import be.unamur.info.b314.compiler.semantics.symtab.B314FunctionType;
+import be.unamur.info.b314.compiler.semantics.symtab.ClauseWhenScope;
 import be.unamur.info.b314.compiler.semantics.symtab.PredefinedType;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,6 +57,7 @@ import org.antlr.symtab.ParameterSymbol;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
+import org.antlr.symtab.SymbolWithScope;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
 import org.antlr.v4.runtime.RuleContext;
@@ -534,8 +536,10 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterClauseWhen(ClauseWhenContext ctx) {
     checkConditionStatement(ctx.condition);
-
-    super.enterClauseWhen(ctx);
+    ClauseWhenScope clauseWhenScope = new ClauseWhenScope(symTable.GLOBALS);
+    clauseWhenScope.setDefNode(ctx);
+    currentScope.define(clauseWhenScope);
+    pushScope(clauseWhenScope);
   }
 
   @Override
@@ -548,6 +552,10 @@ public class SymTableFiller extends B314BaseListener {
 
   @Override
   public void exitLocalVarDecl(LocalVarDeclContext ctx) {
+    popScope();
+  }
+  @Override
+  public void exitClauseWhen(ClauseWhenContext ctx) {
     popScope();
   }
 
