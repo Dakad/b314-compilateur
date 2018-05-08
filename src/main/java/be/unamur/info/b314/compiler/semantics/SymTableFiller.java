@@ -1,7 +1,5 @@
 package be.unamur.info.b314.compiler.semantics;
 
-import static be.unamur.info.b314.compiler.semantics.exception.ExceptionHandler.throwAlreadyDeclaredAsFunction;
-
 import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
@@ -20,8 +18,11 @@ import be.unamur.info.b314.compiler.B314Parser.ExprDParContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprFctContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprGContext;
 import be.unamur.info.b314.compiler.B314Parser.FctDeclContext;
+import be.unamur.info.b314.compiler.B314Parser.FctReturnDeclContext;
+import be.unamur.info.b314.compiler.B314Parser.FctTypeDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.IfThenElseContext;
-import be.unamur.info.b314.compiler.B314Parser.RootContext;
+import be.unamur.info.b314.compiler.B314Parser.LocalVarDeclContext;
+import be.unamur.info.b314.compiler.B314Parser.ProgramContext;
 import be.unamur.info.b314.compiler.B314Parser.ScalarContext;
 import be.unamur.info.b314.compiler.B314Parser.SetToContext;
 import be.unamur.info.b314.compiler.B314Parser.TypeContext;
@@ -33,17 +34,26 @@ import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredVariable;
 import be.unamur.info.b314.compiler.semantics.exception.DuplicateParameter;
 import be.unamur.info.b314.compiler.semantics.exception.ExceptionHandler;
+import be.unamur.info.b314.compiler.semantics.exception.CannotUseFunctionAsVariable;
+import be.unamur.info.b314.compiler.semantics.exception.DuplicateVariable;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
+import be.unamur.info.b314.compiler.semantics.exception.NotMatchingReturnType;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
+import be.unamur.info.b314.compiler.semantics.exception.NotReturnVoidFucntion;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredVariable;
-import be.unamur.info.b314.compiler.semantics.exception.NotReturnVoidFucntion;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
+import be.unamur.info.b314.compiler.semantics.symtab.B314FunctionType;
+import be.unamur.info.b314.compiler.semantics.symtab.ClauseWhenScope;
+import be.unamur.info.b314.compiler.semantics.symtab.PredefinedType;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import org.antlr.symtab.FunctionSymbol;
 import org.antlr.symtab.GlobalScope;
+import org.antlr.symtab.LocalScope;
 import org.antlr.symtab.ParameterSymbol;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
@@ -97,13 +107,12 @@ public class SymTableFiller extends B314BaseListener {
     currentScope = currentScope.getEnclosingScope();
   }
 
-  @Override
-  public void enterRoot(RootContext ctx) {
-    pushScope(symTable.GLOBALS);
-  }
 
   @Override
-  public void exitRoot(RootContext ctx) {
+  public void enterProgram(ProgramContext ctx) { pushScope(symTable.GLOBALS); }
+
+  @Override
+  public void exitProgram(ProgramContext ctx) {
     popScope();
   }
 
@@ -114,40 +123,37 @@ public class SymTableFiller extends B314BaseListener {
    *        with the same name.
    * @throws AlreadyDeclaredAsFunction if the current scope is a function <br>
    *         and the the parameter uses the same name as the function.
-   * @throws DuplicateParameter if the current scope is a function <br>
- *           and the parameter uses the same name as another.
+   * @throws DuplicateVariable if the current scope is a function <br>
+   *         and the parameter uses the same name as another.
    */
   @Override
   public void enterVarDecl(VarDeclContext ctx) {
     String name = ctx.name.getText();
     VariableSymbol var = null;
 
-    try {
-      // ? Am i inside a function ?
+      // ? Am I inside a function ?
       if(currentScope instanceof FunctionSymbol) {
         if(currentScope.getName().equals(name)) // Param name == Function name ?
           ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
 
         // Check for duplicate parameter
         if(currentScope.getSymbol(name) != null)
-          throw new DuplicateParameter(name);
+          throw new DuplicateVariable(name);
 
         var = new ParameterSymbol(name);
       } else {
         if (currentScope instanceof GlobalScope)
           if(symTable.GLOBALS.getSymbol(name) != null)
             ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
+          if(currentScope.getSymbol(name) != null)
+            throw new AlreadyDeclaredVariable(ctx.name.getText());
 
         var = new VariableSymbol(name);
       }
 
+      var.setDefNode(ctx);
       currentScope.define(var);
-    } catch (IllegalArgumentException e) {
-      // throw IllegalArgumentException  if the symbol cannot be defined
-      return;
-    }
   }
-
 
   /**
    * @effects Define the type of an SymbolVariable already inserted in the symtable.
@@ -164,7 +170,7 @@ public class SymTableFiller extends B314BaseListener {
     VariableSymbol var =  (VariableSymbol) currentScope.getSymbol(varName);
 
     if (type instanceof ScalarContext) {
-      varType = PredefinedType.get(type.getText()).type();
+      varType = PredefinedType.get(type.getText());
       var.setType(varType);
     } else {
       ArrayContext typeArray = (ArrayContext) type;
@@ -185,7 +191,7 @@ public class SymTableFiller extends B314BaseListener {
       }
 
       // First, get the type of this array vaWr.
-      varType = PredefinedType.get(typeArray.scalar().getText()).type();
+      varType = PredefinedType.get(typeArray.scalar().getText());
 
       // Init the array
       ArrayType array = this.createArrayType(varType, sizeArray, secondSizeArray);
@@ -228,9 +234,10 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @effects Check the type of the instructions, if the types of the Expr named <i>var</i> and <i>value</i> are
+   * @effects Check the types of the instruction, if the types of the Expr named <i>var</i> and <i>value</i> are
    *          compatible.
    * @throws NotMatchingType if the types of both expr in instruction are not compatible.
+   * @throws NotReturnVoidFucntion if try to set a void function.
    */
   @Override
   public void enterSetTo(SetToContext ctx) {
@@ -243,44 +250,94 @@ public class SymTableFiller extends B314BaseListener {
       if(exprDType == null || !exprDType.equals(PredefinedType.SQUARE_ITEM))
         throw new NotMatchingType(ctx.toString());
     } else {
-      String varSymName;
-      VariableSymbol varSym;
 
-      boolean isScalarVar = exprG instanceof VarContext;
-      if(isScalarVar)
-        varSymName = ((VarContext)exprG).name.getText();
-      else
-        varSymName = ((ArrayEltContext)exprG).name.getText();
-
-      // Check if the exprG var or array is inside the symtab
-      varSym = (VariableSymbol) currentScope.resolve(varSymName);
-      if(varSym == null)
-        throw new UndeclaredVariable(varSymName);
+      // Retrieve the variable from the exprGContext
+      Symbol varSym = getVarFromSymTable(exprG);
 
       // Check for it type's matching
 
-      if(exprDType.equals(PredefinedType.VOID)) {
-        //TODO Check if the function type is VOID. Cannot be set
+      if(exprDType.equals(PredefinedType.FUNCTION)) {
+        exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
+        if(exprDType.equals(PredefinedType.VOID))
+          throw new NotReturnVoidFucntion(ctx.getText());
+
       }
 
-      if(isScalarVar) {
+      if(exprG instanceof VarContext) {
         // Check if both expr's (var to exprD) type matches
-        if(!varSym.getType().equals(exprDType.type()))
-          throw new NotMatchingType(ctx.toString());
+        if(!((VariableSymbol)varSym).getType().equals(exprDType))
+          throw new NotMatchingType(ctx.getText());
       } else {
         // Check if both expr's (arrayVar to exprD) type matches
-        if(!exprDType.equals(getArrayType(varSym)))
-          throw new NotMatchingType(ctx.toString());
+        if(!exprDType.equals(getArrayType((VariableSymbol)varSym)))
+          throw new NotMatchingType(ctx.getText());
       }
     }
 
     super.enterSetTo(ctx);
   }
 
+  /**
+   * @effects Retrieve the name from the exprG and use it to fetch the Symbol
+   * @link SymTableFiller#getVarFromSymTable(String)
+   */
+  private Symbol getVarFromSymTable(ExprGContext exprG) {
+    String varSymName;
+    if(exprG instanceof VarContext) { // ? is var Scalar?
+      varSymName = ((VarContext)exprG).name.getText();
+    } else {
+      varSymName = ((ArrayEltContext)exprG).name.getText();
+    }
+    return getVarFromSymTable(varSymName);
+  }
 
   /**
-   * @return The corresponding the {@see PredefinedType} for this expression <br>
-   *          otherwise <b>null</b>.
+   * @effects Fetch the corresponding Symbol with the provided name from the Symbol Table.
+   * @returns the corresponding Symbol
+   * @throws UndeclaredVariable if the provided name is not in the Symbol Table
+   * @throws CannotUseFunctionAsVariable if the fetched symbol is not a variable.
+   */
+  private Symbol getVarFromSymTable(String varName) {
+    Symbol varSym;
+
+    // Check in localScope, if exist
+    if (!( currentScope instanceof GlobalScope)) {
+      List<Scope> nestedSCopes = currentScope.getNestedScopes();
+      if(!nestedSCopes.isEmpty()) {
+        varSym = (VariableSymbol) nestedSCopes.get(0).getSymbol(varName);
+        if( varSym != null)
+          return varSym;
+      }
+    }
+
+    varSym = currentScope.resolve(varName);
+    if(varSym == null)
+      throw new UndeclaredVariable(varName);
+
+    // Check if the variable is really defined as variable
+    if(!(varSym instanceof VariableSymbol))
+      throw new CannotUseFunctionAsVariable(varName);
+
+    return varSym;
+  }
+
+  /**
+   * @effects Fetch the corresponding {@link FunctionSymbol} withthe provided name from the Symbol Table.
+   * @returns the corresponding {@link FunctionSymbol}
+   * @throws UndeclaredFunction if the provided name is not in the Symbol Table
+   */
+  private FunctionSymbol getFctFromSymTable(String fctName) {
+    FunctionSymbol fctSym = (FunctionSymbol) symTable.GLOBALS.getSymbol(fctName);
+    if(fctSym == null)
+      throw  new UndeclaredFunction(fctName);
+    return fctSym;
+  }
+
+  /**
+   * @return The corresponding the {@link PredefinedType} for this expression which can only be<br>
+   *          <b>{@link PredefinedType#SQUARE}</b>,
+   *          <b>{@link PredefinedType#ARRAY}</b>
+ *          or <b>{@link PredefinedType#VARIABLE}</b>.
    */
   private PredefinedType getTypeOfExprG(ExprGContext expr) {
     RuleContext ctx = expr.getRuleContext();
@@ -294,8 +351,7 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @requires expr to be not null
-   * @return The corresponding {@see PredefinedType} for this expression <br>
+   * @return The corresponding {@link PredefinedType} for this expression <br>
    *          otherwise <b>null</b>.
    */
   private PredefinedType getTypeOfExprD(ExprDContext expr) {
@@ -318,7 +374,7 @@ public class SymTableFiller extends B314BaseListener {
       return this.getTypeOfExprG(((ExprGContext)ctx.getChild(0)));
 
     if(ctx instanceof ExprDFctContext)
-      return getTypeOfExprFunction((ExprFctContext)ctx.getChild(0));
+      return PredefinedType.FUNCTION;
 
     if(ctx instanceof ExprDParContext)
       return this.getTypeOfExprD(((ExprDParContext)ctx).expr);
@@ -327,41 +383,61 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @requires exprFct to be not null.
    * @effects Check the existence of the function and the matching of its parameters.
-   * @return the corresponding {@see PredefinedType} of the expression function
+   * @return the corresponding {@link PredefinedType} of the expression function
    */
   private PredefinedType getTypeOfExprFunction(ExprFctContext exprFct) {
-    String symName = exprFct.name.getText();
-    // Check if the exprFct var or array is inside the symtab
-    FunctionSymbol fctSym = (FunctionSymbol) currentScope.resolve(symName);
-    if(fctSym == null)
-      throw new UndeclaredFunction(exprFct.toString());
+    FunctionSymbol fctSym = getFctFromSymTable(exprFct.name.getText());
 
     // Check if the nb of parameters matches
     if(fctSym.getNumberOfParameters() != exprFct.param.size())
-      throw new UndeclaredFunction(exprFct.toString());
+      throw new UndeclaredFunction(exprFct.getText());
 
-    return PredefinedType.get(fctSym.getType());
+    return ((B314FunctionType)fctSym.getType()).getReturnType();
   }
 
 
   @Override
   public void enterIfThenElse(IfThenElseContext ctx) {
-    PredefinedType condType = this.getTypeOfExprD(ctx.condition);
-
-    if(condType == null || !condType.equals(PredefinedType.BOOLEAN))
-      throw new NotBooleanCondition(ctx.getText());
+    checkConditionStatement(ctx.condition);
 
     super.enterIfThenElse(ctx);
   }
 
+  /**
+   * @effects Check if the condition statement is a boolean type.
+   * @throws NotBooleanCondition if the condition statement is not a boolean type.
+   * @throws UndeclaredVariable if the condition statement uses an undeclared variable.
+   * @throws CannotUseFunctionAsVariable if the condition statement tries to use an function as a variable.
+   */
+  private void checkConditionStatement(ExprDContext condition) {
+    PredefinedType condType = this.getTypeOfExprD(condition);
+
+    if(condType == null)
+      throw new NotBooleanCondition(condition.parent.getText());
+
+    switch (condType) {
+      default:
+        break;
+      case VARIABLE:
+        VarContext varCtx = (VarContext) ((ExprDGContext)condition).children.get(0);
+        VariableSymbol varSym = (VariableSymbol) getVarFromSymTable(varCtx.name.getText());
+        condType = (PredefinedType) varSym.getType();
+        break;
+      case FUNCTION:
+        ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)condition).children.get(0);
+        condType = getTypeOfExprFunction(fctCtx);
+        break;
+    }
+
+    if(!condType.equals(PredefinedType.BOOLEAN))
+      throw new NotBooleanCondition(condition.parent.getText());
+  }
+
+
   @Override
   public void enterWhile(WhileContext ctx) {
-    PredefinedType condType = this.getTypeOfExprD(ctx.condition);
-
-    if(condType == null || !condType.equals(PredefinedType.BOOLEAN))
-      throw new NotBooleanCondition(ctx.getText());
+    checkConditionStatement(ctx.condition);
 
     super.enterWhile(ctx);
   }
@@ -370,7 +446,14 @@ public class SymTableFiller extends B314BaseListener {
   public void enterCompute(ComputeContext ctx) {
     PredefinedType condType = this.getTypeOfExprD(ctx.fct);
 
-    if (condType == null || !condType.equals(PredefinedType.VOID))
+    if (condType != PredefinedType.FUNCTION )
+      throw new NotReturnVoidFucntion(ctx.getText());
+
+    ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)ctx.fct).children.get(0);
+    FunctionSymbol fctSym = getFctFromSymTable(fctCtx.name.getText());
+    condType = ((B314FunctionType)fctSym.getType()).getReturnType();
+
+    if (!condType.equals(PredefinedType.VOID))
       throw new NotReturnVoidFucntion(ctx.getText());
 
     super.enterCompute(ctx);
@@ -396,20 +479,91 @@ public class SymTableFiller extends B314BaseListener {
     ((FunctionSymbol) fctSym).setDefNode(ctx);
     ((FunctionSymbol) fctSym).setEnclosingScope(symTable.GLOBALS);
 
-    // Set the type of this function
-    PredefinedType fctPredefType = PredefinedType.VOID;
-    if(ctx.fctType != null)
-      fctPredefType = PredefinedType.get(ctx.fctType.getText());
-
-    ((FunctionSymbol) fctSym).setType(fctPredefType.type());
-    currentScope.define(fctSym); // Add the function to this scope
+    currentScope.define(fctSym); // Add the function to the Global Scope
     pushScope((Scope) fctSym); // Place this fctSymbol as the current scope
+  }
 
-    super.enterFctDecl(ctx); // Continue the exploration
+  @Override
+  public void enterFctTypeDecl(FctTypeDeclContext ctx) {
+    FunctionSymbol fctSym =  (FunctionSymbol) currentScope;
+
+    List<Type> paramsTypes = new ArrayList<>(fctSym.getNumberOfParameters());
+    for(Symbol sb : fctSym.getSymbols()) {
+      if(sb instanceof ParameterSymbol)
+        paramsTypes.add(((ParameterSymbol) sb).getType());
+    }
+
+    // Get the PredefinedType of the return
+    PredefinedType returnType = PredefinedType.VOID;
+    if(ctx.fctType != null)
+      returnType = PredefinedType.get(ctx.fctType.getText());
+
+    fctSym.setType(new B314FunctionType(returnType, paramsTypes));
+  }
+
+  @Override
+  public void enterFctReturnDecl(FctReturnDeclContext ctx) {
+    FunctionSymbol fctSym =  (FunctionSymbol) currentScope;
+    PredefinedType fctReturnType = ((B314FunctionType) fctSym.getType()).getReturnType();
+
+    // Get the return value type
+    PredefinedType returnValType = PredefinedType.VOID;
+    if(ctx.returnVal != null)
+      returnValType = getTypeOfExprD(ctx.returnVal);
+
+    switch (returnValType) {
+      case VARIABLE:
+        VarContext varCtx = (VarContext) ((ExprDGContext)ctx.returnVal).children.get(0);
+        VariableSymbol varSym = (VariableSymbol) getVarFromSymTable(varCtx.name.getText());
+        returnValType = (PredefinedType) varSym.getType();
+        break;
+      case FUNCTION:
+        ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)ctx.returnVal).children.get(0);
+        returnValType = getTypeOfExprFunction(fctCtx);
+        break;
+      default:
+        break;
+    }
+
+    if(returnValType != fctReturnType)
+      throw new NotMatchingReturnType(ctx.getText());
   }
 
   @Override
   public void exitFctDecl(FctDeclContext ctx) {
+    popScope();
+  }
+
+  /**
+   * @effects Check if the condition statement is a boolean type.
+   * @throws NotBooleanCondition if the condition statement is not a boolean type.
+   * @throws UndeclaredVariable if the condition statement use an undeclared variable.
+   * @throws CannotUseFunctionAsVariable if the condition statement tries to use an function as a variable.
+   */
+  @Override
+  public void enterClauseWhen(ClauseWhenContext ctx) {
+    checkConditionStatement(ctx.condition);
+    ClauseWhenScope clauseWhenScope = new ClauseWhenScope(symTable.GLOBALS);
+    clauseWhenScope.setDefNode(ctx);
+    currentScope.define(clauseWhenScope);
+    pushScope(clauseWhenScope);
+  }
+
+  @Override
+  public void exitClauseWhen(ClauseWhenContext ctx) {
+    popScope();
+  }
+
+  @Override
+  public void enterLocalVarDecl(LocalVarDeclContext ctx) {
+    Scope localScope = new LocalScope(currentScope);
+    currentScope.nest(localScope);
+    pushScope(localScope);
+    super.enterLocalVarDecl(ctx);
+  }
+
+  @Override
+  public void exitLocalVarDecl(LocalVarDeclContext ctx) {
     popScope();
   }
 
@@ -421,11 +575,6 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public boolean equals(Object obj) {
     return super.equals(obj);
-  }
-
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    return super.clone();
   }
 
   @Override

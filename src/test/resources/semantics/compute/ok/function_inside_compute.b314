@@ -4,13 +4,13 @@ declare and retain
   x as integer;
   res as square[43,43];
 
-  f as function (t as boolean) : boolean
+  f as function (t as boolean) : void
   do
     set t to true
-    return res;
+    return void
   done
 
   by default do
-    compute (f)
+    compute f()
 
   done

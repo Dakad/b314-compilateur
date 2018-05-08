@@ -4,7 +4,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import be.unamur.info.b314.compiler.semantics.PredefinedType;
+import be.unamur.info.b314.compiler.semantics.symtab.B314FunctionType;
+import be.unamur.info.b314.compiler.semantics.symtab.PredefinedType;
 import be.unamur.info.b314.compiler.semantics.SymTableFiller;
 import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import org.antlr.symtab.BaseScope;
 import org.antlr.symtab.BaseSymbol;
 import org.antlr.symtab.FunctionSymbol;
 import org.antlr.symtab.ParameterSymbol;
-import org.antlr.symtab.PrimitiveType;
 import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolWithScope;
 import org.antlr.symtab.Type;
@@ -81,8 +81,8 @@ public class B314fctDeclSemanticTest {
     assertThat("Must be an function : f():boolean", symbTab.get("f"), instanceOf(FunctionSymbol.class));
     FunctionSymbol myFct = (FunctionSymbol) symbTab.get("f");
 
-    PrimitiveType myFctType = (PrimitiveType) myFct.getType();
-    assertThat("Must be an booleanType : f():boolean", myFctType.getName(),  is("boolean"));
+    B314FunctionType myFctType = (B314FunctionType) myFct.getType();
+    assertThat("Must be an booleanType : f():boolean", myFctType.getReturnType(), is(PredefinedType.BOOLEAN));
 
     int nbFctParams = myFct.getNumberOfParameters();
     assertThat("Must be has any parameter : f():boolean", nbFctParams, is(0));
@@ -102,8 +102,8 @@ public class B314fctDeclSemanticTest {
     assertThat("Must be an function : f(integer):boolean", symbTab.get("f"), instanceOf(FunctionSymbol.class));
         // Verify - Function
     FunctionSymbol myFct = (FunctionSymbol) symbTab.get("f");
-    PrimitiveType myFctType = (PrimitiveType) myFct.getType();
-    assertThat("Must be an booleanType : f(integer):boolean", myFctType.getName(),  is("boolean"));
+    B314FunctionType myFctType = (B314FunctionType) myFct.getType();
+    assertThat("Must be an booleanType : f(integer):boolean", myFctType.getReturnType(),  is(PredefinedType.BOOLEAN));
 
     // Verify - Params
     int nbFctParams = myFct.getNumberOfParameters();
@@ -113,7 +113,7 @@ public class B314fctDeclSemanticTest {
 
     assertThat("Must contain at least paremeter i : f(integer):boolean", myFctParams, IsMapContaining.hasKey("i") );
 
-    PrimitiveType paramType = (PrimitiveType)  myFctParams.get("i").getType();
+    PredefinedType paramType = (PredefinedType)  myFctParams.get("i").getType();
     assertThat("Must contain at least paremeter i : f(integer):boolean", paramType.getName(), is("integer"));
   }
 
@@ -145,8 +145,8 @@ public class B314fctDeclSemanticTest {
     assertThat("Must be an function : f(integer):boolean", symbTab.get("f"), instanceOf(FunctionSymbol.class));
     // Verify - Function
     FunctionSymbol myFct = (FunctionSymbol) symbTab.get("f");
-    PrimitiveType myFctType = (PrimitiveType) myFct.getType();
-    assertThat("Must be an booleanType : f(integer):boolean", myFctType.getName(),  is("boolean"));
+    B314FunctionType myFctType = (B314FunctionType) myFct.getType();
+    assertThat("Must be an booleanType : f(integer):boolean", myFctType.getReturnType(),  is(PredefinedType.BOOLEAN));
 
     // Verify - Params
     int nbFctParams = myFct.getNumberOfParameters();
@@ -156,7 +156,7 @@ public class B314fctDeclSemanticTest {
 
     assertThat("Must contain at least paremeter i : f(integer):boolean", myFctParams, IsMapContaining.hasKey("i") );
 
-    PrimitiveType paramType = (PrimitiveType)  myFctParams.get("i").getType();
+    PredefinedType paramType = (PredefinedType)  myFctParams.get("i").getType();
     assertThat("Must contain at least paremeter i : f(integer):boolean", paramType.getName(), is("integer"));
 
 
@@ -169,8 +169,8 @@ public class B314fctDeclSemanticTest {
     assertThat("Must be an function : fun(integer, square):void", symbTab.get("fun"), instanceOf(FunctionSymbol.class));
     // Verify - Function
      myFct = (FunctionSymbol) symbTab.get("fun");
-     myFctType = (PrimitiveType) myFct.getType();
-    assertThat("Must be an booleanType : fun(integer, square):void", myFctType.getName(),  is("void"));
+     myFctType = (B314FunctionType) myFct.getType();
+    assertThat("Must be an booleanType : fun(integer, square):void", myFctType.getReturnType(),  is(PredefinedType.VOID));
 
     // Verify - Params
     nbFctParams = myFct.getNumberOfParameters();
@@ -181,13 +181,13 @@ public class B314fctDeclSemanticTest {
     // Verify - first parameter i
     assertThat("Must contain at least parameter i : fun(integer, square):void", myFctParams, IsMapContaining.hasKey("i") );
 
-    paramType = (PrimitiveType)  myFctParams.get("i").getType();
+    paramType = (PredefinedType)  myFctParams.get("i").getType();
     assertThat("Must contain at least parameter i : fun(integer, square):void", paramType.getName(), is("integer"));
 
     // Verify - se cond parameter s
     assertThat("Must contain at least parameter s : fun(integer, square):void", myFctParams, IsMapContaining.hasKey("s") );
 
-    paramType = (PrimitiveType)  myFctParams.get("s").getType();
+    paramType = (PredefinedType)  myFctParams.get("s").getType();
     assertThat("Must contain at least parameter i : fun(integer, square):void", paramType.getName(), is("square"));
 
 
