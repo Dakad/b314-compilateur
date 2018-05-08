@@ -129,7 +129,7 @@ public class ExceptionHandler {
    * @throws UndeclaredVariable with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
    */
-  public static void throwUndesttclaredVariable(ParserRuleContext ctx) {
+  public static void throwUndeclaredVariable(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_UNDECLARED_VARIABLE);
     throw new UndeclaredVariable(formatMsg);
   }
