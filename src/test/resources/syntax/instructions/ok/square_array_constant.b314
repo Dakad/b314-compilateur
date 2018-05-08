@@ -1,4 +1,6 @@
 declare and retain
+    arraySquare as square[1,3];
+
     set arraySquare [0,5] to graal
     by default
     do

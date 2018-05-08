@@ -6,7 +6,7 @@ declare and retain
     f as function( ): boolean
     do
         set t to true
-        return res;
+        return t
     done
 
 when your turn
