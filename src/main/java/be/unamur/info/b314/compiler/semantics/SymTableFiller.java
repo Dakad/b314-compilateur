@@ -526,7 +526,7 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterClauseWhen(ClauseWhenContext ctx) {
     checkConditionStatement(ctx.condition);
-    ClauseWhenScope clauseWhenScope = new ClauseWhenScope(symTable.GLOBALS);
+    ClauseWhenScope clauseWhenScope = new ClauseWhenScope(symTable.GLOBALS, ctx.condition.getText());
     clauseWhenScope.setDefNode(ctx);
     currentScope.define(clauseWhenScope);
     pushScope(clauseWhenScope);
@@ -537,14 +537,23 @@ public class SymTableFiller extends B314BaseListener {
     popScope();
   }
 
+
+
   @Override
   public int hashCode() {
-    return super.hashCode();
+    return symTable.hashCode();
   }
 
   @Override
-  public boolean equals(Object obj) {
-    return super.equals(obj);
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+
+    SymTableFiller that = (SymTableFiller) o;
+
+    return getSymTable().equals(that.getSymTable());
   }
 
   @Override
