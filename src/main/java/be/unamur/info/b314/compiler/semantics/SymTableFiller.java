@@ -137,7 +137,8 @@ public class SymTableFiller extends B314BaseListener {
 
         // Check for duplicate parameter
         if(currentScope.getSymbol(name) != null)
-          throw new DuplicateVariable(name);
+          ExceptionHandler.throwDuplicateVariable(ctx);
+          //throw new DuplicateVariable(name);
 
         var = new ParameterSymbol(name);
       } else {
