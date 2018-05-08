@@ -1,5 +1,7 @@
 package be.unamur.info.b314.compiler.semantics;
 
+import static be.unamur.info.b314.compiler.semantics.exception.ExceptionHandler.throwAlreadyDeclaredAsFunction;
+
 import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
@@ -30,6 +32,7 @@ import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredAsFunctio
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.AlreadyDeclaredVariable;
 import be.unamur.info.b314.compiler.semantics.exception.DuplicateParameter;
+import be.unamur.info.b314.compiler.semantics.exception.ExceptionHandler;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
 import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
@@ -47,6 +50,7 @@ import org.antlr.symtab.Symbol;
 import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -122,7 +126,7 @@ public class SymTableFiller extends B314BaseListener {
       // ? Am i inside a function ?
       if(currentScope instanceof FunctionSymbol) {
         if(currentScope.getName().equals(name)) // Param name == Function name ?
-          throw  new AlreadyDeclaredAsFunction(name);
+          ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
 
         // Check for duplicate parameter
         if(currentScope.getSymbol(name) != null)
@@ -132,7 +136,7 @@ public class SymTableFiller extends B314BaseListener {
       } else {
         if (currentScope instanceof GlobalScope)
           if(symTable.GLOBALS.getSymbol(name) != null)
-            throw new AlreadyDeclaredVariable(name);
+            ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
 
         var = new VariableSymbol(name);
       }
