@@ -544,6 +544,8 @@ public class SymTableFiller extends B314BaseListener {
     pushScope(clauseWhenScope);
   }
 
+
+
   @Override
   public void exitClauseWhen(ClauseWhenContext ctx) {
     popScope();
