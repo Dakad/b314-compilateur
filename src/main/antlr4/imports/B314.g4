@@ -86,7 +86,7 @@ exprBool : boolVal
     /* Var. env. case */
 exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)  # EnvCase
          | (FRUITS | SODA | GRAAL)                                                # EnvCase
-         | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # Nearby
+         | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # EnvCase
          ;
 
     /* Appel de function */
