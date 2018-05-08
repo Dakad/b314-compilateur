@@ -45,17 +45,6 @@ public class ExceptionHandler {
     throw  new AlreadyDeclaredFunction(formatMsg);
   }
 
-  /**
-   *
-   *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - name function declared
-   * @throws AlreadyDeclaredFunction with the pretty msg.
-   */
-  public static void throwAlreadyDeclaredAsFunction(ParserRuleContext ctx, String name) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_FUNCTION)+name;
-    throw  new AlreadyDeclaredFunction(formatMsg);
-  }
-
 
 
   /**
@@ -65,17 +54,6 @@ public class ExceptionHandler {
    */
   public static void throwDuplicateParameter(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_PARAMETER);
-    throw  new DuplicateParameter(formatMsg);
-  }
-
-  /**
-   *
-   *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - parameter
-   * @throws DuplicateParameter with the pretty msg.
-   */
-  public static void throwDuplicateParameter(ParserRuleContext ctx, String name) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_PARAMETER)+name;
     throw  new DuplicateParameter(formatMsg);
   }
 
@@ -91,17 +69,6 @@ public class ExceptionHandler {
     throw  new AlreadyDeclaredVariable(formatMsg);
   }
 
-  /**
-   *
-   *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - name variable
-   * @throws AlreadyDeclaredVariable with the pretty msg.
-   */
-  public static void throwAlreadyDeclaredVariable(ParserRuleContext ctx, String name) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_VARIABLE)+name;
-    throw  new AlreadyDeclaredVariable(formatMsg);
-  }
-
 
 
   /**
@@ -111,17 +78,6 @@ public class ExceptionHandler {
    */
   public static void throwNotPositiveSizeForArray(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY);
-    throw  new NotPositiveSizeForArray(formatMsg);
-  }
-
-  /**
-   *
-   *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - name array
-   * @throws NotPositiveSizeForArray with the pretty msg.
-   */
-  public static void throwNotPositiveSizeForArray(ParserRuleContext ctx, String name) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY)+name;
     throw  new NotPositiveSizeForArray(formatMsg);
   }
 
@@ -137,17 +93,6 @@ public class ExceptionHandler {
     throw  new NotMatchingType(formatMsg);
   }
 
-  /**
-   *
-   *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - name type
-   * @throws NotMatchingType with the pretty msg.
-   */
-  public static void throwNotMatchingType(ParserRuleContext ctx, String name) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_MATCHING_TYPE)+name;
-    throw  new NotMatchingType(formatMsg);
-  }
-
 
 
   /**
@@ -157,17 +102,6 @@ public class ExceptionHandler {
    */
   public static void throwUndeclaredVariable(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_UNDECLARED_VARIABLE);
-    throw  new UndeclaredVariable(formatMsg);
-  }
-
-  /**
-   *
-   *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires id - id du variable
-   * @throws UndeclaredVariable with the pretty msg.
-   */
-  public static void throwUndeclaredVariable(ParserRuleContext ctx, String id) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_UNDECLARED_VARIABLE)+id;
     throw  new UndeclaredVariable(formatMsg);
   }
 
@@ -183,17 +117,6 @@ public class ExceptionHandler {
     throw  new NotBooleanCondition(formatMsg);
   }
 
-  /**
-   *
-   *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires instr - instruction
-   * @throws NotBooleanCondition with the pretty msg.
-   */
-  public static void throwNotBooleanCondition(ParserRuleContext ctx, String instr) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_BOOLEAN_CONDITION)+instr;
-    throw  new NotBooleanCondition(formatMsg);
-  }
-
 
 
   /**
@@ -203,17 +126,6 @@ public class ExceptionHandler {
    */
   public static void throwNotReturnVoidFucntion (ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_RETURN_VOID_FUNCTION);
-    throw  new NotReturnVoidFucntion (formatMsg);
-  }
-
-  /**
-   *
-   *@requires ctx - Context of the instruction causing the error. Must be not null
-   *@requires name - name function declared
-   * @throws NotReturnVoidFucntion  with the pretty msg.
-   */
-  public static void throwNotReturnVoidFucntion (ParserRuleContext ctx, String name) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_RETURN_VOID_FUNCTION)+name;
     throw  new NotReturnVoidFucntion (formatMsg);
   }
 
