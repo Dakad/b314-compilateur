@@ -9,7 +9,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
  */
 public class ExceptionHandler {
 
-  private static final String ERR_MSG_ALREADY_DECLARED_FUNCTION = "Cannot use the function name as identifier for a parameter : ";
+  private static final String ERR_MSG_ALREADY_DECLARED_AS_FUNCTION = "Cannot use the function name as identifier for a parameter : ";
+  private static final String ERR_MSG_ALREADY_DECLARED_FUNCTION =  "A global function has already been defined with the name : ";
   private static final String ERR_MSG_DUPLICATE_PARAMETER = "A parameter has been already defined for this function with the identifier : ";
   private static final String ERR_MSG_ALREADY_DECLARED_VARIABLE = "A global variable has already been defined with the name : ";
   private static final String ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY = "The array's size is null or not positive - Size : ";
@@ -31,6 +32,18 @@ public class ExceptionHandler {
     int lnNb = ctx.start.getLine();
     String msgError = "ERROR LINE : "+lnNb+". "+msg;
     return msgError;
+  }
+
+
+
+  /**
+   *
+   *@requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws AlreadyDeclaredAsFunction with the pretty msg.
+   */
+  public static void throwAlreadyDeclaredAsFunction(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_AS_FUNCTION);
+    throw  new AlreadyDeclaredAsFunction(formatMsg);
   }
 
 
