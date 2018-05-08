@@ -13,6 +13,7 @@ public class ExceptionHandler {
   private static final String ERR_MSG_ALREADY_DECLARED_AS_FUNCTION = "Cannot use the function name as identifier for a parameter";
   private static final String ERR_MSG_ALREADY_DECLARED_FUNCTION = "A global function has already been defined with the name";
   private static final String ERR_MSG_DUPLICATE_PARAMETER = "A parameter has been already defined for this function with the identifier";
+  private static final String ERR_MSG_DUPLICATE_VARIABLE = "A variable/parameter has been already defined for this";
   private static final String ERR_MSG_ALREADY_DECLARED_VARIABLE = "A global variable has already been defined with the name";
   private static final String ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY = "The array's size is null or not positive";
   private static final String ERR_MSG_NOT_MATCHING_TYPE = "The type of the instruction is incorrect";
@@ -31,13 +32,13 @@ public class ExceptionHandler {
    */
   private static String formatterMsg(ParserRuleContext ctx, String msg) {
     int lnNb = ctx.start.getLine();
-    StringBuilder msgError = new StringBuilder("\nERROR : ");
+    StringBuilder msgError = new StringBuilder("\nERROR :\t");
     msgError.append(msg).append("\n");
     String instruction = "";
     for (org.antlr.v4.runtime.tree.ParseTree child : ctx.children) {
       instruction += child.getText() + " ";
     }
-    msgError.append("LINE :").append(lnNb).append("\t");
+    msgError.append("LINE :\t").append(lnNb).append("\t");
     msgError.append(instruction).append("\n");
     return msgError.toString();
   }
@@ -70,6 +71,16 @@ public class ExceptionHandler {
   public static void throwDuplicateParameter(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_PARAMETER);
     throw new DuplicateParameter(formatMsg);
+  }
+
+
+  /**
+   * @throws DuplicateVariable with the pretty msg.
+   * @requires ctx - Context of the instruction causing the error. Must be not null
+   */
+  public static void throwDuplicateVariable(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_VARIABLE);
+    throw new DuplicateVariable(formatMsg);
   }
 
 
