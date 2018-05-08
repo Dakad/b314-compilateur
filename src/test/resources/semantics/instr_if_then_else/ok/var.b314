@@ -1,0 +1,14 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as boolean;
+
+  if i = true then
+    skip
+  done
+
+  by default do
+    if i = false then
+      skip
+    done
+  done

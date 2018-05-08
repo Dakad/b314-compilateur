@@ -1,0 +1,10 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    b as boolean;
+    i as integer;
+    arena as square[27,27];
+
+  by default do
+    set i to b
+  done

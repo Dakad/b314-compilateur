@@ -1,0 +1,33 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer;
+
+  if i = 12 then
+    skip
+  done
+
+  if i > 23 then
+    skip
+  done
+
+  if 12 < i then
+    skip
+  done
+
+  by default do
+    set i to 12
+
+    if 23 <= 12  then
+      skip
+    done
+
+    if i >= 12  then
+      skip
+    done
+
+    if i = i then
+      skip
+    done
+
+  done

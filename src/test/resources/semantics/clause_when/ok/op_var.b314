@@ -1,0 +1,36 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer;
+
+  when your turn
+    when i = 12 do
+      while i = 12 do
+        skip
+      done
+
+      while i > 23 do
+        skip
+      done
+
+      while 12 < i do
+        skip
+      done
+    done
+
+  by default do
+    set i to 12
+
+    while 23 <= 12  do
+      skip
+    done
+
+    while i >= 12  do
+      skip
+    done
+
+    while i = i do
+      skip
+    done
+
+  done

@@ -1,7 +1,7 @@
 /* My comments */
 declare and retain
-	b1 as boolean;
-	b2 as boolean;
+    b1 as boolean;
+    b2 as boolean;
     i1 as integer;
     i2 as integer;
     i3 as integer;
@@ -22,8 +22,8 @@ declare and retain
     		loc2 as boolean;
     		loc3 as square;
     		loc4 as integer[5];
-    		b1 as integer;
-    		s1 as boolean;
+    		b11 as integer;
+    		s11 as boolean;
     	do
     		compute s1 and b1 = 42 or loc2
     		return fct2;

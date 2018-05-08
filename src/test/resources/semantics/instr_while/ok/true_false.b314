@@ -1,0 +1,18 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as boolean;
+    arena as square[27,27];
+
+  while true do
+    skip
+  done
+
+  by default do
+    while arena[1, 2] = player do
+      if i = false then
+        skip
+      done
+    done
+
+  done

@@ -3,7 +3,7 @@ package be.unamur.info.b314.compiler.main;
 import be.unamur.info.b314.compiler.B314BaseVisitor;
 import be.unamur.info.b314.compiler.B314Parser.ImpDeclContext;
 import be.unamur.info.b314.compiler.B314Parser.RootContext;
-import java.util.Map;
+import be.unamur.info.b314.compiler.semantics.SymTableFiller;
 
 /**
  * Print PCode for a given tree using provided symbol table and printer.
@@ -15,18 +15,18 @@ public class PCodeVisitor extends B314BaseVisitor<Object> {
   /**
    * "Memory" of B314; variable/value pairs go here
    */
-  private final Map<String, Integer> symTable;
+  private final SymTableFiller symTable;
 
   private final PCodePrinter printer;
 
-  public PCodeVisitor(Map<String, Integer> symTable, PCodePrinter printer) {
+  public PCodeVisitor(SymTableFiller symTable, PCodePrinter printer) {
     this.symTable = symTable;
     this.printer = printer;
   }
 
   @Override
   public Object visitRoot(RootContext ctx) {
-    this.printer.printSetStackPointer(symTable.size()); // Reserve space for variables
+    this.printer.printSetStackPointer(symTable.countVariables()); // Reserve space for variables
     this.printer.printComments("Start root rule ...");
     super.visitRoot(ctx);  // Print instructions
     this.printer.printComments("End root rule ... ");
@@ -74,5 +74,6 @@ public class PCodeVisitor extends B314BaseVisitor<Object> {
     }
     return null;
   }*/
+
 
 }

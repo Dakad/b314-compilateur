@@ -2,7 +2,7 @@
 
 declare and retain
     myVar as square[5];
-    myVar as square[12,12];
+    myVar1 as square[12,12];
     v1 as integer [42,42];
     v2 as integer [42];
     v3 as boolean [3,5];
