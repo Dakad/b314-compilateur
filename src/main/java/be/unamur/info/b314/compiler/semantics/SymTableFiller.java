@@ -243,6 +243,7 @@ public class SymTableFiller extends B314BaseListener {
     if(exprDType == null)
       throw new NotMatchingType(ctx.getText());
 
+
     if(exprGType == PredefinedType.SQUARE) {
       if(!exprDType.equals(PredefinedType.SQUARE_ITEM))
         throw new NotMatchingType(ctx.getText());
@@ -256,21 +257,36 @@ public class SymTableFiller extends B314BaseListener {
         exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
         if(exprDType.equals(PredefinedType.VOID))
           throw new NotReturnVoidFucntion(ctx.getText());
+      }
 
+      // If the exprD is a VARIABLE, get tit PredefinedType
+      if(exprDType.equals(PredefinedType.VARIABLE)) {
+        ParseTree varFromExprD = exprD.getChild(0);
+        String varNomFromExprD = "";
+        VariableSymbol varSymFromExprD;
+        if(varFromExprD instanceof VarContext) {
+          varNomFromExprD = ((VarContext) varFromExprD).name.getText();
+          varSymFromExprD = (VariableSymbol) getVarFromSymTable(varNomFromExprD);
+          exprDType = PredefinedType.get(varSymFromExprD.getType());
+        } else {
+          varNomFromExprD = ((ArrayEltContext) varFromExprD).name.getText();
+          varSymFromExprD = (VariableSymbol) getVarFromSymTable(varNomFromExprD);
+
+          exprDType = getArrayType(varSymFromExprD);
+        }
       }
 
       if(exprG instanceof VarContext) {
         // Check if both expr's (var to exprD) type matches
         exprGType = (PredefinedType) ((VariableSymbol)varSym).getType();
-
-        if(!checkTypeMatching(exprGType, exprDType))
-          throw new NotMatchingType(ctx.getText());
       } else {
         // Check if both expr's (arrayVar to exprD) type matches
         exprGType = getArrayType((VariableSymbol)varSym);
-        if(!checkTypeMatching(exprGType,exprDType))
-          throw new NotMatchingType(ctx.getText());
       }
+
+
+      if(!checkTypeMatching(exprGType, exprDType))
+        throw new NotMatchingType(ctx.getText());
     }
 
     super.enterSetTo(ctx);
