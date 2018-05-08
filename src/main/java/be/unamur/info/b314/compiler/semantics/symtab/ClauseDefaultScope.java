@@ -16,12 +16,11 @@ public class ClauseDefaultScope extends org.antlr.symtab.SymbolWithScope {
      * @requires enclosingsScope not nul
      * @requires name not nul
      * @param enclosingScope
-     * @param name
      * @effects Initialise the scope
      */
 
-    public ClauseDefaultScope(Scope enclosingScope, String name) {
-        super(NAME + name);
+    public ClauseDefaultScope(Scope enclosingScope) {
+        super(NAME);
         this.setEnclosingScope(enclosingScope);
 
     }
