@@ -1,16 +1,16 @@
 declare and retain
     x as integer;
-    x as square;
+    s as square;
     z as boolean;
     f as function ( x as boolean, y as boolean): boolean
         do
-            if x=y then set f to true done
-            return f;
+            if x=y then set y to true done
+            return x
         done
     f2 as function (a as boolean, b as boolean): boolean
         do
-            if a=b then set f2 to false done
-            return f2;
+            if a=b then set b to false done
+            return z
         done
 when your turn
     by default

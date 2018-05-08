@@ -474,6 +474,7 @@ public class SymTableFiller extends B314BaseListener {
     super.enterWhile(ctx);
   }
 
+  /*
   @Override
   public void enterCompute(ComputeContext ctx) {
     PredefinedType condType = this.getTypeOfExprD(ctx.fct);
@@ -490,6 +491,7 @@ public class SymTableFiller extends B314BaseListener {
 
     super.enterCompute(ctx);
   }
+*/
 
   /**
    * @effects Insert a new {@link FunctionSymbol} <br> into the current scope <br>
