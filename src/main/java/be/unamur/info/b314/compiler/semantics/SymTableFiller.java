@@ -138,7 +138,6 @@ public class SymTableFiller extends B314BaseListener {
         // Check for duplicate parameter
         if(currentScope.getSymbol(name) != null)
           ExceptionHandler.throwDuplicateVariable(ctx);
-          //throw new DuplicateVariable(name);
 
         var = new ParameterSymbol(name);
       } else {
@@ -146,7 +145,7 @@ public class SymTableFiller extends B314BaseListener {
           if(symTable.GLOBALS.getSymbol(name) != null)
             ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
           if(currentScope.getSymbol(name) != null)
-            throw new AlreadyDeclaredVariable(ctx.name.getText());
+            ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
 
         var = new VariableSymbol(name);
       }
@@ -178,7 +177,7 @@ public class SymTableFiller extends B314BaseListener {
       // Check for the positivity of the array' size
       int sizeArray = Integer.parseInt(typeArray.one.INTEGER().getText());
       if(sizeArray <= 0){
-        throw new NotPositiveSizeForArray(""+sizeArray);
+        ExceptionHandler.throwNotPositiveSizeForArray(ctx);
       }
 
       int secondSizeArray = 0;
@@ -186,7 +185,7 @@ public class SymTableFiller extends B314BaseListener {
       if(typeArray.second != null) {
         secondSizeArray = Integer.parseInt(typeArray.second.INTEGER().getText());
         if (secondSizeArray <= 0) {
-          throw new NotPositiveSizeForArray("" + secondSizeArray);
+          ExceptionHandler.throwNotPositiveSizeForArray(ctx);
         }
       }
 
@@ -248,7 +247,7 @@ public class SymTableFiller extends B314BaseListener {
 
     if(exprGType == PredefinedType.SQUARE) {
       if(exprDType == null || !exprDType.equals(PredefinedType.SQUARE_ITEM))
-        throw new NotMatchingType(ctx.toString());
+        ExceptionHandler.throwNotMatchingType(ctx);
     } else {
 
       // Retrieve the variable from the exprGContext
@@ -259,18 +258,18 @@ public class SymTableFiller extends B314BaseListener {
       if(exprDType.equals(PredefinedType.FUNCTION)) {
         exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
         if(exprDType.equals(PredefinedType.VOID))
-          throw new NotReturnVoidFucntion(ctx.getText());
+          ExceptionHandler.throwNotReturnVoidFucntion(ctx);
 
       }
 
       if(exprG instanceof VarContext) {
         // Check if both expr's (var to exprD) type matches
         if(!((VariableSymbol)varSym).getType().equals(exprDType))
-          throw new NotMatchingType(ctx.getText());
+          ExceptionHandler.throwNotMatchingType(ctx);
       } else {
         // Check if both expr's (arrayVar to exprD) type matches
         if(!exprDType.equals(getArrayType((VariableSymbol)varSym)))
-          throw new NotMatchingType(ctx.getText());
+          ExceptionHandler.throwNotMatchingType(ctx);
       }
     }
 
@@ -312,7 +311,7 @@ public class SymTableFiller extends B314BaseListener {
 
     varSym = currentScope.resolve(varName);
     if(varSym == null)
-      throw new UndeclaredVariable(varName);
+      throw new UndeclaredVariable("Undeclared identifier "+varName);
 
     // Check if the variable is really defined as variable
     if(!(varSym instanceof VariableSymbol))
@@ -414,7 +413,7 @@ public class SymTableFiller extends B314BaseListener {
     PredefinedType condType = this.getTypeOfExprD(condition);
 
     if(condType == null)
-      throw new NotBooleanCondition(condition.parent.getText());
+      throw new NotBooleanCondition("The type of the condition statement is not boolean : "+condition.parent.getText());
 
     switch (condType) {
       default:
@@ -431,7 +430,7 @@ public class SymTableFiller extends B314BaseListener {
     }
 
     if(!condType.equals(PredefinedType.BOOLEAN))
-      throw new NotBooleanCondition(condition.parent.getText());
+      throw new NotBooleanCondition("The type of the condition statement is not boolean : "+condition.parent.getText());
   }
 
 
@@ -447,14 +446,14 @@ public class SymTableFiller extends B314BaseListener {
     PredefinedType condType = this.getTypeOfExprD(ctx.fct);
 
     if (condType != PredefinedType.FUNCTION )
-      throw new NotReturnVoidFucntion(ctx.getText());
+      ExceptionHandler.throwNotReturnVoidFucntion(ctx);
 
     ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)ctx.fct).children.get(0);
     FunctionSymbol fctSym = getFctFromSymTable(fctCtx.name.getText());
     condType = ((B314FunctionType)fctSym.getType()).getReturnType();
 
     if (!condType.equals(PredefinedType.VOID))
-      throw new NotReturnVoidFucntion(ctx.getText());
+      ExceptionHandler.throwNotReturnVoidFucntion(ctx);
 
     super.enterCompute(ctx);
   }
@@ -471,7 +470,7 @@ public class SymTableFiller extends B314BaseListener {
     Symbol fctSym = symTable.GLOBALS.getSymbol(name);
 
     if(fctSym != null && fctSym instanceof FunctionSymbol)
-      throw new AlreadyDeclaredFunction(name);
+      ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
     else
       fctSym = new FunctionSymbol(name);
 
@@ -526,7 +525,7 @@ public class SymTableFiller extends B314BaseListener {
     }
 
     if(returnValType != fctReturnType)
-      throw new NotMatchingReturnType(ctx.getText());
+      ExceptionHandler.throwNotMatchingReturnType(ctx);
   }
 
   @Override
