@@ -56,7 +56,6 @@ for serie in [x for x in os.listdir(semanticsDir) if not x.startswith('.')]:
             fout.write('        LOG.debug("Starting interpretation with 1 turn");\n')
             with open('{}/{}'.format(b314okfilesDir,inputFile), 'r') as b314file:
                 b314file.readline() # Skip first line
-
                 input1 = [i for i in b314file.readline().strip().split(';') if not len(i) == 0]
                 output1 = [o for o in b314file.readline().strip().split(';') if not len(o) == 0]
                 fout.write('        result = PCodeInterpreter.getInterpreter().execute(pcodeFile, 1')
@@ -83,6 +82,7 @@ for serie in [x for x in os.listdir(semanticsDir) if not x.startswith('.')]:
                 # for o in output1[1:]:
                     # fout.write(', "{}"'.format(o));
                 # fout.write('));\n')
+
                 fout.write('        // Turns 5\n')
                 fout.write('        LOG.debug("Starting interpretation with 5 turn");\n')
                 input1 = [i for i in b314file.readline().strip().split(',') if not len(i) == 0]
@@ -97,5 +97,6 @@ for serie in [x for x in os.listdir(semanticsDir) if not x.startswith('.')]:
                 # for o in output1[1:]:
                     # fout.write(', "{}"'.format(o));
                 # fout.write('));\n')
+
             fout.write('    }\n\n')
         fout.write('}')
