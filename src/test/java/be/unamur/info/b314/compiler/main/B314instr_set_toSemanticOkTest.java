@@ -34,4 +34,9 @@ public class B314instr_set_toSemanticOkTest {
         CompilerTestHelper.launchCompilation("/semantics/instr_set_to/ok/arena_case_to_item.b314", testFolder.newFile(), true, "instr_set_to: arena_case_to_item");
     }
 
+    @Test
+    public void testinstr_set_to_square_case_to_item_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/semantics/instr_set_to/ok/square_case_to_item.b314", testFolder.newFile(), true, "instr_set_to: arena_case_to_item");
+    }
+
 }
