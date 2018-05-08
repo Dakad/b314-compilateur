@@ -16,6 +16,7 @@ public class ExceptionHandler {
   private static final String ERR_MSG_DUPLICATE_VARIABLE = "A variable/parameter has been already defined for this";
   private static final String ERR_MSG_ALREADY_DECLARED_VARIABLE = "A global variable has already been defined with the name";
   private static final String ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY = "The array's size is null or not positive";
+  private static final String ERR_MSG_NOT_MATCHING_RETURN_TYPE = "The return type of the function is incorrect - Return type";
   private static final String ERR_MSG_NOT_MATCHING_TYPE = "The type of the instruction is incorrect";
   private static final String ERR_MSG_UNDECLARED_VARIABLE = "Undeclared identifier";
   private static final String ERR_MSG_NOT_BOOLEAN_CONDITION = "The type of the condition statement is not boolean";
@@ -79,8 +80,8 @@ public class ExceptionHandler {
    * @requires ctx - Context of the instruction causing the error. Must be not null
    */
   public static void throwDuplicateVariable(ParserRuleContext ctx) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_VARIABLE);
-    throw new DuplicateVariable(formatMsg);
+        String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_VARIABLE);
+        throw new DuplicateVariable(formatMsg);
   }
 
 
@@ -101,6 +102,16 @@ public class ExceptionHandler {
   public static void throwNotPositiveSizeForArray(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY);
     throw new NotPositiveSizeForArray(formatMsg);
+  }
+
+
+  /**
+   * @throws NotMatchingReturnType with the pretty msg.
+   * @requires ctx - Context of the instruction causing the error. Must be not null
+   */
+  public static void throwNotMatchingReturnType(ParserRuleContext ctx) {
+    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_MATCHING_RETURN_TYPE);
+    throw new NotMatchingReturnType(formatMsg);
   }
 
 
