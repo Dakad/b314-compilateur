@@ -1,7 +1,7 @@
 /* My comments */
 declare and retain
-	b1 as boolean;
-	b2 as boolean;
+    b1 as boolean;
+    b2 as boolean;
     i1 as integer;
     i2 as integer;
     i3 as integer;

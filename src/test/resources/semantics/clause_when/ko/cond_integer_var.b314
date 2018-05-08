@@ -1,0 +1,17 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer;
+
+  when your turn
+    when i do
+    skip
+    set i to i+1
+  done
+
+  by default do
+    if i = 2 then
+      skip
+      set i to i+1
+    done
+  done

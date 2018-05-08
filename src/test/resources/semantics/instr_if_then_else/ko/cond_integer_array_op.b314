@@ -1,0 +1,20 @@
+  /* Comments are between delimiters */
+  declare and retain
+    /* Global declarations */
+    i as integer[1];
+    arena as square[27,27];
+
+  if i[1] + 12 then
+    skip
+    set i[1] to i[1] + 1
+  done
+
+  by default do
+    set i[1] to life
+
+    if i[1] * 12 then
+      skip
+    else
+      set i[1] to i[1] + 1
+    done
+  done

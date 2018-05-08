@@ -1,0 +1,16 @@
+/* Comments are between delimiters */
+declare and retain
+  /* Global declarations */
+  b as boolean;
+  arena as square[27,27];
+
+  f as function(): boolean
+    declare local t as boolean;
+  do
+    set t to true
+    return t
+  done
+
+  by default do
+    set b to f(12)
+  done

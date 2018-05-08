@@ -1,0 +1,23 @@
+/*my commentaire */
+
+declare and retain
+
+  x as function( ) : void
+    do
+      next do nothing
+      return void
+    done
+
+
+  f as function( t as boolean ) : boolean
+    do
+      compute x()
+      return t
+    done
+
+
+
+  when your turn
+    by default do
+      skip
+    done

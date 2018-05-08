@@ -1,0 +1,16 @@
+/* My comments */
+declare and retain
+    b1 as boolean;
+    b2 as boolean;
+    i1 as integer;
+    i2 as integer;
+    i3 as integer;
+    s1 as square;
+    s2 as square;
+    v1 as boolean[5, 7];
+    v2 as integer[42];
+
+
+	by default do
+		skip
+	done
