@@ -10,51 +10,6 @@ declare and retain
     v1 as boolean[5, 7];
     v2 as integer[42];
 
-    fct1 as function():square
-    	do
-    		skip
-    		return fct1;
-    	done
-
-    fct2 as function(x as integer, y as boolean):integer
-    	declare local
-    		loc1 as integer;
-    		loc2 as boolean;
-    		loc3 as square;
-    		loc4 as integer[5];
-    	    do skip next shoot east skip
-    	    return fct2;
-    	    done
-
-when your turn
-
-	when true and b1 or v1[0, i1 + 2 * 5] do
-		if b1 and i1 = 2 then
-			while i1 < i3 do
-				set i2 to i1 + 1
-			done
-		else
-			if s1 = ammo then
-				next do nothing
-			done
-		done
-	done
-
-	when false do
-		skip
-	done
-
-	when not graal is north and i2 > 5 and v2[4] < 42 or s1 = dirt do
-    	compute fct1()
-    	set s1 to fct1()
-    	if fct5(i1 + 2, s2 = ammo, ennemi) > 2 then
-    		skip
-    	done
-    	while fct3() do
-    		skip
-    	done
-    	next move west
-	done
 
 	by default do
 		skip

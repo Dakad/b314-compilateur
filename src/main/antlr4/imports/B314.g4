@@ -107,17 +107,23 @@ exprG : name=ID                                                 # Var
 /* Fonction */
 
 fctDecl : name=ID AS FUNCTION
-              LPAR
-                (param+=varDecl
-                (COMMA param+=varDecl)*)*
-              RPAR
-              COLON (fctType=scalar | VOID)
-          localVarDecl?
-          DO (instr)+
-          RETURN (returnVal=exprD | VOID)
+              paramDecl
+              fctTypeDecl
+            localVarDecl?
+          DO
+            (instr)+
+            fctReturnDecl
           DONE
         ;
 
+paramDecl : LPAR
+              (param+=varDecl
+              (COMMA param+=varDecl)*)*
+            RPAR;
+
+fctTypeDecl : COLON (fctType=scalar | VOID);
+
+fctReturnDecl : RETURN (returnVal=exprD | VOID);
 
 /* Instructions */
 
@@ -168,7 +174,7 @@ localVarDecl : DECLARE LOCAL (localVars+=varDecl SEMI)+;
 
 /* Clause When */
 
-clauseWhen : WHEN exprD
+clauseWhen : WHEN condition=exprD
               localVarDecl?
               DO instr+ DONE
            ;
