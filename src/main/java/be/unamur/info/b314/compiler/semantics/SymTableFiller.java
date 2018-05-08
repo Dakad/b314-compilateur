@@ -263,6 +263,7 @@ public class SymTableFiller extends B314BaseListener {
       if(exprG instanceof VarContext) {
         // Check if both expr's (var to exprD) type matches
         exprGType = (PredefinedType) ((VariableSymbol)varSym).getType();
+
         if(!checkTypeMatching(exprGType, exprDType))
           throw new NotMatchingType(ctx.getText());
       } else {
@@ -285,10 +286,10 @@ public class SymTableFiller extends B314BaseListener {
   private boolean checkTypeMatching(PredefinedType t1, PredefinedType t2) {
     switch (t1) {
       case SQUARE:
-          return t2.equals(PredefinedType.SQUARE_ITEM);
+          return t2 == PredefinedType.SQUARE || t2 == PredefinedType.SQUARE_ITEM;
       case BOOLEAN:
       case INTEGER:
-        return t1.equals(t2);
+        return t1 == t2;
       default:
         return false;
     }
