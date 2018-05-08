@@ -5,20 +5,21 @@ import org.antlr.symtab.Scope;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 /**
- * @overview
+ * @overview //TODO Ajouter overview
  */
 public class ClauseWhenScope extends org.antlr.symtab.SymbolWithScope {
 
-  private static int ID = 1;
+  public static final String NAME = "clause_when_";
 
   private ParserRuleContext defNode;
 
   /**
    * @requires enclosiing to not be null
+   * @requires condition to not be null
    * @effects Initialise the Scope.
    */
-  public ClauseWhenScope(Scope enclosingScope) {
-    super("clause_when_"+(ID++));
+  public ClauseWhenScope(Scope enclosingScope, String condition) {
+    super(NAME + condition);
     this.setEnclosingScope(enclosingScope);
   }
 

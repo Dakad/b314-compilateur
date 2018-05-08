@@ -1,0 +1,22 @@
+declare and retain
+  b as boolean;
+  i as integer;
+  s as square[42];
+  s2 as square[42, 42];
+
+  when your turn
+    by default
+      do
+        set s[0] to dirt
+        set s[0] to rock
+        set s[0] to vines
+        set s2[0,1+5] to zombie
+        set s[0] to player
+        set s[0] to ennemi
+        set s[0] to map
+        set s[0] to radio
+        set s2[0,41] to ammo
+        set s[0] to fruits
+        set s[0] to soda
+        set s[0] to nearby[2, 2]
+    done
