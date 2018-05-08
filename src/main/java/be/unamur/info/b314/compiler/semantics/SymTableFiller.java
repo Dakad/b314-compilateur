@@ -217,15 +217,15 @@ public class SymTableFiller extends B314BaseListener {
   private PredefinedType getArrayType(VariableSymbol varSym) {
     // Check for the array var
     ArrayType arr = (ArrayType) varSym.getType();
-    PredefinedType arrPredefType;
+    Type arrPredefType = arr.getType();
 
     // Check if contains nested array ?
-    if(arr.getType() instanceof ArrayType) {
+    if(arrPredefType instanceof ArrayType) {
       // Then, get the type from the nested
-      arr  = (ArrayType) arr.getType();
+      arrPredefType  = ((ArrayType) arrPredefType).getType();
     }
 
-    return PredefinedType.get(arr.getType());
+    return PredefinedType.get(arrPredefType);
   }
 
   /**
@@ -241,11 +241,13 @@ public class SymTableFiller extends B314BaseListener {
     PredefinedType exprGType = getTypeOfExprG(exprG);
     PredefinedType exprDType = getTypeOfExprD(exprD);
 
-    if(exprGType == PredefinedType.SQUARE) {
-      if(exprDType == null || !exprDType.equals(PredefinedType.SQUARE_ITEM))
-        throw new NotMatchingType(ctx.toString());
-    } else {
+    if(exprDType == null)
+      throw new NotMatchingType(ctx.getText());
 
+    if(exprGType == PredefinedType.SQUARE) {
+      if(!exprDType.equals(PredefinedType.SQUARE_ITEM))
+        throw new NotMatchingType(ctx.getText());
+    } else {
       // Retrieve the variable from the exprGContext
       Symbol varSym = getVarFromSymTable(exprG);
 
@@ -260,17 +262,38 @@ public class SymTableFiller extends B314BaseListener {
 
       if(exprG instanceof VarContext) {
         // Check if both expr's (var to exprD) type matches
-        if(!((VariableSymbol)varSym).getType().equals(exprDType))
+        exprGType = (PredefinedType) ((VariableSymbol)varSym).getType();
+        if(!checkTypeMatching(exprGType, exprDType))
           throw new NotMatchingType(ctx.getText());
       } else {
         // Check if both expr's (arrayVar to exprD) type matches
-        if(!exprDType.equals(getArrayType((VariableSymbol)varSym)))
+        exprGType = getArrayType((VariableSymbol)varSym);
+        if(!checkTypeMatching(exprGType,exprDType))
           throw new NotMatchingType(ctx.getText());
       }
     }
 
     super.enterSetTo(ctx);
   }
+
+  /**
+   * @requires t1 to be not null
+   * @param t2 to be not null
+   * @return <b>true</b> if t1 can be match with t2 <br>
+   *          otherwise <b>false</b>
+   */
+  private boolean checkTypeMatching(PredefinedType t1, PredefinedType t2) {
+    switch (t1) {
+      case SQUARE:
+          return t2.equals(PredefinedType.SQUARE_ITEM);
+      case BOOLEAN:
+      case INTEGER:
+        return t1.equals(t2);
+      default:
+        return false;
+    }
+  }
+
 
   /**
    * @effects Retrieve the name from the exprG and use it to fetch the Symbol
@@ -361,8 +384,6 @@ public class SymTableFiller extends B314BaseListener {
     if(ctx instanceof ExprDCaseContext){
       if(((ExprDCaseContext)ctx).children.get(0) instanceof EnvCaseContext)
         return PredefinedType.SQUARE_ITEM;
-      else
-        return null;
     }
 
     if(ctx instanceof ExprDGContext)
