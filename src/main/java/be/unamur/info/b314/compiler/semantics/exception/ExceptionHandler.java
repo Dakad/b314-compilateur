@@ -1,5 +1,7 @@
 package be.unamur.info.b314.compiler.semantics.exception;
 
+import be.unamur.info.b314.compiler.B314Parser.VarDeclContext;
+import org.antlr.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 /**
@@ -30,8 +32,12 @@ public class ExceptionHandler {
    */
   private static String formatterMsg(ParserRuleContext ctx, String msg) {
     int lnNb = ctx.start.getLine();
-    String msgError = "ERROR LINE : "+lnNb+". "+msg;
-    return msgError;
+    String msgError = "ERROR LINE : "+lnNb+" - ";
+    String instruction = "";
+    for(org.antlr.v4.runtime.tree.ParseTree child : ctx.children) {
+      instruction += child.getText()+ " ";
+    }
+    return msgError + instruction;
   }
 
 
@@ -113,7 +119,7 @@ public class ExceptionHandler {
    *@requires ctx - Context of the instruction causing the error. Must be not null
    * @throws UndeclaredVariable with the pretty msg.
    */
-  public static void throwUndeclaredVariable(ParserRuleContext ctx) {
+  public static void throwUndesttclaredVariable(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_UNDECLARED_VARIABLE);
     throw  new UndeclaredVariable(formatMsg);
   }
