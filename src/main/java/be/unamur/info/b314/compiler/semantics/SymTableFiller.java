@@ -1,6 +1,7 @@
 package be.unamur.info.b314.compiler.semantics;
 
 import be.unamur.info.b314.compiler.B314BaseListener;
+import be.unamur.info.b314.compiler.B314Parser;
 import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
@@ -42,10 +43,8 @@ import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
 import be.unamur.info.b314.compiler.semantics.exception.NotReturnVoidFucntion;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredVariable;
-import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
-import be.unamur.info.b314.compiler.semantics.symtab.B314FunctionType;
-import be.unamur.info.b314.compiler.semantics.symtab.ClauseWhenScope;
-import be.unamur.info.b314.compiler.semantics.symtab.PredefinedType;
+import be.unamur.info.b314.compiler.semantics.symtab.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -566,7 +565,25 @@ public class SymTableFiller extends B314BaseListener {
     pushScope(clauseWhenScope);
   }
 
+    /**
+     * @effects creation of Scope for ClauseDefault
+     * @param ctx
+     */
+
   @Override
+  public void enterClauseDefault(B314Parser.ClauseDefaultContext ctx) {
+    ClauseDefaultScope clauseDefaultScope = new ClauseDefaultScope(symTable.GLOBALS);
+    clauseDefaultScope.setDef(ctx);
+    currentScope.define(clauseDefaultScope);
+    pushScope(clauseDefaultScope);
+  }
+
+  @Override
+  public void exitClauseDefault(B314Parser.ClauseDefaultContext ctx) {
+    popScope();
+  }
+
+    @Override
   public void exitClauseWhen(ClauseWhenContext ctx) {
     popScope();
   }
@@ -578,6 +595,7 @@ public class SymTableFiller extends B314BaseListener {
     pushScope(localScope);
     super.enterLocalVarDecl(ctx);
   }
+
 
   @Override
   public void exitLocalVarDecl(LocalVarDeclContext ctx) {
