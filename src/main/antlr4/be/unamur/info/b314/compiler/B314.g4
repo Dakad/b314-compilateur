@@ -99,7 +99,6 @@ exprFct  : name=ID
 /* Expression Gauche */
 
 exprG : name=ID                                                 # Var
-      | ARENA LBRACK (intVal|ID) COMMA (intVal|ID) RBRACK       # ArenaElt
       | name=ID LBRACK one=exprD (COMMA second=exprD)? RBRACK   # ArrayElt
       ;
 
