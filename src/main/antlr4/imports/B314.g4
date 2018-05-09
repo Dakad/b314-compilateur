@@ -77,16 +77,15 @@ exprInt : intVal                                              // 2, 13, -4,
         ;
 
     /* Var. env. booléennes */
-exprBool : boolVal
-         | ENNEMI IS direction=(NORTH | SOUTH | EAST | WEST)
-         | GRAAL  IS direction=(NORTH | SOUTH | EAST | WEST)
-         | NOT exprD
+exprBool : boolVal                                                      #BoolValue
+         | (ENNEMI | GRAAL) IS direction=(NORTH | SOUTH | EAST | WEST)  #PositionEnnemiGraal
+         | NOT exprD                                                    #BoolNot
          ;
 
     /* Var. env. case */
 exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)  # EnvCase
          | (FRUITS | SODA | GRAAL)                                                # EnvCase
-         | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # EnvCase
+         | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # EnvCaseNearby
          ;
 
     /* Appel de function */
