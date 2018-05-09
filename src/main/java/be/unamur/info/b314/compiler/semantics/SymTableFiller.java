@@ -6,7 +6,6 @@ import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ClauseWhenContext;
-import be.unamur.info.b314.compiler.B314Parser.ComputeContext;
 import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
@@ -243,23 +242,25 @@ public class SymTableFiller extends B314BaseListener {
     if(exprDType == null)
       throw new NotMatchingType(ctx.getText());
 
+    // Check if the function is not VOID
+    if(exprDType.equals(PredefinedType.FUNCTION)) {
+      exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
+      if(exprDType.equals(PredefinedType.VOID))
+        throw new NotReturnVoidFucntion(ctx.getText());
+    }
 
+    // Check if set SQUARE to SQR_ITEM
     if(exprGType == PredefinedType.SQUARE) {
-      if(!exprDType.equals(PredefinedType.SQUARE_ITEM))
+      if(!exprDType.equals(PredefinedType.SQUARE_ITEM)) {
         throw new NotMatchingType(ctx.getText());
+      }
     } else {
       // Retrieve the variable from the exprGContext
       Symbol varSym = getVarFromSymTable(exprG);
 
       // Check for it type's matching
 
-      if(exprDType.equals(PredefinedType.FUNCTION)) {
-        exprDType = getTypeOfExprFunction((ExprFctContext)exprD.getChild(0));
-        if(exprDType.equals(PredefinedType.VOID))
-          throw new NotReturnVoidFucntion(ctx.getText());
-      }
-
-      // If the exprD is a VARIABLE, get tit PredefinedType
+      // If the exprD is a VARIABLE, get it PredefinedType
       if(exprDType.equals(PredefinedType.VARIABLE)) {
         ParseTree varFromExprD = exprD.getChild(0);
         String varNomFromExprD = "";
@@ -285,12 +286,13 @@ public class SymTableFiller extends B314BaseListener {
       }
 
 
-      if(!checkTypeMatching(exprGType, exprDType))
+      if(!checkIfTypeMatching(exprGType, exprDType))
         throw new NotMatchingType(ctx.getText());
     }
 
     super.enterSetTo(ctx);
   }
+
 
   /**
    * @requires t1 to be not null
@@ -298,7 +300,7 @@ public class SymTableFiller extends B314BaseListener {
    * @return <b>true</b> if t1 can be match with t2 <br>
    *          otherwise <b>false</b>
    */
-  private boolean checkTypeMatching(PredefinedType t1, PredefinedType t2) {
+  private boolean checkIfTypeMatching(PredefinedType t1, PredefinedType t2) {
     switch (t1) {
       case SQUARE:
           return t2 == PredefinedType.SQUARE || t2 == PredefinedType.SQUARE_ITEM;
@@ -310,6 +312,11 @@ public class SymTableFiller extends B314BaseListener {
     }
   }
 
+
+  @Override
+  public void enterExprDFct(ExprDFctContext ctx) {
+
+  }
 
   /**
    * @effects Retrieve the name from the exprG and use it to fetch the Symbol
@@ -472,6 +479,31 @@ public class SymTableFiller extends B314BaseListener {
     checkConditionStatement(ctx.condition);
 
     super.enterWhile(ctx);
+  }
+
+  @Override
+  public void enterExprDOpBool(ExprDOpBoolContext ctx) {
+    // Check if the left and right part are matching type
+    PredefinedType leftExprDType = this.getTypeOfExprD(ctx.left);
+    PredefinedType rightExprDType = this.getTypeOfExprD(ctx.right);
+
+    if()
+
+    if(ctx.op.equals(ctx.AND()) || ctx.op.equals(ctx.OR())) {
+      if(leftExprDType != PredefinedType.BOOLEAN || rightExprDType != PredefinedType.BOOLEAN)
+        throw new NotMatchingType(ctx.getText());
+    } else {
+        // Check for the use of =
+      if(ctx.op.equals(ctx.EQ())) {
+
+      }
+    }
+
+
+
+    if(leftExprDType != rightExprDType)
+      throw new NotMatchingType(ctx.getText());
+
   }
 
   /*
