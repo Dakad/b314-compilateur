@@ -1,7 +1,7 @@
 declare and retain
     import inputFile.wld
     t as boolean;
-    res as integer;
+x as square;
 
     f as function( ): boolean
     do

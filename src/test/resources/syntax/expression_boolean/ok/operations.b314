@@ -15,8 +15,8 @@ declare and retain
 when your turn
     by default
         do
-            compute not x < 5 and f(z=v, true)=true and f(true, false)=f2(true, true) or f2(true, false)=v
+            compute not x < 5 and f(z=true, true)=true and f(true, false)=f2(true, true) or not f2(true, false)
             compute x=2 and ennemi is north
             compute not graal is south or ennemi is north and x > 42
-            compute nearby [2,2] = ammo and y = map and not x < 5
+            compute nearby [2,2] = ammo and s = map and not x < 5
         done

@@ -1,5 +1,5 @@
 declare and retain
-myVar as boolean;
+myVar as bool;
 when your turn
 by default do
 skip

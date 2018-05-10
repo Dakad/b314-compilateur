@@ -11,7 +11,7 @@ declare and retain
 
 when your turn
 
-	when x = ammo do
+	when nearby[1,4] = ammo do
 		skip
 	done
 
