@@ -43,29 +43,31 @@ action  : MOVE direction=(NORTH | SOUTH | EAST | WEST)      # Move
  /* Expression Droite */
 
 intVal  : INTEGER;
-opInt   : (ADD | SUB | MULT | DIV | MOD);
 boolVal : (TRUE | FALSE);
 
     /* Expressions entières */
-exprD : exprInt                                 #ExprDInt
-      | left=exprD opInt right=exprD            #ExprDOpInt
+exprD : exprInt                                         #ExprDInt
+    /* Expressions avec parenthèse */
+      | LPAR expr=exprD RPAR                            #ExprDPar
+
+      | left=exprD op=(MULT | DIV | MOD) right=exprD    #ExprDOpInt
+      | left=exprD op=(ADD | SUB) right=exprD           #ExprDOpInt
 
     /* Expressions booléennes */
-      | exprBool                                #ExprDBool
       | left=exprD
-        op=(AND | OR | LT | GT | EQ | LE | GE)
-        right=exprD                             #ExprDOpBool
+        op=(LT | GT | EQ | LE | GE)
+        right=exprD                                     #ExprDOpBool
+      | left=exprD op=(AND | OR ) right=exprD           #ExprDOpBool
+      | exprBool                                        #ExprDBool
 
     /* Expressions sur les types de cases */
-      | exprCase                                #ExprDCase
+      | exprCase                                        #ExprDCase
 
-      | exprG                                   #ExprDG
+      | exprG                                           #ExprDG
 
     /* Expressions avec les fonctions */
-      | exprFct                                 #ExprDFct
+      | exprFct                                         #ExprDFct
 
-    /* Expressions avec parenthèse */
-      | LPAR expr=exprD RPAR                    #ExprDPar
       ;
 
 
@@ -77,16 +79,15 @@ exprInt : intVal                                              // 2, 13, -4,
         ;
 
     /* Var. env. booléennes */
-exprBool : boolVal
-         | ENNEMI IS direction=(NORTH | SOUTH | EAST | WEST)
-         | GRAAL  IS direction=(NORTH | SOUTH | EAST | WEST)
-         | NOT exprD
+exprBool : (ENNEMI | GRAAL) IS direction=(NORTH | SOUTH | EAST | WEST)  #PositionEnnemiGraal
+         | NOT exprD                                                    #BoolNot
+         | boolVal                                                      #BoolValue
          ;
 
     /* Var. env. case */
 exprCase : (DIRT | ROCK | VINES | ZOMBIE | PLAYER | ENNEMI | MAP | RADIO | AMMO)  # EnvCase
          | (FRUITS | SODA | GRAAL)                                                # EnvCase
-         | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # Nearby
+         | NEARBY LBRACK elt+=exprD COMMA elt+=exprD RBRACK                       # EnvCaseNearby
          ;
 
     /* Appel de function */

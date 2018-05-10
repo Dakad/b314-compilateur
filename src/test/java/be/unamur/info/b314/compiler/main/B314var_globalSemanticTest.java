@@ -47,7 +47,7 @@ public class B314var_globalSemanticTest {
     symTableFiller = CompilerTestHelper.getSymTable("/semantics/var_global/ok/array_in_all_shapes.b314");
     symbTab = symTableFiller.getSymTable();
 
-    assertThat("Must contain all global variables", symbTab.size() , is(6));
+    assertThat("Must contain all global variables", symbTab.size() , is(7));
 
     assertThat("Must contain at least : myVar as square[5]", symbTab , IsMapContaining.hasKey("myVar"));
     BaseSymbol myVar = (BaseSymbol) symbTab.get("myVar");
@@ -75,7 +75,7 @@ public class B314var_globalSemanticTest {
     symTableFiller = CompilerTestHelper.getSymTable("/semantics/var_global/ok/all_boolean.b314");
     symbTab = symTableFiller.getSymTable();
 
-    assertThat("Must contain all global variables", symbTab.size() , is(3));
+    assertThat("Must contain all global variables", symbTab.size() , is(4));
 
     assertThat("Must contain at least : b1 as boolean", symbTab , IsMapContaining.hasKey("b1"));
     BaseSymbol b1 = (BaseSymbol) symbTab.get("b1");
@@ -109,7 +109,7 @@ public class B314var_globalSemanticTest {
     symTableFiller = CompilerTestHelper.getSymTable("/semantics/var_global/ok/all_integer.b314");
     symbTab = symTableFiller.getSymTable();
 
-    assertThat("Must contain all global variables", symbTab.size() , is(3));
+    assertThat("Must contain all global variables", symbTab.size() , is(4));
 
     assertThat("Must contain at least : i1 as integer", symbTab , IsMapContaining.hasKey("i1"));
     BaseSymbol i1 = (BaseSymbol) symbTab.get("i1");
@@ -143,7 +143,7 @@ public class B314var_globalSemanticTest {
     symTableFiller = CompilerTestHelper.getSymTable("/semantics/var_global/ok/one_square.b314");
     symbTab = symTableFiller.getSymTable();
 
-    assertThat("Must contain all global variables", symbTab.size() , is(3));
+    assertThat("Must contain all global variables", symbTab.size() , is(4));
 
     assertThat("Must contain at least : s1 as square", symbTab , IsMapContaining.hasKey("s1"));
     BaseSymbol s1 = (BaseSymbol) symbTab.get("s1");
@@ -177,7 +177,7 @@ public class B314var_globalSemanticTest {
     symTableFiller = CompilerTestHelper.getSymTable("/semantics/var_global/ok/variable_mixing.b314");
     symbTab = symTableFiller.getSymTable();
 
-    assertThat("Must contain all global variables", symbTab.size() , is(6));
+    assertThat("Must contain all global variables", symbTab.size() , is(7));
 
 
     assertThat("Must contain at least : v1 as integer", symbTab , IsMapContaining.hasKey("v1"));

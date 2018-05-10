@@ -15,7 +15,7 @@ declare and retain
     do
         set i1 to true
         set b1 to 34
-        set b2 to i1 < 42 and b1
+        set b2 to i1 and b1 > 24
       return false
   done
 
