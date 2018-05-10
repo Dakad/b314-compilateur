@@ -56,17 +56,17 @@ exprD : exprInt                                         #ExprDInt
     /* Expressions booléennes */
       | left=exprD
         op=(LT | GT | EQ | LE | GE)
-        right=exprD                             #ExprDOpBool
-      | left=exprD op=(AND | OR ) right=exprD   #ExprDOpBool
-      | exprBool                                #ExprDBool
+        right=exprD                                     #ExprDOpBool
+      | left=exprD op=(AND | OR ) right=exprD           #ExprDOpBool
+      | exprBool                                        #ExprDBool
 
     /* Expressions sur les types de cases */
-      | exprCase                                #ExprDCase
+      | exprCase                                        #ExprDCase
 
-      | exprG                                   #ExprDG
+      | exprG                                           #ExprDG
 
     /* Expressions avec les fonctions */
-      | exprFct                                 #ExprDFct
+      | exprFct                                         #ExprDFct
 
       ;
 
@@ -155,12 +155,13 @@ programMondeGlobalDecl : (globalVarDecl+=varDecl SEMI | globalFctDecl+=fctDecl);
 
     /* Program pour fichier STRATEGIE.b314 */
 
-programStrat : programStratGlobalDecl*
+programStrat :impDecl?
+              programStratGlobalDecl*
                WHEN YOUR TURN
                 clauseWhen*
                 clauseDefault
              ;
-programStratGlobalDecl : (globalVarDecl+=varDecl SEMI | globalFctDecl+=fctDecl | impDecl);
+programStratGlobalDecl : (globalVarDecl+=varDecl SEMI | globalFctDecl+=fctDecl);
 
 
 

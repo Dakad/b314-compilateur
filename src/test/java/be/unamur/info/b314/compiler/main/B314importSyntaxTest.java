@@ -58,6 +58,11 @@ public class B314importSyntaxTest {
     }
 
     @Test
+    public void testimport_multiple_import_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/import/ko/multiple_import.b314", testFolder.newFile(), false, "import: multiple_import");
+    }
+
+    @Test
     public void testimport_wrong_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/import/ko/wrong.b314", testFolder.newFile(), false, "import: wrong");
     }
