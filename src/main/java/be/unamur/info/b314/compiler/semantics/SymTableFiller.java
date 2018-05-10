@@ -13,6 +13,7 @@ import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
 import be.unamur.info.b314.compiler.B314Parser.BoolNotContext;
 import be.unamur.info.b314.compiler.B314Parser.ClauseWhenContext;
+import be.unamur.info.b314.compiler.B314Parser.ComputeContext;
 import be.unamur.info.b314.compiler.B314Parser.EnvCaseNearbyContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
@@ -400,9 +401,8 @@ public class SymTableFiller extends B314BaseListener {
     if(ctx instanceof ExprDBoolContext || ctx instanceof ExprDOpBoolContext)
       return PredefinedType.BOOLEAN;
 
-    if(ctx instanceof ExprDCaseContext){
+    if(ctx instanceof ExprDCaseContext)
         return PredefinedType.SQUARE_ITEM;
-    }
 
     if(ctx instanceof ExprDGContext)
       return this.getTypeOfExprG(((ExprGContext)ctx.getChild(0)));
@@ -464,10 +464,27 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterWhile(WhileContext ctx) {
     checkConditionStatement(ctx.condition);
-
     super.enterWhile(ctx);
   }
 
+  @Override
+  public void enterCompute(ComputeContext ctx) {
+    PredefinedType exprDType = getTypeOfExprD(ctx.exprD());
+
+    switch (exprDType) {
+      case FUNCTION:
+        getTypeOfExprFunction((ExprFctContext) ctx.exprD().getChild(0));
+        return;
+      case SQUARE:
+      case SQUARE_ITEM:
+      case VARIABLE:
+        return;
+        default:
+          checkExprD(ctx.exprD(), exprDType);
+
+    }
+
+  }
 
   @Override
   public void enterBoolNot(BoolNotContext ctx) {
