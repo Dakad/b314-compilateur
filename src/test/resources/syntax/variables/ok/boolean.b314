@@ -2,17 +2,17 @@ declare and retain
     import inputFile.wld
     t as boolean;
     res as boolean[3];
-    res as boolean[3,43];
+    res2 as boolean[3,43];
 
     f as function( ): boolean
     do
-        set t to true
-        return res;
+        set res[1,2] to true
+        return res[1]
     done
 
 when your turn
 
-	when x = ammo do
+	when nearby[1,2] = ammo do
 		skip
 	done
 

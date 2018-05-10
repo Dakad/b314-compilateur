@@ -1,4 +1,6 @@
 declare and retain
+  arrayBool as boolean[12];
+
     set arrayBool [0] to false
     by default
     do

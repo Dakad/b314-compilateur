@@ -6,12 +6,12 @@ declare and retain
     f as function( ): boolean
     do
         set t to true
-        return res;
+        return t
     done
 
 when your turn
 
-	when x = ammo do
+	when nearby[1,4] = ammo do
 		skip
 	done
 

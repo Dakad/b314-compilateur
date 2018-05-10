@@ -1,6 +1,7 @@
 declare and retain
-    set cstSquare to GRAAL
+    cstSquare as square;
     by default
     do
+      set cstSquare to graal
         skip
     done
