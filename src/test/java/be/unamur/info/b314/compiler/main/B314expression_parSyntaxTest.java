@@ -30,8 +30,8 @@ public class B314expression_parSyntaxTest {
     // Serie expression_par OK
     //
     @Test
-    public void testexpression_par_boolean3_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/boolean3.b314", testFolder.newFile(), true, "expression_par: boolean3");
+    public void testexpression_par_boolean_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/boolean.b314", testFolder.newFile(), true, "expression_par: boolean");
     }
 
     @Test
@@ -40,8 +40,8 @@ public class B314expression_parSyntaxTest {
     }
 
     @Test
-    public void testexpression_par_entiere_items_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/entiere_items.b314", testFolder.newFile(), true, "expression_par: entiere_items");
+    public void testexpression_par_boolean3_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/boolean3.b314", testFolder.newFile(), true, "expression_par: boolean3");
     }
 
     @Test
@@ -50,26 +50,26 @@ public class B314expression_parSyntaxTest {
     }
 
     @Test
-    public void testexpression_par_entiere_operation_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/entiere_operation.b314", testFolder.newFile(), true, "expression_par: entiere_operation");
+    public void testexpression_par_entiere_items_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/entiere_items.b314", testFolder.newFile(), true, "expression_par: entiere_items");
     }
 
     @Test
-    public void testexpression_par_boolean_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/boolean.b314", testFolder.newFile(), true, "expression_par: boolean");
+    public void testexpression_par_entiere_operation_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ok/entiere_operation.b314", testFolder.newFile(), true, "expression_par: entiere_operation");
     }
 
     //
     // Serie expression_par KO
     //
     @Test
-    public void testexpression_par_wrong_entiere_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/wrong_entiere.b314", testFolder.newFile(), false, "expression_par: wrong_entiere");
+    public void testexpression_par_wrong_boolean_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/wrong_boolean.b314", testFolder.newFile(), false, "expression_par: wrong_boolean");
     }
 
     @Test
-    public void testexpression_par_wrong_boolean_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/wrong_boolean.b314", testFolder.newFile(), false, "expression_par: wrong_boolean");
+    public void testexpression_par_wrong_entiere_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/wrong_entiere.b314", testFolder.newFile(), false, "expression_par: wrong_entiere");
     }
 
 }
