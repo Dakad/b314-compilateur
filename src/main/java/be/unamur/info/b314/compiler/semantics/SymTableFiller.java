@@ -1,12 +1,19 @@
 package be.unamur.info.b314.compiler.semantics;
 
+import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.BOOLEAN;
+import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.INTEGER;
+import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE;
+import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE_ITEM;
+
 import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser;
 import be.unamur.info.b314.compiler.B314Parser.ArenaEltContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
+import be.unamur.info.b314.compiler.B314Parser.BoolNotContext;
 import be.unamur.info.b314.compiler.B314Parser.ClauseWhenContext;
 import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
+import be.unamur.info.b314.compiler.B314Parser.EnvCaseNearbyContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDContext;
@@ -58,6 +65,7 @@ import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -238,6 +246,7 @@ public class SymTableFiller extends B314BaseListener {
     ExprDContext exprD = ctx.value;
     PredefinedType exprGType = getTypeOfExprG(exprG);
     PredefinedType exprDType = getTypeOfExprD(exprD);
+    boolean isMatching = false;
 
     if(exprDType == null)
       throw new NotMatchingType(ctx.getText());
@@ -258,8 +267,6 @@ public class SymTableFiller extends B314BaseListener {
       // Retrieve the variable from the exprGContext
       Symbol varSym = getVarFromSymTable(exprG);
 
-      // Check for it type's matching
-
       // If the exprD is a VARIABLE, get it PredefinedType
       if(exprDType.equals(PredefinedType.VARIABLE)) {
         ParseTree varFromExprD = exprD.getChild(0);
@@ -272,7 +279,6 @@ public class SymTableFiller extends B314BaseListener {
         } else {
           varNomFromExprD = ((ArrayEltContext) varFromExprD).name.getText();
           varSymFromExprD = (VariableSymbol) getVarFromSymTable(varNomFromExprD);
-
           exprDType = getArrayType(varSymFromExprD);
         }
       }
@@ -285,8 +291,21 @@ public class SymTableFiller extends B314BaseListener {
         exprGType = getArrayType((VariableSymbol)varSym);
       }
 
+      // Check for it type's matching
 
-      if(!checkIfTypeMatching(exprGType, exprDType))
+      switch (exprGType) {
+        case SQUARE:
+          isMatching = (exprDType == PredefinedType.SQUARE || exprDType == PredefinedType.SQUARE_ITEM);
+          break;
+        case BOOLEAN:
+        case INTEGER:
+          isMatching = (exprGType == exprDType);
+          break;
+        default:
+          isMatching = false;
+      }
+
+      if(!isMatching)
         throw new NotMatchingType(ctx.getText());
     }
 
@@ -295,34 +314,10 @@ public class SymTableFiller extends B314BaseListener {
 
 
   /**
-   * @requires t1 to be not null
-   * @param t2 to be not null
-   * @return <b>true</b> if t1 can be match with t2 <br>
-   *          otherwise <b>false</b>
-   */
-  private boolean checkIfTypeMatching(PredefinedType t1, PredefinedType t2) {
-    switch (t1) {
-      case SQUARE:
-          return t2 == PredefinedType.SQUARE || t2 == PredefinedType.SQUARE_ITEM;
-      case BOOLEAN:
-      case INTEGER:
-        return t1 == t2;
-      default:
-        return false;
-    }
-  }
-
-
-  @Override
-  public void enterExprDFct(ExprDFctContext ctx) {
-
-  }
-
-  /**
    * @effects Retrieve the name from the exprG and use it to fetch the Symbol
    * @link SymTableFiller#getVarFromSymTable(String)
    */
-  private Symbol getVarFromSymTable(ExprGContext exprG) {
+  private VariableSymbol getVarFromSymTable(ExprGContext exprG) {
     String varSymName;
     if(exprG instanceof VarContext) { // ? is var Scalar?
       varSymName = ((VarContext)exprG).name.getText();
@@ -338,7 +333,7 @@ public class SymTableFiller extends B314BaseListener {
    * @throws UndeclaredVariable if the provided name is not in the Symbol Table
    * @throws CannotUseFunctionAsVariable if the fetched symbol is not a variable.
    */
-  private Symbol getVarFromSymTable(String varName) {
+  private VariableSymbol getVarFromSymTable(String varName) {
     Symbol varSym;
 
     // Check in localScope, if exist
@@ -347,7 +342,7 @@ public class SymTableFiller extends B314BaseListener {
       if(!nestedSCopes.isEmpty()) {
         varSym = (VariableSymbol) nestedSCopes.get(0).getSymbol(varName);
         if( varSym != null)
-          return varSym;
+          return (VariableSymbol) varSym;
       }
     }
 
@@ -359,7 +354,7 @@ public class SymTableFiller extends B314BaseListener {
     if(!(varSym instanceof VariableSymbol))
       throw new CannotUseFunctionAsVariable(varName);
 
-    return varSym;
+    return (VariableSymbol) varSym;
   }
 
   /**
@@ -378,7 +373,7 @@ public class SymTableFiller extends B314BaseListener {
    * @return The corresponding the {@link PredefinedType} for this expression which can only be<br>
    *          <b>{@link PredefinedType#SQUARE}</b>,
    *          <b>{@link PredefinedType#ARRAY}</b>
- *          or <b>{@link PredefinedType#VARIABLE}</b>.
+   *          or <b>{@link PredefinedType#VARIABLE}</b>.
    */
   private PredefinedType getTypeOfExprG(ExprGContext expr) {
     RuleContext ctx = expr.getRuleContext();
@@ -405,7 +400,6 @@ public class SymTableFiller extends B314BaseListener {
       return PredefinedType.BOOLEAN;
 
     if(ctx instanceof ExprDCaseContext){
-      if(((ExprDCaseContext)ctx).children.get(0) instanceof EnvCaseContext)
         return PredefinedType.SQUARE_ITEM;
     }
 
@@ -444,7 +438,7 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   /**
-   * @effects Check if the condition statement is a boolean type.
+   * @effects Check if the condition statement is a boolean type.sfs
    * @throws NotBooleanCondition if the condition statement is not a boolean type.
    * @throws UndeclaredVariable if the condition statement uses an undeclared variable.
    * @throws CannotUseFunctionAsVariable if the condition statement tries to use an function as a variable.
@@ -453,14 +447,13 @@ public class SymTableFiller extends B314BaseListener {
     PredefinedType condType = this.getTypeOfExprD(condition);
 
     if(condType == null)
-      throw new NotBooleanCondition(condition.parent.getText());
+      throw new NotBooleanCondition(condition.getText());
 
     switch (condType) {
-      default:
-        break;
+      default : break;
       case VARIABLE:
         VarContext varCtx = (VarContext) ((ExprDGContext)condition).children.get(0);
-        VariableSymbol varSym = (VariableSymbol) getVarFromSymTable(varCtx.name.getText());
+        VariableSymbol varSym = getVarFromSymTable(varCtx.name.getText());
         condType = (PredefinedType) varSym.getType();
         break;
       case FUNCTION:
@@ -469,10 +462,11 @@ public class SymTableFiller extends B314BaseListener {
         break;
     }
 
-    if(!condType.equals(PredefinedType.BOOLEAN))
-      throw new NotBooleanCondition(condition.parent.getText());
-  }
+    if(condType != BOOLEAN)
+      throw new NotBooleanCondition(condition.getText());
 
+
+  }
 
   @Override
   public void enterWhile(WhileContext ctx) {
@@ -481,49 +475,129 @@ public class SymTableFiller extends B314BaseListener {
     super.enterWhile(ctx);
   }
 
+
+  @Override
+  public void enterBoolNot(BoolNotContext ctx) {
+    if(!checkExprD(ctx.exprD(), PredefinedType.BOOLEAN))
+      throw new NotMatchingType(ctx.getText());
+  }
+
+  @Override
+  public void enterEnvCaseNearby(EnvCaseNearbyContext ctx) {
+    for (ExprDContext index : ctx.elt) {
+      if(!checkExprD(index, PredefinedType.INTEGER))
+        throw new NotMatchingType(ctx.getText());
+    }
+  }
+
   @Override
   public void enterExprDOpBool(ExprDOpBoolContext ctx) {
-    // Check if the left and right part are matching type
-    PredefinedType leftExprDType = this.getTypeOfExprD(ctx.left);
-    PredefinedType rightExprDType = this.getTypeOfExprD(ctx.right);
+    if(!checkIfExprDIsBool(ctx))
+      throw new NotMatchingType(ctx.getText());
+  }
 
-    if()
 
-    if(ctx.op.equals(ctx.AND()) || ctx.op.equals(ctx.OR())) {
-      if(leftExprDType != PredefinedType.BOOLEAN || rightExprDType != PredefinedType.BOOLEAN)
-        throw new NotMatchingType(ctx.getText());
-    } else {
-        // Check for the use of =
-      if(ctx.op.equals(ctx.EQ())) {
+  private boolean checkExprD(ExprDContext exprD, PredefinedType type) {
+    // Check if is a in (.)
+    if(exprD instanceof ExprDParContext)
+      return checkExprD(((ExprDParContext)exprD).expr,type);
 
+    // Check if is a fct()
+    if(exprD instanceof ExprDGContext) {
+      ExprGContext exprVar = (ExprGContext) exprD.getChild(0);
+      if(exprVar instanceof ArenaEltContext)
+        return type == SQUARE || type == SQUARE_ITEM;
+
+      Type varType = getVarFromSymTable(exprVar).getType();
+      if(!(varType instanceof ArrayType))
+        return type == PredefinedType.get(varType);
+
+      if(exprVar instanceof ArrayEltContext) {
+        // Check first index
+        boolean isChecked = checkExprD(((ArrayEltContext) exprVar).one, INTEGER);
+        if(isChecked && ((ArrayEltContext) exprVar).second != null)
+          isChecked = checkExprD(((ArrayEltContext) exprVar).second, INTEGER);
+        return isChecked;
       }
     }
 
+    // Check if is a var
+    if(exprD instanceof ExprDFctContext)
+      return type == getTypeOfExprFunction((ExprFctContext) exprD.getChild(0));
 
+    switch (type) {
+      case SQUARE   : return (exprD instanceof ExprDCaseContext);
+      case BOOLEAN  : return checkIfExprDIsBool(exprD);
+      case INTEGER  : return checkIfExprDIsInt(exprD);
+    }
 
-    if(leftExprDType != rightExprDType)
-      throw new NotMatchingType(ctx.getText());
-
+    return false;
   }
 
-  /*
-  @Override
-  public void enterCompute(ComputeContext ctx) {
-    PredefinedType condType = this.getTypeOfExprD(ctx.fct);
+  /**
+   * @requires exprD to be not null
+   * @return <b>true</b> if the expr can be comparable otherwise <b>false</b>.
+   */
+  private boolean checkIfExprDIsBool(ExprDContext exprD) {
+    // Check the exprD in  NOT exprD
+    if (exprD instanceof ExprDBoolContext) {
+      if (exprD.getChild(0) instanceof BoolNotContext) {
+        exprD = ((BoolNotContext) exprD.getChild(0)).exprD();
+        return checkExprD(exprD, BOOLEAN);
+      }
+      return true;
+    }
 
-    if (condType != PredefinedType.FUNCTION )
-      throw new NotReturnVoidFucntion(ctx.getText());
+    if (exprD instanceof ExprDOpBoolContext) {
+      ExprDOpBoolContext exprDBool = (ExprDOpBoolContext) exprD;
+      Token opBool = exprDBool.op;
 
-    ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)ctx.fct).children.get(0);
-    FunctionSymbol fctSym = getFctFromSymTable(fctCtx.name.getText());
-    condType = ((B314FunctionType)fctSym.getType()).getReturnType();
+      // Check if OpBoolContext and both left &&_|| Right expr are BOOLEAN
+      // AND | OR
+      if (exprDBool.AND() != null || exprDBool.OR() != null )
+        return (checkExprD(exprDBool.left, BOOLEAN))  &&  checkExprD(exprDBool.right, BOOLEAN);
 
-    if (!condType.equals(PredefinedType.VOID))
-      throw new NotReturnVoidFucntion(ctx.getText());
+      // Check if OpBoolContext and both left  Right expr are comparable with LT | GT | LE | GE
+      boolean isLTorGT = exprDBool.LT() != null || exprDBool.GT() != null
+                        || exprDBool.LE() != null  || exprDBool.GE() != null;
+      if (isLTorGT)
+        return (checkExprD(exprDBool.left, INTEGER)) && checkExprD(exprDBool.right, INTEGER);
 
-    super.enterCompute(ctx);
+      // Check if OpBoolContext and both left  Right expr are comparable with EQ
+      boolean isWellTyped = checkExprD(exprDBool.left, INTEGER) && checkExprD(exprDBool.right, INTEGER);
+
+      // EQ comparable for Int Bool or Square
+      if(!isWellTyped) {
+        isWellTyped = checkExprD(exprDBool.left, BOOLEAN)
+              && checkExprD(exprDBool.right, BOOLEAN);
+        if(!isWellTyped) {
+          // Check if type Case
+            return ( checkExprD(exprDBool.left, SQUARE)
+                    && checkExprD(exprDBool.right, SQUARE) )
+                  || ( checkExprD(exprDBool.left, SQUARE_ITEM)
+                    && checkExprD(exprDBool.right, SQUARE) )
+                  || ( checkExprD(exprDBool.left, SQUARE)
+                    && checkExprD(exprDBool.right, SQUARE_ITEM) )
+                  || ( checkExprD(exprDBool.left, SQUARE_ITEM)
+                    && checkExprD(exprDBool.right, SQUARE_ITEM) )
+             ;
+        }
+      }
+      return isWellTyped;
+    }
+
+
+    return false;
   }
-*/
+
+  private boolean checkIfExprDIsInt(ExprDContext exprD)  {
+    if (exprD instanceof ExprDOpIntContext) {
+      if (checkExprD(((ExprDOpIntContext) exprD).left, INTEGER))
+        return checkExprD(((ExprDOpIntContext) exprD).right, INTEGER);
+    }
+    return (exprD instanceof ExprDIntContext);
+  }
+
 
   /**
    * @effects Insert a new {@link FunctionSymbol} <br> into the current scope <br>
@@ -578,10 +652,21 @@ public class SymTableFiller extends B314BaseListener {
       returnValType = getTypeOfExprD(ctx.returnVal);
 
     switch (returnValType) {
+      case ARRAY:
       case VARIABLE:
-        VarContext varCtx = (VarContext) ((ExprDGContext)ctx.returnVal).children.get(0);
-        VariableSymbol varSym = (VariableSymbol) getVarFromSymTable(varCtx.name.getText());
-        returnValType = (PredefinedType) varSym.getType();
+        ExprGContext varCtx = (ExprGContext) ((ExprDGContext)ctx.returnVal).children.get(0);
+        if(varCtx instanceof VarContext) {
+          VariableSymbol varSym = getVarFromSymTable(((VarContext)varCtx).name.getText());
+          returnValType = (PredefinedType) varSym.getType();
+          break;
+        }else {
+          VariableSymbol varSym = getVarFromSymTable(((ArrayEltContext) varCtx).name.getText());
+          returnValType = getArrayType(varSym);
+        }
+
+        if(varCtx instanceof ArenaEltContext)
+          returnValType = PredefinedType.SQUARE;
+
         break;
       case FUNCTION:
         ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)ctx.returnVal).children.get(0);
