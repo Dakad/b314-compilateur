@@ -13,7 +13,7 @@ declare and retain
     fct1 as function():square
     	do
     		skip
-    		return fct1;
+    		return s1
     	done
 
     fct2 as function(x as integer, y as boolean):integer
@@ -25,8 +25,8 @@ declare and retain
     		b1 as integer;
     		s1 as boolean;
     	do
-    		compute s1 and b1 = 42 or loc2
-    		return fct2;
+    		compute s1 = true and b1 = 42 or loc2 = false
+    		return loc1
     	done
 
     fct3 as function():boolean
@@ -37,7 +37,7 @@ declare and retain
     		loc4 as integer[5];
     	do
     		skip
-    		return fct3;
+    		return loc2
     	done
 
     fct4 as function():square
@@ -48,7 +48,7 @@ declare and retain
     		loc4 as integer[5];
     	do
     	    skip
-    	    return fct4;
+    	    return s2
     	done
 
     fct5 as function(x as integer, y as boolean, z as square):integer
@@ -60,7 +60,7 @@ declare and retain
     		v1 as integer[42];
     	do
     		set v1[0] to 42
-    		return fct5;
+    		return v1[0]
     	done
 
 when your turn

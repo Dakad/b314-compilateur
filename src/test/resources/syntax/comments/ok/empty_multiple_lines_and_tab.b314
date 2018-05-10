@@ -1,12 +1,13 @@
  declare and retain /*       */
     rightExpression as boolean;
     b as boolean;
-    set rightExpression to false
     by default
     /*
 
 
     */
     do
+        set rightExpression to false
+
         set b to rightExpression
     done

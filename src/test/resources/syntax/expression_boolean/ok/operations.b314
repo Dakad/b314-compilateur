@@ -1,22 +1,22 @@
 declare and retain
     x as integer;
-    x as square;
+    s as square;
     z as boolean;
     f as function ( x as boolean, y as boolean): boolean
         do
-            if x=y then set f to true done
-            return f;
+            if x=y then set y to true done
+            return x
         done
     f2 as function (a as boolean, b as boolean): boolean
         do
-            if a=b then set f2 to false done
-            return f2;
+            if a=b then set b to false done
+            return z
         done
 when your turn
     by default
         do
-            compute not x < 5 and f(z=v, true)=true and f(true, false)=f2(true, true) or f2(true, false)=v
+            compute not x < 5 and f(z=true, true)=true and f(true, false)=f2(true, true) or not f2(true, false)
             compute x=2 and ennemi is north
             compute not graal is south or ennemi is north and x > 42
-            compute nearby [2,2] = ammo and y = map and not x < 5
+            compute nearby [2,2] = ammo and s = map and not x < 5
         done

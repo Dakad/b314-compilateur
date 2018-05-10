@@ -40,7 +40,7 @@ declare and retain
 
 when your turn
 
-	when true and b1 or v1[0, i1 + 2 * 5] do
+	when true and b1 do
 		if b1 and i1 = 2 then
 			while i1 < i3 do
 				set i2 to i1 + 1
@@ -56,7 +56,7 @@ when your turn
 		skip
 	done
 
-	when not graal is north and i2 > 5 and v2[4] < 42 or s1 = dirt do
+	when not graal is north and i2 > 5 and i2 < 42 or s1 = dirt do
     	compute fct1()
     	set s1 to fct4()
     	if fct5(i1 + 2, s2 = ammo, latitude) > 2 then

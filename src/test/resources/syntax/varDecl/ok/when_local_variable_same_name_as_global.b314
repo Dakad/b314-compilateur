@@ -9,8 +9,8 @@ declare and retain
 
     fct1 as function():boolean
     	do
-    		set fct1 to true
-    		return fct1;
+    		set b1 to true
+    		return b1
     	done
 
 when your turn

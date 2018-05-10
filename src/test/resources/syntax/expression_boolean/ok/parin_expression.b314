@@ -3,5 +3,5 @@ declare and retain
 when your turn
 by default
     do
-        compute (longitude < grid size) and true or (5 + 2)
+        compute (longitude < grid size) and true or (5 + 2) = 7
     done
