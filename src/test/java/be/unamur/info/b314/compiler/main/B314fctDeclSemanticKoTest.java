@@ -60,7 +60,7 @@ public class B314fctDeclSemanticKoTest {
       fail("[Unthrowed] This .b314 contains duplicate global variable");
     } catch (RuntimeException e) {
       assertThat("Incorrect type of Exception thrown", e,
-          instanceOf(AlreadyDeclaredFunction.class));
+          instanceOf(AlreadyDeclaredAsFunction.class));
     }
   }
 

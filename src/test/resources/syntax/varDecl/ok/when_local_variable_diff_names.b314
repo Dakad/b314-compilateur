@@ -9,8 +9,8 @@ declare and retain
 
     fct1 as function():boolean
     	do
-    		set fct1 to true
-    		return fct1;
+    		set b1 to true
+    		return b1
     	done
 
 when your turn
@@ -22,14 +22,14 @@ when your turn
 
 	when b1
 	declare local
-		loc1 as integer;
-		loc2 as boolean;
-		loc3 as square;
-		loc4 as integer[5];
+		b1 as integer;
+		i2 as boolean;
+		v1 as square;
+		v3 as integer[5];
 	do
-		set loc1 to 34
-		set loc2 to false
-		set b1 to loc1 < 42 and loc2
+		set b1 to 34
+		set i2 to false
+		set b2 to i1 < 42 and b1 = 45
 		next move east
 	done
 

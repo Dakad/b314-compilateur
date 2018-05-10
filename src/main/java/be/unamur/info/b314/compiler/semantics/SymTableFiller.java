@@ -12,7 +12,6 @@ import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
 import be.unamur.info.b314.compiler.B314Parser.BoolNotContext;
 import be.unamur.info.b314.compiler.B314Parser.ClauseWhenContext;
-import be.unamur.info.b314.compiler.B314Parser.EnvCaseContext;
 import be.unamur.info.b314.compiler.B314Parser.EnvCaseNearbyContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
@@ -44,14 +43,15 @@ import be.unamur.info.b314.compiler.semantics.exception.CannotUseFunctionAsVaria
 import be.unamur.info.b314.compiler.semantics.exception.DuplicateVariable;
 import be.unamur.info.b314.compiler.semantics.exception.ExceptionHandler;
 import be.unamur.info.b314.compiler.semantics.exception.NotBooleanCondition;
-import be.unamur.info.b314.compiler.semantics.exception.NotMatchingReturnType;
 import be.unamur.info.b314.compiler.semantics.exception.NotMatchingType;
-import be.unamur.info.b314.compiler.semantics.exception.NotPositiveSizeForArray;
 import be.unamur.info.b314.compiler.semantics.exception.NotReturnVoidFucntion;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredFunction;
 import be.unamur.info.b314.compiler.semantics.exception.UndeclaredVariable;
-import be.unamur.info.b314.compiler.semantics.symtab.*;
-
+import be.unamur.info.b314.compiler.semantics.symtab.ArrayType;
+import be.unamur.info.b314.compiler.semantics.symtab.B314FunctionType;
+import be.unamur.info.b314.compiler.semantics.symtab.ClauseDefaultScope;
+import be.unamur.info.b314.compiler.semantics.symtab.ClauseWhenScope;
+import be.unamur.info.b314.compiler.semantics.symtab.PredefinedType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,7 +66,6 @@ import org.antlr.symtab.SymbolTable;
 import org.antlr.symtab.Type;
 import org.antlr.symtab.VariableSymbol;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -139,7 +138,7 @@ public class SymTableFiller extends B314BaseListener {
       // ? Am I inside a function ?
       if(currentScope instanceof FunctionSymbol) {
         if(currentScope.getName().equals(name)) // Param name == Function name ?
-          ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
+          ExceptionHandler.throwAlreadyDeclaredAsFunction(ctx);
 
         // Check for duplicate parameter
         if(currentScope.getSymbol(name) != null)
@@ -250,7 +249,7 @@ public class SymTableFiller extends B314BaseListener {
     boolean isMatching = false;
 
     if(exprDType == null)
-      throw new NotMatchingType(ctx.getText());
+      ExceptionHandler.throwNotMatchingType(ctx);
 
     // Check if the function is not VOID
     if(exprDType.equals(PredefinedType.FUNCTION)) {
@@ -448,7 +447,7 @@ public class SymTableFiller extends B314BaseListener {
     PredefinedType condType = this.getTypeOfExprD(condition);
 
     if(condType == null)
-      throw new NotBooleanCondition(condition.getText());
+      ExceptionHandler.throwNotBooleanCondition(condition);
 
     switch (condType) {
       default : break;
@@ -464,7 +463,7 @@ public class SymTableFiller extends B314BaseListener {
     }
 
     if(condType != BOOLEAN)
-      throw new NotBooleanCondition(condition.getText());
+      ExceptionHandler.throwNotBooleanCondition(condition);
 
 
   }
@@ -480,21 +479,21 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterBoolNot(BoolNotContext ctx) {
     if(!checkExprD(ctx.exprD(), PredefinedType.BOOLEAN))
-      throw new NotMatchingType(ctx.getText());
+      ExceptionHandler.throwNotMatchingType(ctx);
   }
 
   @Override
   public void enterEnvCaseNearby(EnvCaseNearbyContext ctx) {
     for (ExprDContext index : ctx.elt) {
       if(!checkExprD(index, PredefinedType.INTEGER))
-        throw new NotMatchingType(ctx.getText());
+        ExceptionHandler.throwNotMatchingType(ctx);
     }
   }
 
   @Override
   public void enterExprDOpBool(ExprDOpBoolContext ctx) {
     if(!checkIfExprDIsBool(ctx))
-      throw new NotMatchingType(ctx.getText());
+      ExceptionHandler.throwNotMatchingType(ctx);
   }
 
 
@@ -551,7 +550,6 @@ public class SymTableFiller extends B314BaseListener {
 
     if (exprD instanceof ExprDOpBoolContext) {
       ExprDOpBoolContext exprDBool = (ExprDOpBoolContext) exprD;
-      Token opBool = exprDBool.op;
 
       // Check if OpBoolContext and both left &&_|| Right expr are BOOLEAN
       // AND | OR
@@ -612,12 +610,10 @@ public class SymTableFiller extends B314BaseListener {
     Symbol fctSym = symTable.GLOBALS.getSymbol(name);
 
     if(fctSym != null && fctSym instanceof FunctionSymbol)
-      ExceptionHandler.throwAlreadyDeclaredVariable(ctx);
-    else
-      fctSym = new FunctionSymbol(name);
+      ExceptionHandler.throwAlreadyDeclaredFunction(ctx);
 
-    // Set the current context to the symbol
-    ((FunctionSymbol) fctSym).setDefNode(ctx);
+    fctSym = new FunctionSymbol(name);
+    ((FunctionSymbol) fctSym).setDefNode(ctx); // Set the current context to the symbol
     ((FunctionSymbol) fctSym).setEnclosingScope(symTable.GLOBALS);
 
     currentScope.define(fctSym); // Add the function to the Global Scope
