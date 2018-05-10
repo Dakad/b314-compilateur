@@ -492,6 +492,23 @@ public class SymTableFiller extends B314BaseListener {
 
   @Override
   public void enterArrayElt(ArrayEltContext ctx) {
+    // Check for the index, one or 2 dim ?
+
+    VariableSymbol varSym = getVarFromSymTable(ctx);
+    if(!(varSym.getType() instanceof ArrayType))
+      ExceptionHandler.throwNotMatchingType(ctx);
+
+    ArrayType arr = (ArrayType) varSym.getType();
+
+    // Array of 2 dim and missing second index
+    // var with second index but not array of 2 dim
+    if(  (arr.getType() instanceof ArrayType && ctx.second == null)
+        || (ctx.second != null && !(arr.getType() instanceof ArrayType))
+      )
+      ExceptionHandler.throwNotMatchingType(ctx);
+
+    // Check for the type
+
     boolean isIntType = checkExprD(ctx.one, PredefinedType.INTEGER);
     if( isIntType && ctx.second != null)
       isIntType = checkExprD(ctx.second, PredefinedType.INTEGER);
@@ -599,6 +616,7 @@ public class SymTableFiller extends B314BaseListener {
     if (exprD instanceof ExprDOpIntContext) {
       if (checkExprD(((ExprDOpIntContext) exprD).left, INTEGER))
         return checkExprD(((ExprDOpIntContext) exprD).right, INTEGER);
+      return false;
     }
     return (exprD instanceof ExprDIntContext);
   }

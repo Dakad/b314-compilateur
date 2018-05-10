@@ -78,6 +78,16 @@ public class B314expression_booleanSyntaxTest {
     }
 
     @Test
+    public void testexpression_boolean_operations_with_arrays_missing_index_1_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/operations_with_arrays_missing_index_1.b314", testFolder.newFile(), false, "expression_boolean: operations_with_arrays_missing_index_1");
+    }
+
+    @Test
+    public void testexpression_boolean_operations_with_arrays_missing_index_2_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/operations_with_arrays_missing_index_2.b314", testFolder.newFile(), false, "expression_boolean: operations_with_arrays_missing_index_2");
+    }
+
+    @Test
     public void testexpression_boolean_operations_with_arrays_wrong_type_in_expression_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/operations_with_arrays_wrong_type_in_expression.b314", testFolder.newFile(), false, "expression_boolean: operations_with_arrays_wrong_type_in_expression");
     }

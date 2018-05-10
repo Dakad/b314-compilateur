@@ -6,6 +6,7 @@ declare and retain
     i2 as integer;
     s1 as square;
     s2 as square;
+    v2 as integer[3];
 
     fct2 as function(x as integer, y as boolean):integer
     	do
