@@ -63,8 +63,23 @@ public class B314expression_parSyntaxTest {
     // Serie expression_par KO
     //
     @Test
+    public void testexpression_par_add_var_wrong_type_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/add_var_wrong_type.b314", testFolder.newFile(), false, "expression_par: add_var_wrong_type");
+    }
+
+    @Test
+    public void testexpression_par_operations_with_arrays_wrong_array_type_in_expression_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/operations_with_arrays_wrong_array_type_in_expression.b314", testFolder.newFile(), false, "expression_par: operations_with_arrays_wrong_array_type_in_expression");
+    }
+
+    @Test
     public void testexpression_par_sub_compute_wrong_type_condition_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/sub_compute_wrong_type_condition.b314", testFolder.newFile(), false, "expression_par: sub_compute_wrong_type_condition");
+    }
+
+    @Test
+    public void testexpression_par_undeclared_var_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/undeclared_var.b314", testFolder.newFile(), false, "expression_par: undeclared_var");
     }
 
     @Test
@@ -75,6 +90,11 @@ public class B314expression_parSyntaxTest {
     @Test
     public void testexpression_par_wrong_entiere_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/wrong_entiere.b314", testFolder.newFile(), false, "expression_par: wrong_entiere");
+    }
+
+    @Test
+    public void testexpression_par_wrong_type_in_sub_expression_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_par/ko/wrong_type_in_sub_expression.b314", testFolder.newFile(), false, "expression_par: wrong_type_in_sub_expression");
     }
 
 }

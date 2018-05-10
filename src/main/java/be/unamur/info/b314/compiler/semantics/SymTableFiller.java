@@ -480,7 +480,8 @@ public class SymTableFiller extends B314BaseListener {
       case VARIABLE:
         return;
         default:
-          checkExprD(ctx.exprD(), exprDType);
+          if(!checkExprD(ctx.exprD(), exprDType))
+            ExceptionHandler.throwNotMatchingType(ctx.exprD());
 
     }
 
