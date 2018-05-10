@@ -43,6 +43,12 @@ public class B314fonctionSyntaxTest {
     }
 
     @Test
+    public void testfonction_calling_undeclared_function_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/fonction/ko/calling_undeclared_function.b314", testFolder.newFile(), false, "fonction: wrong");
+    }
+
+
+    @Test
     public void testfonction_wrong_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/fonction/ko/wrong.b314", testFolder.newFile(), false, "fonction: wrong");
     }
