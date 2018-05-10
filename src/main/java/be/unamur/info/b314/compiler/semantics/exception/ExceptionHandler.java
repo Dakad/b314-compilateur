@@ -24,12 +24,12 @@ public class ExceptionHandler {
 
 
   /**
-   * @return An pretty formatted error msg containing the line and the instruction causing the
-   * error.
    * @requires ctx - Must be defined
    * @requires msg - The instruction causing the error
    * @effects Extract different data about the instruction from the provided ctx <br> such as the
    * current <i>line number</i>, <i>the start of incorrect instruction</i>
+   * @return An pretty formatted error msg containing the line and the instruction causing the
+   * error.
    */
   private static String formatterMsg(ParserRuleContext ctx, String msg) {
     int lnNb = ctx.start.getLine();
@@ -46,8 +46,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws AlreadyDeclaredAsFunction with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws AlreadyDeclaredAsFunction with the pretty msg.
    */
   public static void throwAlreadyDeclaredAsFunction(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_AS_FUNCTION);
@@ -56,8 +56,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws AlreadyDeclaredFunction with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws AlreadyDeclaredFunction with the pretty msg.
    */
   public static void throwAlreadyDeclaredFunction(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_FUNCTION);
@@ -66,8 +66,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws DuplicateParameter with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws DuplicateParameter with the pretty msg.
    */
   public static void throwDuplicateParameter(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_PARAMETER);
@@ -76,8 +76,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws DuplicateVariable with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws DuplicateVariable with the pretty msg.
    */
   public static void throwDuplicateVariable(ParserRuleContext ctx) {
         String formatMsg = formatterMsg(ctx, ERR_MSG_DUPLICATE_VARIABLE);
@@ -86,8 +86,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws AlreadyDeclaredVariable with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws AlreadyDeclaredVariable with the pretty msg.
    */
   public static void throwAlreadyDeclaredVariable(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_ALREADY_DECLARED_VARIABLE);
@@ -96,8 +96,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws NotPositiveSizeForArray with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws NotPositiveSizeForArray with the pretty msg.
    */
   public static void throwNotPositiveSizeForArray(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_POSITIVE_SIZE_FOR_ARRAY);
@@ -106,8 +106,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws NotMatchingReturnType with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws NotMatchingReturnType with the pretty msg.
    */
   public static void throwNotMatchingReturnType(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_MATCHING_RETURN_TYPE);
@@ -116,8 +116,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws NotMatchingType with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws NotMatchingType with the pretty msg.
    */
   public static void throwNotMatchingType(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_MATCHING_TYPE);
@@ -126,8 +126,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws UndeclaredVariable with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws UndeclaredVariable with the pretty msg.
    */
   public static void throwUndeclaredVariable(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_UNDECLARED_VARIABLE);
@@ -136,8 +136,8 @@ public class ExceptionHandler {
 
 
   /**
-   * @throws NotBooleanCondition with the pretty msg.
    * @requires ctx - Context of the instruction causing the error. Must be not null
+   * @throws NotBooleanCondition with the pretty msg.
    */
   public static void throwNotBooleanCondition(ParserRuleContext ctx) {
     String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_BOOLEAN_CONDITION);
@@ -145,13 +145,5 @@ public class ExceptionHandler {
   }
 
 
-  /**
-   * @throws NotReturnVoidFucntion with the pretty msg.
-   * @requires ctx - Context of the instruction causing the error. Must be not null
-   */
-  public static void throwNotReturnVoidFucntion(ParserRuleContext ctx) {
-    String formatMsg = formatterMsg(ctx, ERR_MSG_NOT_RETURN_VOID_FUNCTION);
-    throw new NotReturnVoidFucntion(formatMsg);
-  }
 
 }
