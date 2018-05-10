@@ -29,7 +29,7 @@ when your turn
 	do
 		set loc1 to 34
 		set loc2 to false
-		set b1 to loc1 < 42 and loc2
+		set b1 to loc1 < 42 and loc2 = false
 		next move east
 	done
 

@@ -38,15 +38,14 @@ public class B314fonctionSyntaxTest {
     // Serie fonction KO
     //
     @Test
-    public void testfonction_multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/fonction/ko/multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var.b314", testFolder.newFile(), false, "fonction: multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var");
+    public void testfonction_calling_undeclared_function_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/fonction/ko/calling_undeclared_function.b314", testFolder.newFile(), false, "fonction: calling_undeclared_function");
     }
 
     @Test
-    public void testfonction_calling_undeclared_function_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/fonction/ko/calling_undeclared_function.b314", testFolder.newFile(), false, "fonction: wrong");
+    public void testfonction_multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/fonction/ko/multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var.b314", testFolder.newFile(), false, "fonction: multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var");
     }
-
 
     @Test
     public void testfonction_wrong_ko() throws Exception {
