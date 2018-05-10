@@ -5,6 +5,7 @@ import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.FUNCT
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.INTEGER;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE_ITEM;
+import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.VARIABLE;
 
 import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser;
@@ -586,8 +587,11 @@ public class SymTableFiller extends B314BaseListener {
 
       // Check if OpBoolContext and both left &&_|| Right expr are BOOLEAN
       // AND | OR
-      if (exprDBool.AND() != null || exprDBool.OR() != null )
+      if (exprDBool.AND() != null || exprDBool.OR() != null ){
+        if(getTypeOfExprD(exprDBool.left) == VARIABLE || getTypeOfExprD(exprDBool.right) == VARIABLE )
+          return false;
         return (checkExprD(exprDBool.left, BOOLEAN))  &&  checkExprD(exprDBool.right, BOOLEAN);
+      }
 
       // Check if OpBoolContext and both left  Right expr are comparable with LT | GT | LE | GE
       boolean isLTorGT = exprDBool.LT() != null || exprDBool.GT() != null
