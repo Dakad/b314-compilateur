@@ -491,6 +491,16 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
+  public void enterArrayElt(ArrayEltContext ctx) {
+    boolean isIntType = checkExprD(ctx.one, PredefinedType.INTEGER);
+    if( isIntType && ctx.second != null)
+      isIntType = checkExprD(ctx.second, PredefinedType.INTEGER);
+
+    if(!isIntType)
+      ExceptionHandler.throwNotMatchingType(ctx);
+  }
+
+  @Override
   public void enterExprDOpBool(ExprDOpBoolContext ctx) {
     if(!checkIfExprDIsBool(ctx))
       ExceptionHandler.throwNotMatchingType(ctx);
@@ -508,17 +518,13 @@ public class SymTableFiller extends B314BaseListener {
       if(exprVar instanceof ArenaEltContext)
         return type == SQUARE || type == SQUARE_ITEM;
 
-      Type varType = getVarFromSymTable(exprVar).getType();
-      if(!(varType instanceof ArrayType))
+      VariableSymbol varSym = getVarFromSymTable(exprVar);
+      Type varType = varSym.getType();
+      if(varType instanceof ArrayType)
+        return type == getArrayType(varSym);
+      else
         return type == PredefinedType.get(varType);
 
-      if(exprVar instanceof ArrayEltContext) {
-        // Check first index
-        boolean isChecked = checkExprD(((ArrayEltContext) exprVar).one, INTEGER);
-        if(isChecked && ((ArrayEltContext) exprVar).second != null)
-          isChecked = checkExprD(((ArrayEltContext) exprVar).second, INTEGER);
-        return isChecked;
-      }
     }
 
     // Check if is a var
@@ -697,11 +703,10 @@ public class SymTableFiller extends B314BaseListener {
     pushScope(clauseWhenScope);
   }
 
-    /**
-     * @effects creation of Scope for ClauseDefault
-     * @param ctx
-     */
-
+  /**
+   * @effects creation of Scope for ClauseDefault
+   * @param ctx
+   */
   @Override
   public void enterClauseDefault(B314Parser.ClauseDefaultContext ctx) {
     ClauseDefaultScope clauseDefaultScope = new ClauseDefaultScope(symTable.GLOBALS);

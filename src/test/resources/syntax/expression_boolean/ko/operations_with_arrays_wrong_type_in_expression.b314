@@ -1,0 +1,16 @@
+declare and retain
+  x as integer;
+  y as square;
+  t1 as boolean[42];
+  t2 as boolean[42,42];
+  t6 as integer[ 42, 42];
+
+  when your turn
+    by default do
+      compute t1[0] and t1[x + 2 *  4 % 6]
+            or t2[x + 2 * 4 % 6,0]
+            and t6[x + 2*4 % 6, latitude + 1]
+      compute not x < 5
+      compute x = 2 and ennemi is north
+      compute not graal is south or ennemi is north and  x > 42
+    done
