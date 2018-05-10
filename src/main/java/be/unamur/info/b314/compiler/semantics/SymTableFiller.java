@@ -1,10 +1,10 @@
 package be.unamur.info.b314.compiler.semantics;
 
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.BOOLEAN;
-import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.FUNCTION;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.INTEGER;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE_ITEM;
+import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.VARIABLE;
 
 import be.unamur.info.b314.compiler.B314BaseListener;
 import be.unamur.info.b314.compiler.B314Parser;
@@ -13,6 +13,7 @@ import be.unamur.info.b314.compiler.B314Parser.ArrayContext;
 import be.unamur.info.b314.compiler.B314Parser.ArrayEltContext;
 import be.unamur.info.b314.compiler.B314Parser.BoolNotContext;
 import be.unamur.info.b314.compiler.B314Parser.ClauseWhenContext;
+import be.unamur.info.b314.compiler.B314Parser.ComputeContext;
 import be.unamur.info.b314.compiler.B314Parser.EnvCaseNearbyContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDBoolContext;
 import be.unamur.info.b314.compiler.B314Parser.ExprDCaseContext;
@@ -400,9 +401,8 @@ public class SymTableFiller extends B314BaseListener {
     if(ctx instanceof ExprDBoolContext || ctx instanceof ExprDOpBoolContext)
       return PredefinedType.BOOLEAN;
 
-    if(ctx instanceof ExprDCaseContext){
+    if(ctx instanceof ExprDCaseContext)
         return PredefinedType.SQUARE_ITEM;
-    }
 
     if(ctx instanceof ExprDGContext)
       return this.getTypeOfExprG(((ExprGContext)ctx.getChild(0)));
@@ -464,10 +464,28 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterWhile(WhileContext ctx) {
     checkConditionStatement(ctx.condition);
-
     super.enterWhile(ctx);
   }
 
+  @Override
+  public void enterCompute(ComputeContext ctx) {
+    PredefinedType exprDType = getTypeOfExprD(ctx.exprD());
+
+    switch (exprDType) {
+      case FUNCTION:
+        getTypeOfExprFunction((ExprFctContext) ctx.exprD().getChild(0));
+        return;
+      case SQUARE:
+      case SQUARE_ITEM:
+      case VARIABLE:
+        return;
+        default:
+          if(!checkExprD(ctx.exprD(), exprDType))
+            ExceptionHandler.throwNotMatchingType(ctx.exprD());
+
+    }
+
+  }
 
   @Override
   public void enterBoolNot(BoolNotContext ctx) {
@@ -569,8 +587,11 @@ public class SymTableFiller extends B314BaseListener {
 
       // Check if OpBoolContext and both left &&_|| Right expr are BOOLEAN
       // AND | OR
-      if (exprDBool.AND() != null || exprDBool.OR() != null )
+      if (exprDBool.AND() != null || exprDBool.OR() != null ){
+        if(getTypeOfExprD(exprDBool.left) == VARIABLE || getTypeOfExprD(exprDBool.right) == VARIABLE )
+          return false;
         return (checkExprD(exprDBool.left, BOOLEAN))  &&  checkExprD(exprDBool.right, BOOLEAN);
+      }
 
       // Check if OpBoolContext and both left  Right expr are comparable with LT | GT | LE | GE
       boolean isLTorGT = exprDBool.LT() != null || exprDBool.GT() != null

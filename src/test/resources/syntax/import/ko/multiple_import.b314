@@ -1,0 +1,36 @@
+declare and retain
+  import inputFile.wld
+  t as boolean ;
+  import inputFile3.wld
+  res as integer ;
+  import inputFile4 .wld
+  f as function (): boolean
+    do
+
+    set t to true
+    return t
+  done
+
+  when your turn
+    when life < 20
+      do
+      next use soda
+    done
+
+    when life < 50
+      do
+      next use fruits
+    done
+
+    when nearby [ 4 , 5 ] = ennemi
+      do
+      next shoot north
+    done
+
+    by default
+      declare local b as boolean ;
+      do
+
+      set b to f ()
+      next move east
+  done
