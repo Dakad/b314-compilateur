@@ -1,0 +1,15 @@
+declare and retain
+ x as integer ;
+ t1 as boolean [ 42 ] ;
+ t4 as integer [ 42 ] ;
+ t5 as integer [ 42 , 42 ] ;
+ t6 as integer [ 42 , 42 ] ;
+when your turn
+by default
+do
+
+compute x + 1 - ( 48 + 2)
+compute life / 2 * ( longitude / grid size)
+compute ( ammo count + 1 - x  % 5 - 2 )
+compute x - t1 [ 0 ]
+done
