@@ -77,7 +77,7 @@ when your turn
 		done
 	done
 
-	when v1[0, i2 + 2] > 0
+	when v1[0, i2 + 2] = true
 	declare local
 		loc1 as integer;
 		loc2 as boolean;

@@ -1,6 +1,7 @@
 package be.unamur.info.b314.compiler.semantics;
 
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.BOOLEAN;
+import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.FUNCTION;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.INTEGER;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE_ITEM;
@@ -274,11 +275,11 @@ public class SymTableFiller extends B314BaseListener {
         VariableSymbol varSymFromExprD;
         if(varFromExprD instanceof VarContext) {
           varNomFromExprD = ((VarContext) varFromExprD).name.getText();
-          varSymFromExprD = (VariableSymbol) getVarFromSymTable(varNomFromExprD);
+          varSymFromExprD = getVarFromSymTable(varNomFromExprD);
           exprDType = PredefinedType.get(varSymFromExprD.getType());
         } else {
           varNomFromExprD = ((ArrayEltContext) varFromExprD).name.getText();
-          varSymFromExprD = (VariableSymbol) getVarFromSymTable(varNomFromExprD);
+          varSymFromExprD = getVarFromSymTable(varNomFromExprD);
           exprDType = getArrayType(varSymFromExprD);
         }
       }
@@ -340,7 +341,7 @@ public class SymTableFiller extends B314BaseListener {
     if (!( currentScope instanceof GlobalScope)) {
       List<Scope> nestedSCopes = currentScope.getNestedScopes();
       if(!nestedSCopes.isEmpty()) {
-        varSym = (VariableSymbol) nestedSCopes.get(0).getSymbol(varName);
+        varSym = nestedSCopes.get(0).getSymbol(varName);
         if( varSym != null)
           return (VariableSymbol) varSym;
       }
@@ -348,11 +349,11 @@ public class SymTableFiller extends B314BaseListener {
 
     varSym = currentScope.resolve(varName);
     if(varSym == null)
-      throw new UndeclaredVariable("Undeclared identifier "+varName);
+      throw new UndeclaredVariable("ERROR : Undeclared variable - "+varName);
 
     // Check if the variable is really defined as variable
     if(!(varSym instanceof VariableSymbol))
-      throw new CannotUseFunctionAsVariable(varName);
+      throw new CannotUseFunctionAsVariable("ERROR : Cannot use fucntion as variable - "+varName);
 
     return (VariableSymbol) varSym;
   }
@@ -424,6 +425,7 @@ public class SymTableFiller extends B314BaseListener {
 
     // Check if the nb of parameters matches
     if(fctSym.getNumberOfParameters() != exprFct.param.size())
+      //ExceptionHandler.throwUndeclaredFunction(exprFct);
       throw new UndeclaredFunction(exprFct.getText());
 
     return ((B314FunctionType)fctSym.getType()).getReturnType();
@@ -433,7 +435,6 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterIfThenElse(IfThenElseContext ctx) {
     checkConditionStatement(ctx.condition);
-
     super.enterIfThenElse(ctx);
   }
 
@@ -445,27 +446,19 @@ public class SymTableFiller extends B314BaseListener {
    */
   private void checkConditionStatement(ExprDContext condition) {
     PredefinedType condType = this.getTypeOfExprD(condition);
-
-    if(condType == null)
-      ExceptionHandler.throwNotBooleanCondition(condition);
-
     switch (condType) {
-      default : break;
+      case BOOLEAN:
       case VARIABLE:
-        VarContext varCtx = (VarContext) ((ExprDGContext)condition).children.get(0);
-        VariableSymbol varSym = getVarFromSymTable(varCtx.name.getText());
-        condType = (PredefinedType) varSym.getType();
-        break;
       case FUNCTION:
-        ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)condition).children.get(0);
-        condType = getTypeOfExprFunction(fctCtx);
-        break;
+        if(checkExprD(condition, BOOLEAN))
+          return;
+      default:
+        condType = null;
     }
 
+    // Finally, check if the condition is really BOOLEAN
     if(condType != BOOLEAN)
       ExceptionHandler.throwNotBooleanCondition(condition);
-
-
   }
 
   @Override
@@ -491,6 +484,33 @@ public class SymTableFiller extends B314BaseListener {
   }
 
   @Override
+  public void enterArrayElt(ArrayEltContext ctx) {
+    // Check for the index, one or 2 dim ?
+
+    VariableSymbol varSym = getVarFromSymTable(ctx);
+    if(!(varSym.getType() instanceof ArrayType))
+      ExceptionHandler.throwNotMatchingType(ctx);
+
+    ArrayType arr = (ArrayType) varSym.getType();
+
+    // Array of 2 dim and missing second index
+    // var with second index but not array of 2 dim
+    if(  (arr.getType() instanceof ArrayType && ctx.second == null)
+        || (ctx.second != null && !(arr.getType() instanceof ArrayType))
+      )
+      ExceptionHandler.throwNotMatchingType(ctx);
+
+    // Check for the type
+
+    boolean isIntType = checkExprD(ctx.one, PredefinedType.INTEGER);
+    if( isIntType && ctx.second != null)
+      isIntType = checkExprD(ctx.second, PredefinedType.INTEGER);
+
+    if(!isIntType)
+      ExceptionHandler.throwNotMatchingType(ctx);
+  }
+
+  @Override
   public void enterExprDOpBool(ExprDOpBoolContext ctx) {
     if(!checkIfExprDIsBool(ctx))
       ExceptionHandler.throwNotMatchingType(ctx);
@@ -508,17 +528,13 @@ public class SymTableFiller extends B314BaseListener {
       if(exprVar instanceof ArenaEltContext)
         return type == SQUARE || type == SQUARE_ITEM;
 
-      Type varType = getVarFromSymTable(exprVar).getType();
-      if(!(varType instanceof ArrayType))
+      VariableSymbol varSym = getVarFromSymTable(exprVar);
+      Type varType = varSym.getType();
+      if(varType instanceof ArrayType)
+        return type == getArrayType(varSym);
+      else
         return type == PredefinedType.get(varType);
 
-      if(exprVar instanceof ArrayEltContext) {
-        // Check first index
-        boolean isChecked = checkExprD(((ArrayEltContext) exprVar).one, INTEGER);
-        if(isChecked && ((ArrayEltContext) exprVar).second != null)
-          isChecked = checkExprD(((ArrayEltContext) exprVar).second, INTEGER);
-        return isChecked;
-      }
     }
 
     // Check if is a var
@@ -593,6 +609,7 @@ public class SymTableFiller extends B314BaseListener {
     if (exprD instanceof ExprDOpIntContext) {
       if (checkExprD(((ExprDOpIntContext) exprD).left, INTEGER))
         return checkExprD(((ExprDOpIntContext) exprD).right, INTEGER);
+      return false;
     }
     return (exprD instanceof ExprDIntContext);
   }
@@ -697,11 +714,9 @@ public class SymTableFiller extends B314BaseListener {
     pushScope(clauseWhenScope);
   }
 
-    /**
-     * @effects creation of Scope for ClauseDefault
-     * @param ctx
-     */
-
+  /**
+   * @effects creation of Scope for ClauseDefault
+   */
   @Override
   public void enterClauseDefault(B314Parser.ClauseDefaultContext ctx) {
     ClauseDefaultScope clauseDefaultScope = new ClauseDefaultScope(symTable.GLOBALS);

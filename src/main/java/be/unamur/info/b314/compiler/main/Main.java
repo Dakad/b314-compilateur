@@ -61,7 +61,6 @@ public class Main {
         try {
           main.initialise(line);
           main.compile(); // Call compile method (to be completed)
-          System.err.println("OK"); // Print OK on stderr
         } catch (Exception e) {
           LOG.error("Exception occured during compilation!", e);
           System.err.println("KO"); // Print KO on stderr if a problem occured
@@ -168,7 +167,10 @@ public class Main {
     // Build symbol table
     LOG.debug("Building symbol table");
     SymTableFiller symTable = fillSymTable();
+    System.err.println("OK"); // Print OK on stderr
     LOG.debug("Building symbol table: done");
+
+
 
     // Print PCode
     LOG.debug("Printing PCode");
