@@ -1,7 +1,8 @@
   /* Comments are between delimiters */
   declare and retain
     /* Global declarations */
-    i as boolean;
+    i as integer;
+    j as integer;
     arena as square[27,27];
 
   by default do

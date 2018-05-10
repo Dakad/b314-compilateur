@@ -1,6 +1,7 @@
 package be.unamur.info.b314.compiler.semantics;
 
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.BOOLEAN;
+import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.FUNCTION;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.INTEGER;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE_ITEM;
@@ -274,11 +275,11 @@ public class SymTableFiller extends B314BaseListener {
         VariableSymbol varSymFromExprD;
         if(varFromExprD instanceof VarContext) {
           varNomFromExprD = ((VarContext) varFromExprD).name.getText();
-          varSymFromExprD = (VariableSymbol) getVarFromSymTable(varNomFromExprD);
+          varSymFromExprD = getVarFromSymTable(varNomFromExprD);
           exprDType = PredefinedType.get(varSymFromExprD.getType());
         } else {
           varNomFromExprD = ((ArrayEltContext) varFromExprD).name.getText();
-          varSymFromExprD = (VariableSymbol) getVarFromSymTable(varNomFromExprD);
+          varSymFromExprD = getVarFromSymTable(varNomFromExprD);
           exprDType = getArrayType(varSymFromExprD);
         }
       }
@@ -340,7 +341,7 @@ public class SymTableFiller extends B314BaseListener {
     if (!( currentScope instanceof GlobalScope)) {
       List<Scope> nestedSCopes = currentScope.getNestedScopes();
       if(!nestedSCopes.isEmpty()) {
-        varSym = (VariableSymbol) nestedSCopes.get(0).getSymbol(varName);
+        varSym = nestedSCopes.get(0).getSymbol(varName);
         if( varSym != null)
           return (VariableSymbol) varSym;
       }
@@ -348,11 +349,11 @@ public class SymTableFiller extends B314BaseListener {
 
     varSym = currentScope.resolve(varName);
     if(varSym == null)
-      throw new UndeclaredVariable("Undeclared identifier "+varName);
+      throw new UndeclaredVariable("ERROR : Undeclared variable - "+varName);
 
     // Check if the variable is really defined as variable
     if(!(varSym instanceof VariableSymbol))
-      throw new CannotUseFunctionAsVariable(varName);
+      throw new CannotUseFunctionAsVariable("ERROR : Cannot use fucntion as variable - "+varName);
 
     return (VariableSymbol) varSym;
   }
@@ -424,6 +425,7 @@ public class SymTableFiller extends B314BaseListener {
 
     // Check if the nb of parameters matches
     if(fctSym.getNumberOfParameters() != exprFct.param.size())
+      //ExceptionHandler.throwUndeclaredFunction(exprFct);
       throw new UndeclaredFunction(exprFct.getText());
 
     return ((B314FunctionType)fctSym.getType()).getReturnType();
@@ -433,7 +435,6 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterIfThenElse(IfThenElseContext ctx) {
     checkConditionStatement(ctx.condition);
-
     super.enterIfThenElse(ctx);
   }
 
@@ -445,27 +446,19 @@ public class SymTableFiller extends B314BaseListener {
    */
   private void checkConditionStatement(ExprDContext condition) {
     PredefinedType condType = this.getTypeOfExprD(condition);
-
-    if(condType == null)
-      ExceptionHandler.throwNotBooleanCondition(condition);
-
     switch (condType) {
-      default : break;
+      case BOOLEAN:
       case VARIABLE:
-        VarContext varCtx = (VarContext) ((ExprDGContext)condition).children.get(0);
-        VariableSymbol varSym = getVarFromSymTable(varCtx.name.getText());
-        condType = (PredefinedType) varSym.getType();
-        break;
       case FUNCTION:
-        ExprFctContext fctCtx = (ExprFctContext) ((ExprDFctContext)condition).children.get(0);
-        condType = getTypeOfExprFunction(fctCtx);
-        break;
+        if(checkExprD(condition, BOOLEAN))
+          return;
+      default:
+        condType = null;
     }
 
+    // Finally, check if the condition is really BOOLEAN
     if(condType != BOOLEAN)
       ExceptionHandler.throwNotBooleanCondition(condition);
-
-
   }
 
   @Override
@@ -723,7 +716,6 @@ public class SymTableFiller extends B314BaseListener {
 
   /**
    * @effects creation of Scope for ClauseDefault
-   * @param ctx
    */
   @Override
   public void enterClauseDefault(B314Parser.ClauseDefaultContext ctx) {
