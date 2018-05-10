@@ -6,13 +6,13 @@ declare and retain
 
     f as function( ): boolean
     do
-        set t to true
-        return res;
+        set t to player
+        return true
     done
 
 when your turn
 
-	when x = ammo do
+	when t = ammo do
 		skip
 	done
 

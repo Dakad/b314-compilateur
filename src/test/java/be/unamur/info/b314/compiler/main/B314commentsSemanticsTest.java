@@ -36,7 +36,7 @@ public class B314commentsSemanticsTest {
     @Ignore
     public void testcomments_empty() throws Exception{
         File pcodeFile = testFolder.newFile();
-        CompilerTestHelper.launchCompilation("/semantics/comments/empty.b314", pcodeFile, true, "comments: empty");
+        CompilerTestHelper.launchCompilation("/semantics/comments/ok/empty.b314", pcodeFile, true, "comments: empty");
         LOG.debug("PCode is: {{}", FileUtils.readFileToString(pcodeFile));
         InterpreterResult result;
         // Turns: 1

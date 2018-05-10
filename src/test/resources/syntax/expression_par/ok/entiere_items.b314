@@ -1,5 +1,5 @@
 declare and retain
-    x as integer;
+    x as square;
 when your turn
 by default
     do

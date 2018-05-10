@@ -13,7 +13,7 @@ declare and retain
     fct1 as function():square
     	do
     		skip
-    		return fct1;
+    		return s1
     	done
 
     fct2 as function(x as integer, y as boolean):integer
@@ -23,7 +23,7 @@ declare and retain
     		loc3 as square;
     		loc4 as integer[5];
     	    do skip next shoot east skip
-    	    return fct2;
+    	    return loc1
     	    done
 
 when your turn
@@ -47,10 +47,10 @@ when your turn
 	when not graal is north and i2 > 5 and v2[4] < 42 or s1 = dirt do
     	compute fct1()
     	set s1 to fct1()
-    	if fct5(i1 + 2, s2 = ammo, ennemi) > 2 then
+    	if fct2(i1 + 2, s2 = ammo) > 2 then
     		skip
     	done
-    	while fct3() do
+    	while fct1()=ammo do
     		skip
     	done
     	next move west

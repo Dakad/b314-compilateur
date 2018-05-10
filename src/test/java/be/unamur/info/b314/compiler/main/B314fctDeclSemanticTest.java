@@ -75,7 +75,7 @@ public class B314fctDeclSemanticTest {
     symbTab = symTableFiller.getSymTable();
 
     // Verify
-    assertThat("Must contain all global variables and functions", symbTab.size(), is(2));
+    assertThat("Must contain all global variables and functions", symbTab.size(), is(3));
 
     assertThat("Must contain at least : f():boolean", symbTab, IsMapContaining.hasKey("f"));
     assertThat("Must be an function : f():boolean", symbTab.get("f"), instanceOf(FunctionSymbol.class));
@@ -96,7 +96,7 @@ public class B314fctDeclSemanticTest {
     symbTab = symTableFiller.getSymTable();
 
     // Verify
-    assertThat("Must contain all global variables and functions", symbTab.size(), is(2));
+    assertThat("Must contain all global variables and functions", symbTab.size(), is(3));
         // Verify - Symbol
     assertThat("Must contain at least : f(integer):boolean", symbTab, IsMapContaining.hasKey("f"));
     assertThat("Must be an function : f(integer):boolean", symbTab.get("f"), instanceOf(FunctionSymbol.class));
@@ -135,7 +135,7 @@ public class B314fctDeclSemanticTest {
     symTableFiller = CompilerTestHelper.getSymTable("/semantics/fctDecl/ok/with_params_2.b314");
     symbTab = symTableFiller.getSymTable();
 
-    assertThat("Must contain all global variables and functions", symbTab.size(), is(3));
+    assertThat("Must contain all global variables and functions", symbTab.size(), is(4));
 
 
     // Verify first function : f(integer)
