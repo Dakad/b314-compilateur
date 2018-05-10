@@ -40,8 +40,8 @@ declare and retain
 
 when your turn
 
-	when true and b1 do
-		if b1 and i1 = 2 then
+	when true = b1 do
+		if b1 = true and i1 = 2 then
 			while i1 < i3 do
 				set i2 to i1 + 1
 			done

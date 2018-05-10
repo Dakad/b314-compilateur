@@ -38,6 +38,16 @@ public class B314fonctionSyntaxTest {
     // Serie fonction KO
     //
     @Test
+    public void testfonction_calling_undeclared_function_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/fonction/ko/calling_undeclared_function.b314", testFolder.newFile(), false, "fonction: calling_undeclared_function");
+    }
+
+    @Test
+    public void testfonction_local_var_same_name_as_fct_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/fonction/ko/local_var_same_name_as_fct.b314", testFolder.newFile(), false, "fonction: local_var_same_name_as_fct");
+    }
+
+    @Test
     public void testfonction_multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/fonction/ko/multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var.b314", testFolder.newFile(), false, "fonction: multiple_global_vars_and_functions_with_parameters_and_wrongly_typed_instructions_no_local_var");
     }

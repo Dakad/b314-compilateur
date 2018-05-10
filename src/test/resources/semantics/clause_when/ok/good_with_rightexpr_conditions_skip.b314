@@ -32,7 +32,7 @@ declare and retain
 
   when your turn
 
-    when true and b1 or (i1 + 2 * 5) = 7 do
+    when true = b1 or (i1 + 2 * 5) = 7 do
       skip
     done
 

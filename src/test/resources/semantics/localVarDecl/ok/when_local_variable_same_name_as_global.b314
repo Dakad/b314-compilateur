@@ -29,7 +29,7 @@ when your turn
     do
       set b1 to 34
       set i1 to false
-      set i1 to b1 < 42 and i1
+      set i1 to b1 < 42 and i1 = true
       next move east
 	done
 

@@ -11,6 +11,6 @@ declare and retain
   done
 
   by default do
-    compute f()
+    compute f(x = 12)
 
   done
