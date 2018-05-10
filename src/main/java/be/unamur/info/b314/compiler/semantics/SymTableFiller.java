@@ -1,7 +1,6 @@
 package be.unamur.info.b314.compiler.semantics;
 
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.BOOLEAN;
-import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.FUNCTION;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.INTEGER;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE;
 import static be.unamur.info.b314.compiler.semantics.symtab.PredefinedType.SQUARE_ITEM;

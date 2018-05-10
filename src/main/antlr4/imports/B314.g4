@@ -155,12 +155,13 @@ programMondeGlobalDecl : (globalVarDecl+=varDecl SEMI | globalFctDecl+=fctDecl);
 
     /* Program pour fichier STRATEGIE.b314 */
 
-programStrat : programStratGlobalDecl*
+programStrat :impDecl?
+              programStratGlobalDecl*
                WHEN YOUR TURN
                 clauseWhen*
                 clauseDefault
              ;
-programStratGlobalDecl : (globalVarDecl+=varDecl SEMI | globalFctDecl+=fctDecl | impDecl);
+programStratGlobalDecl : (globalVarDecl+=varDecl SEMI | globalFctDecl+=fctDecl);
 
 
 
