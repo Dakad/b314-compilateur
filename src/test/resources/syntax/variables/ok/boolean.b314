@@ -6,7 +6,7 @@ declare and retain
 
     f as function( ): boolean
     do
-        set res[1,2] to true
+        set res2[1,2] to true
         return res[1]
     done
 

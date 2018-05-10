@@ -1,0 +1,58 @@
+declare and retain
+ b1 as boolean ;
+ b2 as boolean ;
+ b3 as boolean ;
+ f1 as square ;
+
+ fct1 as function ( x as integer  ): square
+  do compute x + 1
+  set x to x + 1 % longitude + grid size - graal is south set f1 to ammo
+  return f1
+  done
+
+ i1 as integer ;
+ b4 as boolean ;
+ b5 as boolean ;
+ f2 as integer ;
+ f3 as boolean ;
+
+ fct2 as function ( x as integer , y as boolean  ): integer
+  do
+    skip
+    return f2
+  done
+
+ fct3 as function (  ): boolean
+ do
+ set f3 to true and false or not graal is north
+ return f3
+ done
+
+ s1 as square ;
+ i2 as integer ;
+ b6 as boolean ;
+ i3 as integer ;
+ s2 as square ;
+ f4 as square ;
+ fct4 as function (  ): square
+ do skip
+ return f4
+ done
+ fct5 as function ( x as integer , y as boolean , z as square  ): integer
+ do
+   if y and x = 2 then
+     while x < 5
+      do set x to x + 1
+     done
+   else
+    if z = ammo then
+      next do nothing
+    done
+  done
+  return x
+done
+
+when your turn
+by default
+ do skip
+done

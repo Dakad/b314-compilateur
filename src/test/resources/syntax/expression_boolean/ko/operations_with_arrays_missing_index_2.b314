@@ -1,0 +1,19 @@
+declare and retain
+  x as integer ;
+  y as square ;
+  t1 as boolean [ 42 ] ;
+  t2 as boolean [ 42 , 42 ] ;
+  t3 as boolean [ 42 , 42 ] ;
+  t4 as integer [ 42 ] ;
+  t5 as integer [ 42 , 42 ] ;
+  t6 as integer [ 42 , 42 ] ;
+  t7 as square [ 42 ] ;
+  t8 as square [ 42 , 42 ] ;
+  t9 as square [ 42 , 42 ] ;
+
+  when your turn
+    by default do
+      compute not x < 5 compute x = 2 and ennemi is north
+      compute not graal is south or ennemi is north and x > 42
+      compute t7 [ 41 ] = dirt and t8 [ t4 [ 0 ] , t6 [ 0 ] ] = ennemi
+    done

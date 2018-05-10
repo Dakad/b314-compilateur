@@ -35,18 +35,8 @@ public class B314expression_booleanSyntaxTest {
     }
 
     @Test
-    public void testexpression_boolean_operations_with_array_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operations_with_array.b314", testFolder.newFile(), true, "expression_boolean: operations_with_array");
-    }
-
-    @Test
-    public void testexpression_boolean_parin_expression_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/parin_expression.b314", testFolder.newFile(), true, "expression_boolean: parin_expression");
-    }
-
-    @Test
-    public void testexpression_boolean_operation_only_env_vars_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operation_only_env_vars.b314", testFolder.newFile(), true, "expression_boolean: operation_only_env_vars");
+    public void testexpression_boolean_environnement_var_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/environnement_var.b314", testFolder.newFile(), true, "expression_boolean: environnement_var");
     }
 
     @Test
@@ -60,21 +50,26 @@ public class B314expression_booleanSyntaxTest {
     }
 
     @Test
-    public void testexpression_boolean_environnement_var_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/environnement_var.b314", testFolder.newFile(), true, "expression_boolean: environnement_var");
+    public void testexpression_boolean_operations_with_array_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operations_with_array.b314", testFolder.newFile(), true, "expression_boolean: operations_with_array");
+    }
+
+    @Test
+    public void testexpression_boolean_operation_only_env_vars_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/operation_only_env_vars.b314", testFolder.newFile(), true, "expression_boolean: operation_only_env_vars");
+    }
+
+    @Test
+    public void testexpression_boolean_parin_expression_ok() throws Exception{
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ok/parin_expression.b314", testFolder.newFile(), true, "expression_boolean: parin_expression");
     }
 
     //
     // Serie expression_boolean KO
     //
     @Test
-    public void testexpression_boolean_or_env_var_wrong_type_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/or_env_var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: or_env_var_wrong_type");
-    }
-
-    @Test
-    public void testexpression_boolean_var_wrong_type_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: var_wrong_type");
+    public void testexpression_boolean_env_var_wrong_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/env_var_wrong.b314", testFolder.newFile(), false, "expression_boolean: env_var_wrong");
     }
 
     @Test
@@ -83,8 +78,23 @@ public class B314expression_booleanSyntaxTest {
     }
 
     @Test
-    public void testexpression_boolean_env_var_wrong_ko() throws Exception {
-        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/env_var_wrong.b314", testFolder.newFile(), false, "expression_boolean: env_var_wrong");
+    public void testexpression_boolean_operations_with_arrays_missing_index_1_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/operations_with_arrays_missing_index_1.b314", testFolder.newFile(), false, "expression_boolean: operations_with_arrays_missing_index_1");
+    }
+
+    @Test
+    public void testexpression_boolean_operations_with_arrays_missing_index_2_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/operations_with_arrays_missing_index_2.b314", testFolder.newFile(), false, "expression_boolean: operations_with_arrays_missing_index_2");
+    }
+
+    @Test
+    public void testexpression_boolean_operations_with_arrays_wrong_type_in_expression_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/operations_with_arrays_wrong_type_in_expression.b314", testFolder.newFile(), false, "expression_boolean: operations_with_arrays_wrong_type_in_expression");
+    }
+
+    @Test
+    public void testexpression_boolean_operations_with_arrays_wrong_type_in_index_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/operations_with_arrays_wrong_type_in_index.b314", testFolder.newFile(), false, "expression_boolean: operations_with_arrays_wrong_type_in_index");
     }
 
     @Test
@@ -98,8 +108,18 @@ public class B314expression_booleanSyntaxTest {
     }
 
     @Test
+    public void testexpression_boolean_or_env_var_wrong_type_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/or_env_var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: or_env_var_wrong_type");
+    }
+
+    @Test
     public void testexpression_boolean_undeclared_var_ko() throws Exception {
         CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/undeclared_var.b314", testFolder.newFile(), false, "expression_boolean: undeclared_var");
+    }
+
+    @Test
+    public void testexpression_boolean_var_wrong_type_ko() throws Exception {
+        CompilerTestHelper.launchCompilation("/syntax/expression_boolean/ko/var_wrong_type.b314", testFolder.newFile(), false, "expression_boolean: var_wrong_type");
     }
 
 }
