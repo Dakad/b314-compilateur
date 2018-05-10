@@ -22,10 +22,10 @@ declare and retain
     		loc2 as boolean;
     		loc3 as square;
     		loc4 as integer[5];
-    		b11 as integer;
-    		s11 as boolean;
+    		b1 as integer;
+    		s1 as boolean;
     	do
-    		compute s1 and b1 = 42 or loc2
+    		compute s1 = true and b1 = 42 or loc2 = false
     		return i1
     	done
 
@@ -127,5 +127,5 @@ when your turn
 		b1 as integer;
 		s1 as boolean;
 	do
-		compute s1 and b1 = 42 or loc2
+		compute s1 = false and b1 = 42 or loc2 = true
 	done

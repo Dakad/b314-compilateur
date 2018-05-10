@@ -1,12 +1,13 @@
 declare and retain
     import inputFile.wld
+    x as integer;
 
 when your turn
     when life < 20 do
         next use fruits
     done
 
-    when x > 5 and life < 2 do
+    when ((x > 5) and (life < 2)) do
         next use fruits
     done
 
