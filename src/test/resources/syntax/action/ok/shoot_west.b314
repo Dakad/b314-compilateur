@@ -1,12 +1,12 @@
 declare and retain
     import inputFile.wld
     t as boolean;
-    res as integer;
+    x as square;
 
     f as function( ): boolean
     do
         set t to true
-        return res;
+       return t
     done
 
 when your turn

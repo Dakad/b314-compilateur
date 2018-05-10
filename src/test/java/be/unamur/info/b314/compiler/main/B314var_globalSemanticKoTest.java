@@ -38,16 +38,9 @@ public class B314var_globalSemanticKoTest {
   //
   // Serie var_global KO
   //
-  @Test
+  @Test(expected = AlreadyDeclaredVariable.class)
   public void testvar_global_duplicate_name_ko() {
-    try {
       CompilerTestHelper.getSymTable("/semantics/var_global/ko/duplicate_name.b314");
-
-      fail("[Unthrowed] This .b314 contains duplicate global variable");
-    } catch (RuntimeException e) {
-      assertThat("Incorrect type of Exception throwned", e,
-          instanceOf(AlreadyDeclaredVariable.class));
-    }
   }
 
   @Test

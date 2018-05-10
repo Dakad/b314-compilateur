@@ -59,10 +59,6 @@ public class B314varDeclSyntaxTest {
         CompilerTestHelper.launchCompilation("/syntax/varDecl/ok/one_integer.b314", testFolder.newFile(), true, "varDecl: one_integer");
     }
 
-    @Test
-    public void testvarDecl_nul_size_array_ok() throws Exception{
-        CompilerTestHelper.launchCompilation("/syntax/varDecl/ok/nul_size_array.b314", testFolder.newFile(), true, "varDecl: nul_size_array");
-    }
 
     @Test
     public void testvarDecl_array_in_all_shapes_ok() throws Exception{
