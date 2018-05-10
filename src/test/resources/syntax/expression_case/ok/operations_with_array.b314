@@ -1,5 +1,5 @@
 declare and retain
-    x as integer;
+    x as square;
     y as square;
     t3 as square[42, 42];
     t4 as square[42];
@@ -9,6 +9,6 @@ when your turn
 by default
     do
         compute nearby[2, 2] = ammo and y = rock and not x = soda
-        compute not x < player
-        compute not graal is south or ennemi is north and x > 42
+        compute not x = player
+        compute not graal is south or ennemi is north and 26 > 42
     done

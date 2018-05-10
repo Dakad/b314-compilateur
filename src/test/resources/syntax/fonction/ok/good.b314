@@ -1,18 +1,18 @@
 declare and retain
     import inputFile.wld
-    t as square;
+    t as boolean;
     r as square[3];
     res as square[43,43];
 
     f as function( ): boolean
     do
         set t to true
-        return res;
+        return t
     done
 
 when your turn
 
-	when x = ammo do
+	when nearby[4,5] = ammo do
 		skip
 	done
 

@@ -1,6 +1,7 @@
 declare and retain
-    set cstbool to false
+    cstbool as boolean;
     by default
     do
+      set cstbool to false
         skip
     done

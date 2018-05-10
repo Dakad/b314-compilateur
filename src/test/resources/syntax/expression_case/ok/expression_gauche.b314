@@ -1,7 +1,15 @@
 declare and retain
     x as boolean;
+
+
+  fct as function(b as square):integer
+  do
+    skip
+    return 2
+  done
+
 when your turn
 by default
     do
-        compute nearby[fct(dirt),fct2]
+        compute nearby[fct(dirt),56]
     done
