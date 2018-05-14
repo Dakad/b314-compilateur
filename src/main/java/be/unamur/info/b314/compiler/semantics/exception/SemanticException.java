@@ -4,6 +4,8 @@ package be.unamur.info.b314.compiler.semantics.exception;
 
 
 /**
+ * @overview A SemanticException is a abstract representation of a semantic error during the parsing.
+ * A SemanticException is mutable.
  *
  */
 public class SemanticException extends RuntimeException{

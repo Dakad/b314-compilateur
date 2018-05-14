@@ -1,6 +1,6 @@
 package be.unamur.info.b314.compiler.semantics.exception;
 
-public class ReservedName extends RuntimeException {
+public class ReservedName extends SemanticException {
 
   public ReservedName() {
     this("undefined");
