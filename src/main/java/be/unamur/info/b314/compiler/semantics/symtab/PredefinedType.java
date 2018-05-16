@@ -2,7 +2,7 @@ package be.unamur.info.b314.compiler.semantics.symtab;
 
 
 /**
- * @overview
+ * @overview A PredefenidType is
  */
 public enum PredefinedType implements org.antlr.symtab.Type {
 

@@ -75,7 +75,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * SymTableFiller is mutable.
  * @specfield symbolTable : Holds all scopes and symbols of the parsed .B314
  * @specfield currentScope : Represents the last Scope entered
- * @inv symbolTable must contains at least the global scope and the predefined types such as
+ * @invariant symbolTable must contains at least the global scope and the predefined types such as
  * Boolean, Integer, Square.
  */
 public class SymTableFiller extends B314BaseListener {
@@ -84,7 +84,9 @@ public class SymTableFiller extends B314BaseListener {
 
   private Scope currentScope;
 
-
+  /**
+   * @effects Initialise the table of Symbols.
+   */
   public SymTableFiller() {
     this.symTable = new SymbolTable();
   }
@@ -741,7 +743,7 @@ public class SymTableFiller extends B314BaseListener {
   @Override
   public void enterClauseDefault(B314Parser.ClauseDefaultContext ctx) {
     ClauseDefaultScope clauseDefaultScope = new ClauseDefaultScope(symTable.GLOBALS);
-    clauseDefaultScope.setDef(ctx);
+    clauseDefaultScope.setDefNode(ctx);
     currentScope.define(clauseDefaultScope);
     pushScope(clauseDefaultScope);
   }
