@@ -16,7 +16,7 @@ public class ClauseWhenScope extends org.antlr.symtab.SymbolWithScope {
   /**
    * @requires enclosiing to not be null
    * @requires condition to not be null
-   * @effects Initialise the Scope.
+   * @effects Initialise the Scope with the literal condition as name and it enclosing scope.
    */
   public ClauseWhenScope(Scope enclosingScope, String condition) {
     super(NAME + condition);

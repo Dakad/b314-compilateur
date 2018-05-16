@@ -9,10 +9,4 @@ public class NotMatchingReturnType extends SemanticException{
     super(msgError);
   }
 
-  /**
-   * @effects
-   */
-  public NotMatchingReturnType() {
-    this("undefined");
-  }
 }

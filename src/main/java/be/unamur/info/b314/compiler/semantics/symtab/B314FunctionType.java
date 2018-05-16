@@ -4,7 +4,7 @@ import java.util.List;
 import org.antlr.symtab.Type;
 
 /**
- * @overview
+ * @overview This class is used to represent the scope of the clause 'by default'.
  */
 public class B314FunctionType extends org.antlr.symtab.FunctionType {
 
